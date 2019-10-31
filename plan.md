@@ -26,8 +26,30 @@ I believe that these are the things that we can realistically cover:
 1. `readr`, `readxl`, `voom` and `janitor`: to load in a structured data.
 1. `dplyr`: basic data manipulation. `filter`, `mutate`, `select`, `contains`, `group_by`, `summarise`, `left_join`.
 1. `ggplot2`: data visualisation. `geom_point`, `geom_boxplot`, `geom_line`, `facet_wrap`, `facet_grid`.
-1. `lapply`, `mclapply` and `purrr`: avoiding writing loops. (Doubtful)
+1. `broom`: getting basic model outputs. 
+1. `lapply`, `mclapply`, `purrr` and `profvis` avoiding writing loops. (Doubtful)
 
+
+# Planning for each of the three parts: 
+
+
+1. Monday 2nd Dec (1hr, 15:20-16:30). 
+
+In this session, we will first familiarise ourselves of the basics of `R`, e.g. loading in an Excel dataset, recognising variable types.  We will be using the `R Markdown` documentation system, which allows us to execute codes, visualise output and writing a report. Time permitting, we will also start to learn the basics of data manipulations such as filtering of observations and selection of columns. 
+
+Some of the packages to be covered: `rmarkdown`, `readr`, `readxl`, `voom`, `janitor` and `dplyr`. 
+
+2. Tuesday 3rd Dec (1.5hr, 13:30-15:00).
+
+In this session, we will focus on the basics of data cleaning and data visualisation. This type of tasks is where the `tidyverse` framework becomes one of the most powerful tools in data science. We will learn how to summarise data, converting between "wide" and "tall" data frames and also how to integrate different datasets. At the end of this session, we will massage the data into a suitable format that we can start to think about modelling in the next session. 
+
+Some of the packages to be covered: `dplyr`, `tidyr` and `ggplot2`.
+
+3. Tuesday 3rd Dec (1.5hr, 15:30-17:00).  
+
+In this session, we will focus on the modelling of our cleaned data from the previous session. We will firstly use loops to perform some basic modelling tasks to understand the basics of R programming. Then, we will introduce some powerful wrapper functions that can help us to write better and cleaner codes. 
+
+Some of the packages to be covered: `broom`, `purrr` and `profvis`.
 
 
 # To-do list
