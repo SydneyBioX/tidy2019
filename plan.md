@@ -47,7 +47,7 @@ Some of the packages to be covered: `dplyr`, `tidyr` and `ggplot2`.
 
 3. Tuesday 3rd Dec (1.5hr, 15:30-17:00).  
 
-In this session, we will focus on the modelling of our cleaned data from the previous session. We will firstly use loops to perform some basic modelling tasks to understand the basics of R programming. Then, we will introduce some powerful wrapper functions that can help us to write better and cleaner codes. 
+In this session, we will focus on the modelling of our cleaned data from the previous session. We will firstly introduce lists and use for loops to perform some basic modelling tasks to understand the basics of R programming. Then, we will introduce some powerful wrapper functions that can help us to write better and cleaner codes. 
 
 Some of the packages to be covered: `tibble`, `broom` and `purrr`.
 
