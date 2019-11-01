@@ -49,7 +49,7 @@ Some of the packages to be covered: `dplyr`, `tidyr` and `ggplot2`.
 
 In this session, we will focus on the modelling of our cleaned data from the previous session. We will firstly use loops to perform some basic modelling tasks to understand the basics of R programming. Then, we will introduce some powerful wrapper functions that can help us to write better and cleaner codes. 
 
-Some of the packages to be covered: `broom`, `purrr` and `profvis`.
+Some of the packages to be covered: `tibble`, `broom` and `purrr`.
 
 
 # To-do list
