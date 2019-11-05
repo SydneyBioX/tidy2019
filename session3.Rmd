@@ -1,0 +1,109 @@
+---
+title: "session3"
+author: "Kevin Wang"
+date: "05/11/2019"
+output: html_document
+---
+
+
+# Loading packages
+
+```{r}
+library(tidyverse)
+library(skimr)
+```
+
+
+# Loading cleaned sample data
+
+```{r}
+session3_data = read_csv(file = "data/wide_sample_ge_data.csv") %>% 
+  dplyr::filter(dose == 0) %>% 
+  dplyr::mutate_at(.vars = vars(Ahrr:Cxcr7), .funs = log)
+
+dose_order = sort(unique(session3_data$dose))
+time_order = sort(unique(session3_data$time))
+
+clean_data = session3_data %>% 
+  dplyr::mutate(dose = factor(dose, dose_order),
+                time = factor(time, time_order)) %>% 
+  dplyr::select(strain, Ahrr:Cxcr7)
+```
+
+# Correlation analysis
+
+```{r}
+clean_data %>% 
+  dplyr::select_if(is.numeric) %>% 
+  pairs
+
+clean_data %>% 
+  ggplot(aes(x = Ahrr,
+             y = Ccbl1,
+             colour = strain)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+cor(clean_data$Ahrr, clean_data$Ccbl1)
+```
+
+
+
+```{r}
+clean_data %>% 
+  group_by(strain) %>% 
+  skimr::skim()
+```
+
+
+
+
+```{r}
+clean_data_nest = clean_data %>% 
+  group_by(strain) %>% 
+  tidyr::nest()
+
+clean_data_nest
+
+clean_data_nest$data
+
+purrr::map(clean_data_nest$data, ~ cor(.x$Ahrr, .x$Ccbl1))
+
+
+```
+
+
+
+
+# Scatter plot
+```{r}
+clean_data %>% 
+  ggplot(aes(x = strain,
+             y = Ahrr,
+             colour = strain)) +
+  geom_boxplot()
+```
+
+# Multiple genes 
+
+```{r}
+clean_data_long = clean_data %>% 
+  tidyr::pivot_longer(cols = Ahrr:Cxcr7, 
+                      names_to = "gene_symbol", 
+                      values_to = "gene_value")
+
+clean_data_long %>% 
+  ggplot(aes(x = strain, 
+             y = gene_value,
+             colour = strain)) +
+  geom_boxplot() +
+  facet_wrap(~gene_symbol, scales = "free")
+```
+
+
+
+# Session Info
+```{r}
+sessionInfo()
+```
+

@@ -1,0 +1,145 @@
+---
+title: 'session 1'
+author: "Kevin Wang"
+date: "05/11/2019"
+output: html_document
+---
+
+# Going through some variable types
+
+```{r}
+class(c(TRUE, FALSE))
+class(1:5)
+class(rnorm(5))
+class(c("a", "b"))
+class(iris)
+```
+
+
+
+# Loading packages 
+```{r}
+library(tidyverse)
+library(janitor)
+library(readxl)
+library(visdat)
+```
+
+
+# Loading data
+
+
+## First attempt
+
+This is bad.
+
+```{r}
+raw_data = readxl::read_xls("data/sample_data.xls")
+
+head(raw_data)
+```
+
+## Second attempt
+
+This is good. 
+
+```{r}
+raw_data = readxl::read_xls("data/sample_data.xls", skip = 3)
+head(raw_data)
+```
+
+
+# Cleaning column names
+
+This looks nice. 
+
+```{r}
+clean_col_data = raw_data %>% 
+  janitor::clean_names()
+```
+
+
+# Selecting data
+
+
+## Selecting certain columns
+
+This selects columns.
+
+```{r}
+sub_data = clean_col_data %>% 
+  dplyr::select(strain, sample)
+
+sub_data
+```
+
+
+# Selecting columns by character vector
+
+This selects 4 columns that we will use for our analysis.
+
+```{r}
+colnames(clean_col_data) %>% tolower()
+select_columns = colnames(clean_col_data)[1:4]
+select_columns
+
+sub_data = clean_col_data %>% 
+  dplyr::select(one_of(select_columns))
+
+sub_data
+```
+
+
+# Renaming columns
+
+
+```{r}
+sub_data = sub_data %>% 
+  dplyr::rename(
+    time = time_hours,
+    dose = dose_µg_kg)
+```
+
+# Mutating columns
+
+```{r}
+mutate_data = sub_data %>% 
+  dplyr::mutate(time = as.numeric(time), 
+                dose = as.numeric(dose))
+```
+
+
+# Missing values 
+```{r}
+mutate_data %>% 
+  visdat::vis_miss()
+```
+
+# Filtering out problematic rows
+
+```{r}
+mutate_data %>% 
+  dplyr::filter(is.na(time))
+
+filter_data = mutate_data %>% 
+  dplyr::filter(!is.na(time))
+
+filter_data = mutate_data %>% 
+  dplyr::filter(complete.cases(time))
+
+filter_data
+```
+
+
+# Saving data
+
+```{r}
+write_csv(filter_data, path = "data/clean_sample_data.csv")
+```
+
+
+# Session Info 
+```{r}
+sessionInfo()
+```
+

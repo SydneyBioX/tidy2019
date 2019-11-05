@@ -11,7 +11,7 @@ The purpose of this document is to write down a list of publicly available datas
 
 # Gene expression 
 
-+ Take this sample data and add on 10 genes from NanoString https://www.ncbi.nlm.nih.gov/geo/geo2r/?acc=GSE43251&platform=GPL16444. This data has a pretty good experimental design. 
++ Take this sample data and add on 10 genes from NanoString https://www.ncbi.nlm.nih.gov/geo/geo2r/?acc=GSE43251&platform=GPL16444. This data has a pretty good experimental design. https://rnajournal.cshlp.org/content/19/1/51/suppl/DC1 supplementary table 4 has the sample labelling. 
 
 + This sample data is pretty dirty with replicates. https://www.ncbi.nlm.nih.gov/geo/geo2r/?acc=GSE55055. Not great, but possible. 
 
