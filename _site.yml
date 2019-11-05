@@ -1,0 +1,18 @@
+# This file controls the layout of the website. 
+name: "BioinfoSummer - Tidyverse"
+navbar:
+  title: "_site.yml"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Mon: session 1"
+      href: session1.html
+    - text: "Tue: session 2"
+      href: session2.html
+    - text: "Tue: session 3"
+      href: session3.html
+output_dir: "."
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate

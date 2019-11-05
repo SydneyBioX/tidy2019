@@ -1,0 +1,26 @@
+---
+title: "CPC workshop"
+author: "Wang and Tarr"
+date: "2-3 December 2019"
+output:
+  html_document:
+    css: style.css
+---
+
+# Aim of this workshop
+
+In this workshop we will focus on 
+
+# Prerequisites
+
+Ideally, you should at least know what `R` is, since this is not a programming workshop, you can still pick up important practical skills by running the codes we provided. 
+
+## Running workshop on the cloud
+
+
+# Clipboard
+
+In some circumstances, we might need to share codes beyond the existing materials. Please click [here](https://docs.google.com/document/d/136YffzxjkUM8RIGsnjD_yOkCTWw4Ijdwjy4_58nC-zc/edit?usp=sharing) to access these codes. 
+
+
+# References
