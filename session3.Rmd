@@ -1,9 +1,18 @@
 ---
 title: "session3"
-author: "Kevin Wang"
+author: "Kevin Wang and Garth Tarr"
 date: "05/11/2019"
 output: html_document
 ---
+
+
+
+# Learning outcomes of this session
+
++ More plotting with `ggplot2`
++ `for` loops and `purrr::map` functions
++ Modelling with `broom`
+
 
 
 # Loading packages

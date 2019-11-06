@@ -10,7 +10,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Kevin Wang" />
+<meta name="author" content="Kevin Wang and Garth Tarr" />
 
 <meta name="date" content="2019-05-11" />
 
@@ -269,7 +269,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">_site.yml</a>
+      <a class="navbar-brand" href="index.html">BioinfoSummer - Tidyverse</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -298,12 +298,20 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">session3</h1>
-<h4 class="author">Kevin Wang</h4>
+<h4 class="author">Kevin Wang and Garth Tarr</h4>
 <h4 class="date">05/11/2019</h4>
 
 </div>
 
 
+<div id="learning-outcomes-of-this-session" class="section level1">
+<h1>Learning outcomes of this session</h1>
+<ul>
+<li>More plotting with <code>ggplot2</code></li>
+<li><code>for</code> loops and <code>purrr::map</code> functions</li>
+<li>Modelling with <code>broom</code></li>
+</ul>
+</div>
 <div id="loading-packages" class="section level1">
 <h1>Loading packages</h1>
 <pre class="r"><code>library(tidyverse)
@@ -357,7 +365,7 @@ clean_data = session3_data %&gt;%
 ##  n variables: 6 
 ##  group variables: strain 
 ## 
-## ── Variable type:numeric ──────────────────────────────────────────────────────────────────────────────────────
+## ── Variable type:numeric ───────────────────────────────────────────────────────────────────────
 ##  strain variable missing complete  n mean   sd   p0  p25  p50  p75 p100
 ##      HW     Ahrr       0       24 24 1.64 0.59 0.25 1.36 1.64 2.16 2.57
 ##      HW  Aldh3a1       0       24 24 2.94 1.45 1    1.87 2.22 4.59 5.43
@@ -476,7 +484,7 @@ clean_data_long %&gt;%
 ## Running under: macOS Mojave 10.14.6
 ## 
 ## Matrix products: default
-## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
 ## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
@@ -486,10 +494,10 @@ clean_data_long %&gt;%
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] rmarkdown_1.16  visdat_0.5.3    stringi_1.4.3   skimr_1.0.7    
-##  [5] readxl_1.3.1    janitor_1.2.0   forcats_0.4.0   stringr_1.4.0  
-##  [9] dplyr_0.8.3     purrr_0.3.3     readr_1.3.1     tidyr_1.0.0    
-## [13] tibble_2.1.3    ggplot2_3.2.1   tidyverse_1.2.1
+##  [1] skimr_1.0.7     visdat_0.5.3    readxl_1.3.1    janitor_1.2.0  
+##  [5] forcats_0.4.0   stringr_1.4.0   dplyr_0.8.3     purrr_0.3.3    
+##  [9] readr_1.3.1     tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1  
+## [13] tidyverse_1.2.1
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] tidyselect_0.2.5 xfun_0.10        reshape2_1.4.3   haven_2.1.1     
@@ -500,10 +508,10 @@ clean_data_long %&gt;%
 ## [21] gtable_0.3.0     cellranger_1.1.0 rvest_0.3.4      evaluate_0.14   
 ## [25] labeling_0.3     knitr_1.25       fansi_0.4.0      broom_0.5.2     
 ## [29] Rcpp_1.0.2       scales_1.0.0     backports_1.1.5  jsonlite_1.6    
-## [33] digest_0.6.22    hms_0.5.2        packrat_0.5.0    grid_3.6.1      
+## [33] hms_0.5.2        digest_0.6.22    stringi_1.4.3    grid_3.6.1      
 ## [37] cli_1.1.0        tools_3.6.1      magrittr_1.5     lazyeval_0.2.2  
 ## [41] crayon_1.3.4     pkgconfig_2.0.3  zeallot_0.1.0    ellipsis_0.3.0  
-## [45] rsconnect_0.8.15 xml2_1.2.2       lubridate_1.7.4  assertthat_0.2.1
+## [45] xml2_1.2.2       lubridate_1.7.4  assertthat_0.2.1 rmarkdown_1.16  
 ## [49] httr_1.4.1       rstudioapi_0.10  R6_2.4.0         nlme_3.1-141    
 ## [53] compiler_3.6.1</code></pre>
 </div>

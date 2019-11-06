@@ -1,9 +1,18 @@
 ---
 title: "session2"
-author: "Kevin Wang"
+author: "Kevin Wang and Garth Tarr"
 date: "05/11/2019"
 output: html_document
 ---
+
+
+# Learning outcomes of this session
+
++ Summaring a `data.frame`
++ Making basic plots using `ggplot2`: tile plot and scatter plots
++ Joining two datasets together (`left_join`)
++ `pivot_longer` and `pivot_wider` to reshape data for plotting purposes
+
 
 
 # Loading packages

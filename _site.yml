@@ -1,7 +1,7 @@
 # This file controls the layout of the website. 
 name: "BioinfoSummer - Tidyverse"
 navbar:
-  title: "_site.yml"
+  title: "BioinfoSummer - Tidyverse"
   left:
     - text: "Home"
       href: index.html

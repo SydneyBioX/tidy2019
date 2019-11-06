@@ -17,6 +17,8 @@ Ideally, you should at least know what `R` is, since this is not a programming w
 
 ## Running workshop on the cloud
 
+We will use RStudio Cloud to run this workshop.
+
 
 # Clipboard
 

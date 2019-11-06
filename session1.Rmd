@@ -1,9 +1,22 @@
 ---
-title: 'session 1'
-author: "Kevin Wang"
+title: 'session1'
+author: "Kevin Wang and Garth Tarr"
 date: "05/11/2019"
 output: html_document
 ---
+
+# Learning outcomes of this session
+
++ Understand basic variable types in `R`, in particular the `data.frame`
++ Loading in an Excel sheet as data. 
++ Cleaning columns names 
++ Selection of `data.frame` columns
++ Renaming `data.frame` columns
++ Creating new `data.frame` columns
++ Looking for missing values in `data.frame`
++ Filtering `data.frame` rows
++ Saving `data.frame` for next stage of analysis
+
 
 # Going through some variable types
 
