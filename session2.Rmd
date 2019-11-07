@@ -8,7 +8,7 @@ output: html_document
 
 # Learning outcomes of this session
 
-+ Summaring a `data.frame`
++ left_join data
 + Making basic plots using `ggplot2`: tile plot and scatter plots
 + Joining two datasets together (`left_join`)
 + `pivot_longer` and `pivot_wider` to reshape data for plotting purposes
@@ -19,7 +19,6 @@ output: html_document
 
 ```{r}
 library(tidyverse)
-library(skimr)
 ```
 
 
@@ -29,110 +28,15 @@ library(skimr)
 session1_data = read_csv(file = "data/clean_sample_data.csv")
 ```
 
-# Skimming your data
-```{r}
-skimr::skim(session1_data)
-```
-
-
-# Mutating data
-```{r}
-clean_sample_data = session1_data %>% 
-  dplyr::mutate(dose = as.character(dose),
-                time = as.character(time))
-```
-
-
-
-# Making summary statistics 
-
-## Counting number of samples
-```{r}
-clean_sample_data %>% 
-  group_by(strain) %>% 
-  count()
-
-clean_sample_data %>% 
-  group_by(strain) %>% 
-  summarise(n())
-```
-
-## Counting with more variables
-```{r}
-clean_sample_data %>% 
-  group_by(strain, dose) %>% 
-  count()
-
-clean_sample_data %>% 
-  group_by(strain, dose, time) %>% 
-  count()
-```
-
-
-# Making simple plots 
-```{r}
-count_data = clean_sample_data %>% 
-  group_by(strain, dose, time) %>% 
-  count() %>% 
-  ungroup()
-
-
-count_data %>% 
-  ggplot(aes(x = dose, y = time, fill = n)) +
-  geom_tile()
-
-count_data %>% 
-  ggplot(aes(x = dose, y = time, fill = n)) +
-  geom_tile() +
-  facet_grid(~strain)
-```
-
-
-## (Extension: ordering using factors)
-```{r}
-class(session1_data$dose)
-unique(session1_data$dose)
-class(count_data$dose)
-unique(count_data$dose)
-
-dose_order = sort(unique(session1_data$dose))
-
-clean_count_data = count_data %>% 
-  dplyr::mutate(dose = factor(dose, dose_order))
-
-clean_count_data %>% 
-  ggplot(aes(x = dose, y = time, fill = n, label = n)) +
-  geom_tile() +
-  geom_text() +
-  facet_grid(~strain)
-```
-
-
-
-```{r, include=FALSE}
-time_order = sort(unique(session1_data$time))
-
-clean_count_data = count_data %>% 
-  dplyr::mutate(dose = factor(dose, dose_order),
-                time = factor(time, time_order))
-
-clean_count_data %>% 
-  ggplot(aes(x = dose, y = time, fill = n, label = n)) +
-  geom_tile() +
-  geom_text() +
-  facet_grid(~strain)
-```
-
-
 # Reading in gene expression data (top 10 rows)
 ```{r}
-raw_ge_data = read_delim(file = "data/GSE43251_NanoString_non-normalized.txt", delim = "\t", n_max = 5)
+raw_ge_data = read_delim(file = "data/GSE43251_NanoString_non-normalized.txt", delim = "\t", n_max = 6)
 # raw_ge_data = read_tsv(file = "data/GSE43251_NanoString_non-normalized.txt", n_max = 5)
 
-raw_ge_data = raw_ge_data %>% 
+clean_ge_data = raw_ge_data %>% 
   dplyr::select(-1)
-# raw_ge_data = raw_ge_data %>% 
-#   dplyr::select(-GB_ACC)
+
+clean_ge_data
 ```
 
 
@@ -141,20 +45,29 @@ raw_ge_data = raw_ge_data %>%
 # left_join sample data
 ```{r}
 ge_sample_data = data.frame(
-  sample = colnames(raw_ge_data)[-1],
+  sample = colnames(clean_ge_data)[-1],
   ge_data_available = "yes"
 )
 
-joined_sample_data = left_join(clean_sample_data, ge_sample_data, by = "sample")
+joined_sample_data = left_join(session1_data, ge_sample_data, by = "sample")
 
 joined_sample_data
 ```
 
 
+# DT
+
+```{r}
+joined_sample_data %>% 
+  DT::datatable()
+```
+
+
+
 # `tidyr::pivot_longer` the gene expression data
 
 ```{r}
-ge_data_long = raw_ge_data %>% 
+ge_data_long = clean_ge_data %>% 
   tidyr::pivot_longer(
     cols = -GENE_SYMBOL,
     names_to = "sample", 
@@ -165,19 +78,88 @@ ge_data_long
 
 
 ```{r}
-long_sample_ge_data = clean_sample_data %>% 
+long_sample_ge_data = session1_data %>% 
   left_join(ge_data_long, by = "sample") %>% 
-  dplyr::filter(!is.na(GENE_SYMBOL))
+  dplyr::filter(!is.na(GENE_SYMBOL)) %>% 
+  janitor::clean_names()
+
+
+long_sample_ge_data
 ```
 
+
+# `ggplot2` visualisation 
+
+
+```{r}
+long_sample_ge_data %>% 
+  ggplot()
+
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression))
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) + 
+  geom_point()
+
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) + 
+  geom_point() +
+  facet_wrap(~gene_symbol)
+
+
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) + 
+  geom_point() +
+  facet_wrap(~gene_symbol) +
+  scale_y_log10()
+
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) + 
+  geom_point() +
+  geom_boxplot() +
+  facet_wrap(~gene_symbol) +
+  scale_y_log10()
+
+
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) + 
+  geom_point() +
+  geom_boxplot() +
+  facet_wrap(~gene_symbol) +
+  scale_y_log10(labels = scales::comma)
+```
 
 
 # `tidyr::pivot_wider` the gene expression data
 
 ```{r}
 wide_sample_ge_data = long_sample_ge_data %>% 
-  tidyr::pivot_wider(names_from = "GENE_SYMBOL",
+  tidyr::pivot_wider(names_from = "gene_symbol",
                      values_from = "gene_expression")
+```
+
+## Visualisation
+```{r}
+wide_sample_ge_data %>% 
+  ggplot(aes(x = Ahrr,
+             y = Cxcr7,
+             colour = strain)) +
+  geom_point() +
+  scale_x_log10(labels = scales::comma) +
+  scale_y_log10(labels = scales::comma) +
+geom_smooth(method = "lm")
 ```
 
 
@@ -185,6 +167,8 @@ wide_sample_ge_data = long_sample_ge_data %>%
 write_csv(long_sample_ge_data, path = "data/long_sample_ge_data.csv")
 write_csv(wide_sample_ge_data, path = "data/wide_sample_ge_data.csv")
 ```
+
+
 
 
 # Session Info

@@ -15,6 +15,7 @@ output: html_document
 + Creating new `data.frame` columns
 + Looking for missing values in `data.frame`
 + Filtering `data.frame` rows
++ Summaring a `data.frame`
 + Saving `data.frame` for next stage of analysis
 
 
@@ -142,6 +143,32 @@ filter_data = mutate_data %>%
 
 filter_data
 ```
+
+
+# Making summary statistics 
+
+## Counting number of samples
+```{r}
+filter_data %>% 
+  group_by(strain) %>% 
+  count()
+
+filter_data %>% 
+  group_by(strain) %>% 
+  summarise(n())
+```
+
+## Counting with more variables
+```{r}
+filter_data %>% 
+  group_by(strain, dose) %>% 
+  count()
+
+filter_data %>% 
+  group_by(strain, dose, time) %>% 
+  count()
+```
+
 
 
 # Saving data

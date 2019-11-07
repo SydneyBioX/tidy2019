@@ -26,90 +26,108 @@ library(skimr)
 # Loading cleaned sample data
 
 ```{r}
-session3_data = read_csv(file = "data/wide_sample_ge_data.csv") %>% 
-  dplyr::filter(dose == 0) %>% 
-  dplyr::mutate_at(.vars = vars(Ahrr:Cxcr7), .funs = log)
-
-dose_order = sort(unique(session3_data$dose))
-time_order = sort(unique(session3_data$time))
+session3_data = read_csv(file = "data/session3_data.csv") %>% 
+  dplyr::select(-time, -dose)
 
 clean_data = session3_data %>% 
-  dplyr::mutate(dose = factor(dose, dose_order),
-                time = factor(time, time_order)) %>% 
-  dplyr::select(strain, Ahrr:Cxcr7)
+  dplyr::mutate_if(is.numeric, .funs = log)
+
+hw_data = clean_data %>% 
+  dplyr::filter(strain == "HW")
+
+le_data = clean_data %>% 
+  dplyr::filter(strain == "LE")
 ```
 
 # Correlation analysis
 
 ```{r}
 clean_data %>% 
-  dplyr::select_if(is.numeric) %>% 
-  pairs
-
-clean_data %>% 
   ggplot(aes(x = Ahrr,
-             y = Ccbl1,
+             y = Cxcr7,
              colour = strain)) +
   geom_point() +
   geom_smooth(method = "lm")
 
-cor(clean_data$Ahrr, clean_data$Ccbl1)
+
+lm(Ahrr ~ Cxcr7, data = clean_data)
+lm(Ahrr ~ Cxcr7, data = hw_data)
+lm(Ahrr ~ Cxcr7, data = le_data)
+
+lm_Ahrr_Cxcr7 = function(this_data){
+  lm(Ahrr ~ Cxcr7, data = this_data)
+}
+
+list_data = list(
+  clean_data = clean_data, 
+  hw_data = hw_data,
+  le_data = le_data)
+
+purrr::map(.x = list_data, 
+           .f = lm_Ahrr_Cxcr7)
+
+purrr::map(.x = list_data, 
+           .f = lm_Ahrr_Cxcr7) %>% 
+  purrr::map(.f = broom::tidy)
 ```
 
 
 
-```{r}
-clean_data %>% 
-  group_by(strain) %>% 
-  skimr::skim()
-```
-
-
-
 
 ```{r}
-clean_data_nest = clean_data %>% 
-  group_by(strain) %>% 
+Cxcr7_long = clean_data %>%
+  tidyr::pivot_longer(
+    cols = -c("strain", "Cxcr7", "sample"),
+    names_to = "gene_symbols",
+    values_to = "gene_expression")
+
+Cxcr7_long
+
+Cxcr7_nest = Cxcr7_long %>% 
+  group_by(strain, gene_symbols) %>% 
   tidyr::nest()
 
-clean_data_nest
+Cxcr7_nest$data[1:2]
 
-clean_data_nest$data
+lm_Cxcr7_ge = function(this_data){
+  lm(Cxcr7 ~ gene_expression, data = this_data)
+}
 
-purrr::map(clean_data_nest$data, ~ cor(.x$Ahrr, .x$Ccbl1))
+Cxcr7_model = Cxcr7_nest %>% 
+  dplyr::mutate(lm_obj = purrr::map(.x = data, 
+                                    .f = lm_Cxcr7_ge),
+                lm_tidy = purrr::map(.x = lm_obj,
+                                     .f = broom::tidy))
 
 
+
+Cxcr7_model_long = Cxcr7_model %>% 
+  dplyr::select(-data, -lm_obj) %>% 
+  tidyr::unnest(lm_tidy) %>% 
+  dplyr::select(strain, gene_symbols, term, estimate) %>% 
+  dplyr::filter(term == "gene_expression")
+
+
+Cxcr7_model_long
+
+
+Cxcr7_model_wide = Cxcr7_model_long %>% 
+  dplyr::ungroup() %>% 
+  tidyr::pivot_wider(names_from = "strain",
+                     values_from = "estimate")
+
+
+Cxcr7_model_wide %>% 
+  ggplot(aes(x = HW, y = LE)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, colour = "red")
+
+Cxcr7_model_wide %>% 
+  ggplot(aes(x = HW, y = LE,
+             label = gene_symbols)) +
+  geom_text() +
+  geom_abline(slope = 1, intercept = 0, colour = "red")
 ```
-
-
-
-
-# Scatter plot
-```{r}
-clean_data %>% 
-  ggplot(aes(x = strain,
-             y = Ahrr,
-             colour = strain)) +
-  geom_boxplot()
-```
-
-# Multiple genes 
-
-```{r}
-clean_data_long = clean_data %>% 
-  tidyr::pivot_longer(cols = Ahrr:Cxcr7, 
-                      names_to = "gene_symbol", 
-                      values_to = "gene_value")
-
-clean_data_long %>% 
-  ggplot(aes(x = strain, 
-             y = gene_value,
-             colour = strain)) +
-  geom_boxplot() +
-  facet_wrap(~gene_symbol, scales = "free")
-```
-
-
 
 # Session Info
 ```{r}
