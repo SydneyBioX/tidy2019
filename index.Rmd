@@ -1,5 +1,5 @@
 ---
-title: "CPC workshop"
+title: "Enter the Tidyverse"
 author: "Kevin Wang and Garth Tarr"
 date: "2-3 December 2019"
 output:
