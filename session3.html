@@ -71,6 +71,7 @@ h6 {
 }
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 
 
 
@@ -342,41 +343,197 @@ hw_data = clean_data %&gt;%
 le_data = clean_data %&gt;% 
   dplyr::filter(strain == &quot;LE&quot;)</code></pre>
 </div>
-<div id="correlation-analysis" class="section level1">
-<h1>Correlation analysis</h1>
+<div id="t-test" class="section level1">
+<h1>t-test</h1>
+<pre class="r"><code>t.test(x = hw_data$Ahrr, 
+       y = le_data$Ahrr)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  hw_data$Ahrr and le_data$Ahrr
+## t = -0.75737, df = 148.97, p-value = 0.45
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.5485616  0.2445692
+## sample estimates:
+## mean of x mean of y 
+##  2.998168  3.150164</code></pre>
+<pre class="r"><code>t.test(x = hw_data$Cxcr7, 
+       y = le_data$Cxcr7)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  hw_data$Cxcr7 and le_data$Cxcr7
+## t = -6.7356, df = 92.864, p-value = 1.343e-09
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -1.5401323 -0.8387663
+## sample estimates:
+## mean of x mean of y 
+##  3.568083  4.757532</code></pre>
+<pre class="r"><code>t.test(Ahrr ~ strain, data = clean_data)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  Ahrr by strain
+## t = -0.75737, df = 148.97, p-value = 0.45
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.5485616  0.2445692
+## sample estimates:
+## mean in group HW mean in group LE 
+##         2.998168         3.150164</code></pre>
+<pre class="r"><code>gene_long = clean_data %&gt;%
+  tidyr::pivot_longer(
+    cols = -c(&quot;strain&quot;, &quot;sample&quot;),
+    names_to = &quot;gene_symbols&quot;,
+    values_to = &quot;gene_expression&quot;)
+
+
+gene_long</code></pre>
+<pre><code>## # A tibble: 8,316 x 4
+##    strain sample gene_symbols gene_expression
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;                  &lt;dbl&gt;
+##  1 HW     HW1    Ahrr                    2.57
+##  2 HW     HW1    Aldh3a1                 1.65
+##  3 HW     HW1    Bbs2                    3.52
+##  4 HW     HW1    Ccbl1                   5.47
+##  5 HW     HW1    Cxcr7                   3.16
+##  6 HW     HW1    Col18a1                 7.43
+##  7 HW     HW1    Cyb5a                  10.1 
+##  8 HW     HW1    Cyp1a1                  2.90
+##  9 HW     HW1    Cyp1a2                 10.6 
+## 10 HW     HW1    Cyp1b1                  1.87
+## # … with 8,306 more rows</code></pre>
+<pre class="r"><code>gene_nest = gene_long %&gt;% 
+  group_by(gene_symbols) %&gt;% 
+  tidyr::nest()
+
+gene_nest</code></pre>
+<pre><code>## # A tibble: 54 x 2
+## # Groups:   gene_symbols [54]
+##    gene_symbols           data
+##    &lt;chr&gt;        &lt;list&lt;df[,3]&gt;&gt;
+##  1 Ahrr              [154 × 3]
+##  2 Aldh3a1           [154 × 3]
+##  3 Bbs2              [154 × 3]
+##  4 Ccbl1             [154 × 3]
+##  5 Cxcr7             [154 × 3]
+##  6 Col18a1           [154 × 3]
+##  7 Cyb5a             [154 × 3]
+##  8 Cyp1a1            [154 × 3]
+##  9 Cyp1a2            [154 × 3]
+## 10 Cyp1b1            [154 × 3]
+## # … with 44 more rows</code></pre>
+<pre class="r"><code>gene_nest$data[1:2]</code></pre>
+<pre><code>## &lt;list_of&lt;
+##   tbl_df&lt;
+##     strain         : character
+##     sample         : character
+##     gene_expression: double
+##   &gt;
+## &gt;[2]&gt;
+## [[1]]
+## # A tibble: 154 x 3
+##    strain sample gene_expression
+##    &lt;chr&gt;  &lt;chr&gt;            &lt;dbl&gt;
+##  1 HW     HW1              2.57 
+##  2 HW     HW2              0.352
+##  3 HW     HW3              0.254
+##  4 HW     HW4              2.30 
+##  5 HW     HW5              2.02 
+##  6 HW     HW6              1.70 
+##  7 HW     WW45             2.90 
+##  8 HW     WW46             3.11 
+##  9 HW     WW47             3.36 
+## 10 HW     WW48             2.04 
+## # … with 144 more rows
+## 
+## [[2]]
+## # A tibble: 154 x 3
+##    strain sample gene_expression
+##    &lt;chr&gt;  &lt;chr&gt;            &lt;dbl&gt;
+##  1 HW     HW1               1.65
+##  2 HW     HW2               2.14
+##  3 HW     HW3               2.05
+##  4 HW     HW4               5.73
+##  5 HW     HW5               4.18
+##  6 HW     HW6               4.40
+##  7 HW     WW45              7.98
+##  8 HW     WW46              7.01
+##  9 HW     WW47              7.73
+## 10 HW     WW48              7.96
+## # … with 144 more rows</code></pre>
+<pre class="r"><code>t_test_ge = function(this_data){
+  t.test(gene_expression ~ strain, data = this_data)
+}
+
+
+gene_test = gene_nest %&gt;% 
+  dplyr::mutate(test = purrr::map(.x = data, 
+                                  .f = t_test_ge),
+                test_tidy = purrr::map(.x = test,
+                                       .f = broom::tidy))
+
+
+
+gene_model_long = gene_test %&gt;% 
+  tidyr::unnest(test_tidy)
+
+
+gene_model_long %&gt;% 
+  ggplot(aes(x = p.value)) +
+  geom_histogram()</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="session3_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>gene_model_long %&gt;% 
+  dplyr::filter(p.value &lt; 0.0001) %&gt;% 
+  tidyr::unnest(data) %&gt;% 
+  dplyr::mutate(
+    label = paste0(gene_symbols, 
+                   &quot;, p-value = &quot;, 
+                   signif(p.value, 2))) %&gt;% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) +
+  geom_boxplot() +
+  facet_wrap(~ label, scales = &quot;free&quot;)</code></pre>
+<p><img src="session3_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+</div>
+<div id="regression-analysis" class="section level1">
+<h1>Regression analysis</h1>
 <pre class="r"><code>clean_data %&gt;% 
   ggplot(aes(x = Ahrr,
              y = Cxcr7,
              colour = strain)) +
   geom_point() +
   geom_smooth(method = &quot;lm&quot;)</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<pre class="r"><code>lm(Ahrr ~ Cxcr7, data = clean_data)</code></pre>
+<p><img src="session3_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>lm(Cxcr7 ~ Ahrr, data = clean_data)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = Ahrr ~ Cxcr7, data = clean_data)
+## lm(formula = Cxcr7 ~ Ahrr, data = clean_data)
 ## 
 ## Coefficients:
-## (Intercept)        Cxcr7  
-##      0.2878       0.6775</code></pre>
-<pre class="r"><code>lm(Ahrr ~ Cxcr7, data = hw_data)</code></pre>
+## (Intercept)         Ahrr  
+##      2.2446       0.6054</code></pre>
+<pre class="r"><code>lm(Cxcr7 ~ Ahrr, data = hw_data)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = Ahrr ~ Cxcr7, data = hw_data)
+## lm(formula = Cxcr7 ~ Ahrr, data = hw_data)
 ## 
 ## Coefficients:
-## (Intercept)        Cxcr7  
-##      -1.717        1.321</code></pre>
-<pre class="r"><code>lm(Ahrr ~ Cxcr7, data = le_data)</code></pre>
+## (Intercept)         Ahrr  
+##      2.5755       0.3311</code></pre>
+<pre class="r"><code>lm(Cxcr7 ~ Ahrr, data = le_data)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = Ahrr ~ Cxcr7, data = le_data)
+## lm(formula = Cxcr7 ~ Ahrr, data = le_data)
 ## 
 ## Coefficients:
-## (Intercept)        Cxcr7  
-##     -0.3532       0.7364</code></pre>
-<pre class="r"><code>lm_Ahrr_Cxcr7 = function(this_data){
-  lm(Ahrr ~ Cxcr7, data = this_data)
+## (Intercept)         Ahrr  
+##      1.8324       0.9286</code></pre>
+<pre class="r"><code>lm_Cxcr7_Ahrr = function(this_data){
+  lm(Cxcr7 ~ Ahrr, data = this_data)
 }
 
 list_data = list(
@@ -385,65 +542,65 @@ list_data = list(
   le_data = le_data)
 
 purrr::map(.x = list_data, 
-           .f = lm_Ahrr_Cxcr7)</code></pre>
+           .f = lm_Cxcr7_Ahrr)</code></pre>
 <pre><code>## $clean_data
 ## 
 ## Call:
-## lm(formula = Ahrr ~ Cxcr7, data = this_data)
+## lm(formula = Cxcr7 ~ Ahrr, data = this_data)
 ## 
 ## Coefficients:
-## (Intercept)        Cxcr7  
-##      0.2878       0.6775  
+## (Intercept)         Ahrr  
+##      2.2446       0.6054  
 ## 
 ## 
 ## $hw_data
 ## 
 ## Call:
-## lm(formula = Ahrr ~ Cxcr7, data = this_data)
+## lm(formula = Cxcr7 ~ Ahrr, data = this_data)
 ## 
 ## Coefficients:
-## (Intercept)        Cxcr7  
-##      -1.717        1.321  
+## (Intercept)         Ahrr  
+##      2.5755       0.3311  
 ## 
 ## 
 ## $le_data
 ## 
 ## Call:
-## lm(formula = Ahrr ~ Cxcr7, data = this_data)
+## lm(formula = Cxcr7 ~ Ahrr, data = this_data)
 ## 
 ## Coefficients:
-## (Intercept)        Cxcr7  
-##     -0.3532       0.7364</code></pre>
+## (Intercept)         Ahrr  
+##      1.8324       0.9286</code></pre>
 <pre class="r"><code>purrr::map(.x = list_data, 
-           .f = lm_Ahrr_Cxcr7) %&gt;% 
+           .f = lm_Cxcr7_Ahrr) %&gt;% 
   purrr::map(.f = broom::tidy)</code></pre>
 <pre><code>## $clean_data
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic  p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)    0.288    0.281       1.02 3.07e- 1
-## 2 Cxcr7          0.678    0.0659     10.3  3.75e-19
+## 1 (Intercept)    2.24     0.195       11.5 1.78e-22
+## 2 Ahrr           0.605    0.0589      10.3 3.75e-19
 ## 
 ## $hw_data
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic  p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)    -1.72     0.596     -2.88 5.06e- 3
-## 2 Cxcr7           1.32     0.164      8.03 5.56e-12
+## 1 (Intercept)    2.58     0.134      19.2  3.02e-32
+## 2 Ahrr           0.331    0.0412      8.03 5.56e-12
 ## 
 ## $le_data
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic  p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)   -0.353    0.302      -1.17 2.47e- 1
-## 2 Cxcr7          0.736    0.0612     12.0  2.07e-18</code></pre>
-<pre class="r"><code>Cxcr7_long = clean_data %&gt;%
+## 1 (Intercept)    1.83     0.260       7.05 1.22e- 9
+## 2 Ahrr           0.929    0.0771     12.0  2.07e-18</code></pre>
+<pre class="r"><code>gene_long = clean_data %&gt;%
   tidyr::pivot_longer(
     cols = -c(&quot;strain&quot;, &quot;Cxcr7&quot;, &quot;sample&quot;),
     names_to = &quot;gene_symbols&quot;,
     values_to = &quot;gene_expression&quot;)
 
-Cxcr7_long</code></pre>
+gene_long</code></pre>
 <pre><code>## # A tibble: 8,162 x 5
 ##    strain sample Cxcr7 gene_symbols gene_expression
 ##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;                  &lt;dbl&gt;
@@ -458,11 +615,11 @@ Cxcr7_long</code></pre>
 ##  9 HW     HW1     3.16 Cyp1b1                  1.87
 ## 10 HW     HW1     3.16 Cyp2a1                  8.40
 ## # … with 8,152 more rows</code></pre>
-<pre class="r"><code>Cxcr7_nest = Cxcr7_long %&gt;% 
+<pre class="r"><code>gene_nest = gene_long %&gt;% 
   group_by(strain, gene_symbols) %&gt;% 
   tidyr::nest()
 
-Cxcr7_nest$data[1:2]</code></pre>
+gene_nest$data[1:2]</code></pre>
 <pre><code>## &lt;list_of&lt;
 ##   tbl_df&lt;
 ##     sample         : character
@@ -505,7 +662,7 @@ Cxcr7_nest$data[1:2]</code></pre>
   lm(Cxcr7 ~ gene_expression, data = this_data)
 }
 
-Cxcr7_model = Cxcr7_nest %&gt;% 
+gene_model = gene_nest %&gt;% 
   dplyr::mutate(lm_obj = purrr::map(.x = data, 
                                     .f = lm_Cxcr7_ge),
                 lm_tidy = purrr::map(.x = lm_obj,
@@ -513,14 +670,14 @@ Cxcr7_model = Cxcr7_nest %&gt;%
 
 
 
-Cxcr7_model_long = Cxcr7_model %&gt;% 
+gene_model_long = gene_model %&gt;% 
   dplyr::select(-data, -lm_obj) %&gt;% 
   tidyr::unnest(lm_tidy) %&gt;% 
   dplyr::select(strain, gene_symbols, term, estimate) %&gt;% 
   dplyr::filter(term == &quot;gene_expression&quot;)
 
 
-Cxcr7_model_long</code></pre>
+gene_model_long</code></pre>
 <pre><code>## # A tibble: 106 x 4
 ## # Groups:   strain, gene_symbols [106]
 ##    strain gene_symbols term            estimate
@@ -536,23 +693,23 @@ Cxcr7_model_long</code></pre>
 ##  9 HW     Cyp1b1       gene_expression    0.140
 ## 10 HW     Cyp2a1       gene_expression    0.742
 ## # … with 96 more rows</code></pre>
-<pre class="r"><code>Cxcr7_model_wide = Cxcr7_model_long %&gt;% 
+<pre class="r"><code>gene_model_wide = gene_model_long %&gt;% 
   dplyr::ungroup() %&gt;% 
   tidyr::pivot_wider(names_from = &quot;strain&quot;,
                      values_from = &quot;estimate&quot;)
 
 
-Cxcr7_model_wide %&gt;% 
+gene_model_wide %&gt;% 
   ggplot(aes(x = HW, y = LE)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, colour = &quot;red&quot;)</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<pre class="r"><code>Cxcr7_model_wide %&gt;% 
+<p><img src="session3_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>gene_model_wide %&gt;% 
   ggplot(aes(x = HW, y = LE,
              label = gene_symbols)) +
   geom_text() +
   geom_abline(slope = 1, intercept = 0, colour = &quot;red&quot;)</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<p><img src="session3_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
 </div>
 <div id="session-info" class="section level1">
 <h1>Session Info</h1>

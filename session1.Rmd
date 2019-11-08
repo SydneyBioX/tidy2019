@@ -2,7 +2,9 @@
 title: 'session1'
 author: "Kevin Wang and Garth Tarr"
 date: "05/11/2019"
-output: html_document
+output:
+  html_document:
+    css: style.css
 ---
 
 # Learning outcomes of this session

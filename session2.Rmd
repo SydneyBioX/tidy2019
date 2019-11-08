@@ -2,16 +2,18 @@
 title: "session2"
 author: "Kevin Wang and Garth Tarr"
 date: "05/11/2019"
-output: html_document
+output:
+  html_document:
+    css: style.css
 ---
 
 
 # Learning outcomes of this session
 
 + left_join data
-+ Making basic plots using `ggplot2`: tile plot and scatter plots
++ Making basic plots using `ggplot2`: boxplots, histograms and scatter plots
 + Joining two datasets together (`left_join`)
-+ `pivot_longer` and `pivot_wider` to reshape data for plotting purposes
++ `pivot_longer` and `pivot_wider` to reshape data for visualisation purposes
 
 
 
@@ -88,8 +90,10 @@ long_sample_ge_data
 ```
 
 
-# `ggplot2` visualisation 
+# `ggplot2` visualisation
 
+
+A blurb about ggplot framework. 
 
 ```{r}
 long_sample_ge_data %>% 
@@ -139,6 +143,71 @@ long_sample_ge_data %>%
   geom_boxplot() +
   facet_wrap(~gene_symbol) +
   scale_y_log10(labels = scales::comma)
+
+
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) + 
+  geom_point() +
+  geom_boxplot() +
+  facet_wrap(~gene_symbol) +
+  scale_y_log10(labels = scales::comma)
+```
+
+
+
+```{r}
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression, 
+             colour = strain)) + 
+  geom_point() +
+  geom_boxplot() +
+  facet_wrap(~gene_symbol) +
+  scale_y_log10(labels = scales::comma)
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) + 
+  geom_point(aes(colour = strain)) +
+  geom_boxplot() +
+  facet_wrap(~gene_symbol) +
+  scale_y_log10(labels = scales::comma)
+```
+
+
+
+
+
+
+## Histogram
+```{r}
+long_sample_ge_data %>% 
+  ggplot(aes(x = gene_expression)) + 
+  geom_histogram()
+
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = gene_expression)) + 
+  geom_histogram() +
+  facet_wrap(~gene_symbol) +
+  scale_x_log10(labels = scales::comma)
+
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = gene_expression)) + 
+  geom_histogram() +
+  geom_density() +
+  facet_wrap(~gene_symbol) +
+  scale_x_log10(labels = scales::comma)
+
+long_sample_ge_data %>% 
+  ggplot(aes(x = gene_expression, y = ..density..)) + 
+  geom_histogram() +
+  geom_density() +
+  facet_wrap(~gene_symbol) +
+  scale_x_log10(labels = scales::comma)
 ```
 
 

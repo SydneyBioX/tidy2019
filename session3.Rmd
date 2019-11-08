@@ -2,7 +2,9 @@
 title: "session3"
 author: "Kevin Wang and Garth Tarr"
 date: "05/11/2019"
-output: html_document
+output:
+  html_document:
+    css: style.css
 ---
 
 
@@ -39,7 +41,94 @@ le_data = clean_data %>%
   dplyr::filter(strain == "LE")
 ```
 
-# Correlation analysis
+
+# t-test
+
+```{r}
+t.test(x = hw_data$Ahrr, 
+       y = le_data$Ahrr)
+
+t.test(x = hw_data$Cxcr7, 
+       y = le_data$Cxcr7)
+
+t.test(Ahrr ~ strain, data = clean_data)
+```
+
+
+
+
+```{r}
+gene_long = clean_data %>%
+  tidyr::pivot_longer(
+    cols = -c("strain", "sample"),
+    names_to = "gene_symbols",
+    values_to = "gene_expression")
+
+
+gene_long
+
+
+gene_nest = gene_long %>% 
+  group_by(gene_symbols) %>% 
+  tidyr::nest()
+
+gene_nest
+
+gene_nest$data[1:2]
+
+t_test_ge = function(this_data){
+  t.test(gene_expression ~ strain, data = this_data)
+}
+
+
+gene_test = gene_nest %>% 
+  dplyr::mutate(test = purrr::map(.x = data, 
+                                  .f = t_test_ge),
+                test_tidy = purrr::map(.x = test,
+                                       .f = broom::tidy))
+
+
+
+gene_model_long = gene_test %>% 
+  tidyr::unnest(test_tidy)
+
+
+gene_model_long %>% 
+  ggplot(aes(x = p.value)) +
+  geom_histogram()
+
+
+gene_model_long %>% 
+  dplyr::filter(p.value < 0.0001) %>% 
+  tidyr::unnest(data) %>% 
+  dplyr::mutate(
+    label = paste0(gene_symbols, 
+                   ", p-value = ", 
+                   signif(p.value, 2))) %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) +
+  geom_boxplot() +
+  facet_wrap(~ label, scales = "free")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Regression analysis
 
 ```{r}
 clean_data %>% 
@@ -50,12 +139,12 @@ clean_data %>%
   geom_smooth(method = "lm")
 
 
-lm(Ahrr ~ Cxcr7, data = clean_data)
-lm(Ahrr ~ Cxcr7, data = hw_data)
-lm(Ahrr ~ Cxcr7, data = le_data)
+lm(Cxcr7 ~ Ahrr, data = clean_data)
+lm(Cxcr7 ~ Ahrr, data = hw_data)
+lm(Cxcr7 ~ Ahrr, data = le_data)
 
-lm_Ahrr_Cxcr7 = function(this_data){
-  lm(Ahrr ~ Cxcr7, data = this_data)
+lm_Cxcr7_Ahrr = function(this_data){
+  lm(Cxcr7 ~ Ahrr, data = this_data)
 }
 
 list_data = list(
@@ -64,10 +153,10 @@ list_data = list(
   le_data = le_data)
 
 purrr::map(.x = list_data, 
-           .f = lm_Ahrr_Cxcr7)
+           .f = lm_Cxcr7_Ahrr)
 
 purrr::map(.x = list_data, 
-           .f = lm_Ahrr_Cxcr7) %>% 
+           .f = lm_Cxcr7_Ahrr) %>% 
   purrr::map(.f = broom::tidy)
 ```
 
@@ -75,25 +164,25 @@ purrr::map(.x = list_data,
 
 
 ```{r}
-Cxcr7_long = clean_data %>%
+gene_long = clean_data %>%
   tidyr::pivot_longer(
     cols = -c("strain", "Cxcr7", "sample"),
     names_to = "gene_symbols",
     values_to = "gene_expression")
 
-Cxcr7_long
+gene_long
 
-Cxcr7_nest = Cxcr7_long %>% 
+gene_nest = gene_long %>% 
   group_by(strain, gene_symbols) %>% 
   tidyr::nest()
 
-Cxcr7_nest$data[1:2]
+gene_nest$data[1:2]
 
 lm_Cxcr7_ge = function(this_data){
   lm(Cxcr7 ~ gene_expression, data = this_data)
 }
 
-Cxcr7_model = Cxcr7_nest %>% 
+gene_model = gene_nest %>% 
   dplyr::mutate(lm_obj = purrr::map(.x = data, 
                                     .f = lm_Cxcr7_ge),
                 lm_tidy = purrr::map(.x = lm_obj,
@@ -101,28 +190,28 @@ Cxcr7_model = Cxcr7_nest %>%
 
 
 
-Cxcr7_model_long = Cxcr7_model %>% 
+gene_model_long = gene_model %>% 
   dplyr::select(-data, -lm_obj) %>% 
   tidyr::unnest(lm_tidy) %>% 
   dplyr::select(strain, gene_symbols, term, estimate) %>% 
   dplyr::filter(term == "gene_expression")
 
 
-Cxcr7_model_long
+gene_model_long
 
 
-Cxcr7_model_wide = Cxcr7_model_long %>% 
+gene_model_wide = gene_model_long %>% 
   dplyr::ungroup() %>% 
   tidyr::pivot_wider(names_from = "strain",
                      values_from = "estimate")
 
 
-Cxcr7_model_wide %>% 
+gene_model_wide %>% 
   ggplot(aes(x = HW, y = LE)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, colour = "red")
 
-Cxcr7_model_wide %>% 
+gene_model_wide %>% 
   ggplot(aes(x = HW, y = LE,
              label = gene_symbols)) +
   geom_text() +
