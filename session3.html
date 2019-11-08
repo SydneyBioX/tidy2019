@@ -315,13 +315,7 @@ $(document).ready(function () {
 </div>
 <div id="loading-packages" class="section level1">
 <h1>Loading packages</h1>
-<pre class="r"><code>library(tidyverse)
-library(skimr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;skimr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:stats&#39;:
-## 
-##     filter</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
 </div>
 <div id="loading-cleaned-sample-data" class="section level1">
 <h1>Loading cleaned sample data</h1>
@@ -345,32 +339,6 @@ le_data = clean_data %&gt;%
 </div>
 <div id="t-test" class="section level1">
 <h1>t-test</h1>
-<pre class="r"><code>t.test(x = hw_data$Ahrr, 
-       y = le_data$Ahrr)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  hw_data$Ahrr and le_data$Ahrr
-## t = -0.75737, df = 148.97, p-value = 0.45
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -0.5485616  0.2445692
-## sample estimates:
-## mean of x mean of y 
-##  2.998168  3.150164</code></pre>
-<pre class="r"><code>t.test(x = hw_data$Cxcr7, 
-       y = le_data$Cxcr7)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  hw_data$Cxcr7 and le_data$Cxcr7
-## t = -6.7356, df = 92.864, p-value = 1.343e-09
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -1.5401323 -0.8387663
-## sample estimates:
-## mean of x mean of y 
-##  3.568083  4.757532</code></pre>
 <pre class="r"><code>t.test(Ahrr ~ strain, data = clean_data)</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
@@ -383,6 +351,34 @@ le_data = clean_data %&gt;%
 ## sample estimates:
 ## mean in group HW mean in group LE 
 ##         2.998168         3.150164</code></pre>
+<pre class="r"><code>t.test(Cxcr7 ~ strain, data = clean_data)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  Cxcr7 by strain
+## t = -6.7356, df = 92.864, p-value = 1.343e-09
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -1.5401323 -0.8387663
+## sample estimates:
+## mean in group HW mean in group LE 
+##         3.568083         4.757532</code></pre>
+<pre class="r"><code>t.test(Ahrr ~ strain, data = clean_data) %&gt;% 
+  broom::tidy()</code></pre>
+<pre><code>## # A tibble: 1 x 10
+##   estimate estimate1 estimate2 statistic p.value parameter conf.low
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1   -0.152      3.00      3.15    -0.757   0.450      149.   -0.549
+## # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+## #   alternative &lt;chr&gt;</code></pre>
+<pre class="r"><code>t.test(Cxcr7 ~ strain, data = clean_data) %&gt;% 
+  broom::tidy()</code></pre>
+<pre><code>## # A tibble: 1 x 10
+##   estimate estimate1 estimate2 statistic p.value parameter conf.low
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1    -1.19      3.57      4.76     -6.74 1.34e-9      92.9    -1.54
+## # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+## #   alternative &lt;chr&gt;</code></pre>
 <pre class="r"><code>gene_long = clean_data %&gt;%
   tidyr::pivot_longer(
     cols = -c(&quot;strain&quot;, &quot;sample&quot;),
@@ -464,21 +460,20 @@ gene_nest</code></pre>
 ##  9 HW     WW47              7.73
 ## 10 HW     WW48              7.96
 ## # … with 144 more rows</code></pre>
-<pre class="r"><code>t_test_ge = function(this_data){
-  t.test(gene_expression ~ strain, data = this_data)
+<pre class="r"><code>tidy_test = function(this_data){
+  t.test(gene_expression ~ strain, data = this_data) %&gt;% 
+    broom::tidy()
 }
 
 
 gene_test = gene_nest %&gt;% 
-  dplyr::mutate(test = purrr::map(.x = data, 
-                                  .f = t_test_ge),
-                test_tidy = purrr::map(.x = test,
-                                       .f = broom::tidy))
-
-
+  dplyr::mutate(
+    tidy_result = purrr::map(
+      .x = data,
+      .f = tidy_test))
 
 gene_model_long = gene_test %&gt;% 
-  tidyr::unnest(test_tidy)
+  tidyr::unnest(tidy_result)
 
 
 gene_model_long %&gt;% 
@@ -729,10 +724,9 @@ gene_model_wide %&gt;%
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] skimr_1.0.7     visdat_0.5.3    readxl_1.3.1    janitor_1.2.0  
-##  [5] forcats_0.4.0   stringr_1.4.0   dplyr_0.8.3     purrr_0.3.3    
-##  [9] readr_1.3.1     tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1  
-## [13] tidyverse_1.2.1
+##  [1] visdat_0.5.3    readxl_1.3.1    janitor_1.2.0   forcats_0.4.0  
+##  [5] stringr_1.4.0   dplyr_0.8.3     purrr_0.3.3     readr_1.3.1    
+##  [9] tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1   tidyverse_1.2.1
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.2        lubridate_1.7.4   lattice_0.20-38  

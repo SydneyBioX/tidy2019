@@ -21,7 +21,6 @@ output:
 
 ```{r}
 library(tidyverse)
-library(skimr)
 ```
 
 
@@ -45,13 +44,15 @@ le_data = clean_data %>%
 # t-test
 
 ```{r}
-t.test(x = hw_data$Ahrr, 
-       y = le_data$Ahrr)
-
-t.test(x = hw_data$Cxcr7, 
-       y = le_data$Cxcr7)
-
 t.test(Ahrr ~ strain, data = clean_data)
+t.test(Cxcr7 ~ strain, data = clean_data)
+
+
+t.test(Ahrr ~ strain, data = clean_data) %>% 
+  broom::tidy()
+
+t.test(Cxcr7 ~ strain, data = clean_data) %>% 
+  broom::tidy()
 ```
 
 
@@ -76,21 +77,20 @@ gene_nest
 
 gene_nest$data[1:2]
 
-t_test_ge = function(this_data){
-  t.test(gene_expression ~ strain, data = this_data)
+tidy_test = function(this_data){
+  t.test(gene_expression ~ strain, data = this_data) %>% 
+    broom::tidy()
 }
 
 
 gene_test = gene_nest %>% 
-  dplyr::mutate(test = purrr::map(.x = data, 
-                                  .f = t_test_ge),
-                test_tidy = purrr::map(.x = test,
-                                       .f = broom::tidy))
-
-
+  dplyr::mutate(
+    tidy_result = purrr::map(
+      .x = data,
+      .f = tidy_test))
 
 gene_model_long = gene_test %>% 
-  tidyr::unnest(test_tidy)
+  tidyr::unnest(tidy_result)
 
 
 gene_model_long %>% 
@@ -110,21 +110,6 @@ gene_model_long %>%
   geom_boxplot() +
   facet_wrap(~ label, scales = "free")
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -217,6 +202,10 @@ gene_model_wide %>%
   geom_text() +
   geom_abline(slope = 1, intercept = 0, colour = "red")
 ```
+
+
+
+
 
 # Session Info
 ```{r}
