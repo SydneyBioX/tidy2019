@@ -113,7 +113,7 @@ gene_model_long %>%
 
 
 
-# Regression analysis
+# Regression analysis (extension)
 
 ```{r}
 clean_data %>% 

@@ -9,7 +9,9 @@ output:
 
 # Aim of this workshop
 
-In this workshop, we will teach you some necessary data skills to turn a piece of real clinical data into a nicely written report. We will be operating under the `tidyverse` framework in `R`, which is very powerful for data manipulations, visualisation and modelling. 
+In this workshop, we will teach you some necessary data wrangling skills to turn a piece of real clinical data into a nicely written report. We will be operating under the `tidyverse` framework in `R`, which is very powerful for data manipulations, visualisation and modelling. 
+
+# What is the `tidyverse`? 
 
 The `tidyverse` is a collection of `R` packages that aims to streamline the following workflow.
 

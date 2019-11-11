@@ -21,18 +21,6 @@ output:
 + Saving `data.frame` for next stage of analysis
 
 
-# Going through some variable types
-
-```{r}
-class(c(TRUE, FALSE))
-class(1:5)
-class(rnorm(5))
-class(c("a", "b"))
-class(iris)
-```
-
-
-
 # Loading packages 
 ```{r}
 library(tidyverse)
@@ -42,22 +30,69 @@ library(visdat)
 ```
 
 
-# Loading data
 
+# Warm up: variable types
+
+Before we take a dive into the `tidyverse`, let's take a quick minute to revise on some variable types in `R`. The reason that we want to do this is because everything in `R` is stored as a variable/object which ultimately determines its behaviours. 
+
+```{r}
+logical = c(TRUE, FALSE)
+logical
+class(logical)
+
+integer = 1:5
+integer
+class(integer)
+
+numeric = rnorm(5)
+numeric
+class(numeric)
+
+character = c("a", "b")
+character
+class(character)
+
+what_am_i = c(integer, character)
+what_am_i
+class(what_am_i)
+
+how_about_me = list(integer, character)
+how_about_me
+class(how_about_me[[1]])
+class(how_about_me[[2]])
+
+data(diamonds, package = "ggplot2")
+diamonds
+class(diamonds)
+```
+
+
+
+
+# Reading in data
+
+In this session, we will read in a Excel dataset (`xls` format). We will use the [`readxl` package](https://readxl.tidyverse.org/) to perform this task. 
+
+Of course, `xls` is not the only data type that `R` can deal with. Have a look at this [cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf) to see some data types that the [`readr` package](https://readr.tidyverse.org/) is able to handle. If you want to read in SAS or SPSS files, have a look at the [`haven` package](https://haven.tidyverse.org/).  
 
 ## First attempt
 
-This is bad.
+The `read_xls` function from the `readxl` package is perfect to read in a `xls` data, let's try that!
 
 ```{r}
-raw_data = readxl::read_xls("data/sample_data.xls")
+raw_data = readxl::read_xls(path = "data/sample_data.xls")
 
 head(raw_data)
 ```
 
+Oh, no! We seemed to read in a very ugly dataset. What happened? 
+
+If we open up the `xls` dataset up in Excel, we see that `R` didn't do anything wrong! It actually faithfully read in everything that you can see in the Excel sheet. 
+This `xls` data is poorly formatte with the first three rows being non-sense that is not relevant for data analysis. We should ask the function `read_xls` to skip the first three rows, use the 4th row as the data headings. How can we do that?
+
 ## Second attempt
 
-This is good. 
+Have a look at this!
 
 ```{r}
 raw_data = readxl::read_xls("data/sample_data.xls", skip = 3)
@@ -67,11 +102,13 @@ head(raw_data)
 
 # Cleaning column names
 
-This looks nice. 
+The column names of this dataset isn't quite as nice as we would like. For example, the "time" column has some strange symbols. We can remove these using the `clean_names` function from the `janitor` package. Even though this package is not a part of the `tidyverse`, but it is a very useful package nonetheless. 
 
 ```{r}
 clean_col_data = raw_data %>% 
   janitor::clean_names()
+
+clean_col_data
 ```
 
 
@@ -80,11 +117,14 @@ clean_col_data = raw_data %>%
 
 ## Selecting certain columns
 
-This selects columns.
+We will now use the `dplyr` package to perform some basic data cleaning. The `dplyr` package is one of the most popular packages inside the `tidyverse`. Its main functions are designed to interact with the `data.frame` object in `R` in a very intuitive way. This is why its name is an excellent pun: it is a **ply**e**r** for  **d**ata (okay, maybe it depends on your sense of humour). 
+
+Let's see `dplyr` in action. If we want to select only the `strain` column of this data, then we can use the `select` function from the `dplyr` package.
+
 
 ```{r}
 sub_data = clean_col_data %>% 
-  dplyr::select(strain, sample)
+  dplyr::select(strain)
 
 sub_data
 ```
@@ -92,9 +132,16 @@ sub_data
 
 # Selecting columns by character vector
 
-This selects 4 columns that we will use for our analysis.
+If we want to select multiple columns in the data, we could include more names (unquoted) into the `select` function. 
+
+However, sometimes it is useful to select columns using a character vector, especially considering the "dose" column has a Greek symbol (nano-gram) inside. 
+
 
 ```{r}
+clean_col_data %>% 
+  dplyr::select(strain, sample)
+
+
 colnames(clean_col_data) %>% tolower()
 select_columns = colnames(clean_col_data)[1:4]
 select_columns
@@ -108,6 +155,7 @@ sub_data
 
 # Renaming columns
 
+We can also rename the columns. 
 
 ```{r}
 sub_data = sub_data %>% 
