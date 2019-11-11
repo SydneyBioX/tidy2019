@@ -158,22 +158,46 @@ sub_data
 We can also rename the columns. 
 
 ```{r}
+sub_data %>% 
+  dplyr::rename(time = time_hours)
+
+rename_columns = c("strain", "sample", "time", "dose")
+
 sub_data = sub_data %>% 
-  dplyr::rename(
-    time = time_hours,
-    dose = dose_µg_kg)
+  dplyr::rename_at(vars(select_columns), ~ rename_columns)
+
+sub_data 
 ```
 
 # Mutating columns
 
+The `mutate` function in `dplyr` does exactly what you would expect: it changes an entire column. It has the structure that `new column = some changes to the (old column)`. 
+
 ```{r}
-mutate_data = sub_data %>% 
-  dplyr::mutate(time = as.numeric(time), 
+sub_data %>% 
+  dplyr::mutate(time_2 = as.numeric(time))
+```
+
+If the new column has the same name as the old column, then this column will be over-written. 
+
+```{r}
+mutate_data =  sub_data %>% 
+  dplyr::mutate(time = as.numeric(time),
                 dose = as.numeric(dose))
+
+mutate_data
 ```
 
 
 # Missing values 
+
+When we mutated our data, we saw that there was a warning message about `NA`, which is `R`'s way to represent a missing value. So what happened?
+
+If we have a quick look at the original `xls` file, we see that someone must have copied the data with the heading four times. This is why when we converted `time` into a numeric variable, `R` recognised the column headings in the middle of the data as weird values and assigned those with `NA`. 
+
+We can visualise `NA` in our data using the `vis_miss` function from `visdat`. 
+
+
 ```{r}
 mutate_data %>% 
   visdat::vis_miss()

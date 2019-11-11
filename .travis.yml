@@ -6,6 +6,9 @@ latex: false
 branches:
   only:
     - master
+    
+cache:
+  packages: yes
 
 script:
   - R -e 'rmarkdown::render_site()'

@@ -355,7 +355,7 @@ integer</code></pre>
 <pre><code>## [1] &quot;integer&quot;</code></pre>
 <pre class="r"><code>numeric = rnorm(5)
 numeric</code></pre>
-<pre><code>## [1] -0.19813726  0.37069828  0.26175396 -0.01749427 -1.41694613</code></pre>
+<pre><code>## [1]  0.67179458  2.22805361 -0.48834835 -0.04406991 -0.81623416</code></pre>
 <pre class="r"><code>class(numeric)</code></pre>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
 <pre class="r"><code>character = c(&quot;a&quot;, &quot;b&quot;)
@@ -538,25 +538,94 @@ sub_data</code></pre>
 <div id="renaming-columns" class="section level1">
 <h1>Renaming columns</h1>
 <p>We can also rename the columns.</p>
-<pre class="r"><code>sub_data = sub_data %&gt;% 
-  dplyr::rename(
-    time = time_hours,
-    dose = dose_µg_kg)</code></pre>
+<pre class="r"><code>sub_data %&gt;% 
+  dplyr::rename(time = time_hours)</code></pre>
+<pre><code>## # A tibble: 168 x 4
+##    strain sample time  dose_µg_kg
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;     
+##  1 HW     HW1    1.5   0         
+##  2 HW     HW2    1.5   0         
+##  3 HW     HW3    1.5   0         
+##  4 HW     HW4    1.5   100       
+##  5 HW     HW5    1.5   100       
+##  6 HW     HW6    1.5   100       
+##  7 HW     WW45   3     100       
+##  8 HW     WW46   3     100       
+##  9 HW     WW47   3     100       
+## 10 HW     WW48   3     100       
+## # … with 158 more rows</code></pre>
+<pre class="r"><code>rename_columns = c(&quot;strain&quot;, &quot;sample&quot;, &quot;time&quot;, &quot;dose&quot;)
+
+sub_data = sub_data %&gt;% 
+  dplyr::rename_at(vars(select_columns), ~ rename_columns)
+
+sub_data </code></pre>
+<pre><code>## # A tibble: 168 x 4
+##    strain sample time  dose 
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
+##  1 HW     HW1    1.5   0    
+##  2 HW     HW2    1.5   0    
+##  3 HW     HW3    1.5   0    
+##  4 HW     HW4    1.5   100  
+##  5 HW     HW5    1.5   100  
+##  6 HW     HW6    1.5   100  
+##  7 HW     WW45   3     100  
+##  8 HW     WW46   3     100  
+##  9 HW     WW47   3     100  
+## 10 HW     WW48   3     100  
+## # … with 158 more rows</code></pre>
 </div>
 <div id="mutating-columns" class="section level1">
 <h1>Mutating columns</h1>
-<pre class="r"><code>mutate_data = sub_data %&gt;% 
-  dplyr::mutate(time = as.numeric(time), 
+<p>The <code>mutate</code> function in <code>dplyr</code> does exactly what you would expect: it changes an entire column. It has the structure that <code>new column = some changes to the (old column)</code>.</p>
+<pre class="r"><code>sub_data %&gt;% 
+  dplyr::mutate(time_2 = as.numeric(time))</code></pre>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<pre><code>## # A tibble: 168 x 5
+##    strain sample time  dose  time_2
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+##  1 HW     HW1    1.5   0        1.5
+##  2 HW     HW2    1.5   0        1.5
+##  3 HW     HW3    1.5   0        1.5
+##  4 HW     HW4    1.5   100      1.5
+##  5 HW     HW5    1.5   100      1.5
+##  6 HW     HW6    1.5   100      1.5
+##  7 HW     WW45   3     100      3  
+##  8 HW     WW46   3     100      3  
+##  9 HW     WW47   3     100      3  
+## 10 HW     WW48   3     100      3  
+## # … with 158 more rows</code></pre>
+<p>If the new column has the same name as the old column, then this column will be over-written.</p>
+<pre class="r"><code>mutate_data =  sub_data %&gt;% 
+  dplyr::mutate(time = as.numeric(time),
                 dose = as.numeric(dose))</code></pre>
 <pre><code>## Warning: NAs introduced by coercion
 
 ## Warning: NAs introduced by coercion</code></pre>
+<pre class="r"><code>mutate_data</code></pre>
+<pre><code>## # A tibble: 168 x 4
+##    strain sample  time  dose
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 HW     HW1      1.5     0
+##  2 HW     HW2      1.5     0
+##  3 HW     HW3      1.5     0
+##  4 HW     HW4      1.5   100
+##  5 HW     HW5      1.5   100
+##  6 HW     HW6      1.5   100
+##  7 HW     WW45     3     100
+##  8 HW     WW46     3     100
+##  9 HW     WW47     3     100
+## 10 HW     WW48     3     100
+## # … with 158 more rows</code></pre>
 </div>
 <div id="missing-values" class="section level1">
 <h1>Missing values</h1>
+<p>When we mutated our data, we saw that there was a warning message about <code>NA</code>, which is <code>R</code>’s way to represent a missing value. So what happened?</p>
+<p>If we have a quick look at the original <code>xls</code> file, we see that someone must have copied the data with the heading four times. This is why when we converted <code>time</code> into a numeric variable, <code>R</code> recognised the column headings in the middle of the data as weird values and assigned those with <code>NA</code>.</p>
+<p>We can visualise <code>NA</code> in our data using the <code>vis_miss</code> function from <code>visdat</code>.</p>
 <pre class="r"><code>mutate_data %&gt;% 
   visdat::vis_miss()</code></pre>
-<p><img src="session1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="session1_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 <div id="filtering-out-problematic-rows" class="section level1">
 <h1>Filtering out problematic rows</h1>
