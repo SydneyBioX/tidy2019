@@ -323,12 +323,12 @@ $(document).ready(function () {
 <div id="loading-packages" class="section level1">
 <h1>Loading packages</h1>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
 ## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
 ## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
 ## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ───────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(janitor)</code></pre>
@@ -355,7 +355,7 @@ integer</code></pre>
 <pre><code>## [1] &quot;integer&quot;</code></pre>
 <pre class="r"><code>numeric = rnorm(5)
 numeric</code></pre>
-<pre><code>## [1]  0.67179458  2.22805361 -0.48834835 -0.04406991 -0.81623416</code></pre>
+<pre><code>## [1] -0.0006877978 -0.5000656382 -0.1097003958 -0.2331164289  1.0439878212</code></pre>
 <pre class="r"><code>class(numeric)</code></pre>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
 <pre class="r"><code>character = c(&quot;a&quot;, &quot;b&quot;)
@@ -629,7 +629,10 @@ sub_data </code></pre>
 </div>
 <div id="filtering-out-problematic-rows" class="section level1">
 <h1>Filtering out problematic rows</h1>
-<pre class="r"><code>mutate_data %&gt;% 
+<p>We will now filtering out the three rows of column headings, which we have converted into <code>NA</code> in the <code>time</code> and <code>dose</code> columns.</p>
+<p>We will use the <code>filter</code> function from the <code>dplyr</code> package. The function takes in <code>logical</code> vectors of the same length as the <code>nrow(data)</code> as the input.</p>
+<pre class="r"><code>## These are the rows we want to filter out
+mutate_data %&gt;% 
   dplyr::filter(is.na(time))</code></pre>
 <pre><code>## # A tibble: 3 x 4
 ##   strain sample  time  dose
@@ -637,11 +640,9 @@ sub_data </code></pre>
 ## 1 Strain Sample    NA    NA
 ## 2 Strain Sample    NA    NA
 ## 3 Strain Sample    NA    NA</code></pre>
-<pre class="r"><code>filter_data = mutate_data %&gt;% 
-  dplyr::filter(!is.na(time))
-
+<pre class="r"><code>## The reverse of the above is written with a `!`. 
 filter_data = mutate_data %&gt;% 
-  dplyr::filter(complete.cases(time))
+  dplyr::filter(!is.na(time))
 
 filter_data</code></pre>
 <pre><code>## # A tibble: 165 x 4
@@ -661,6 +662,8 @@ filter_data</code></pre>
 </div>
 <div id="making-summary-statistics" class="section level1">
 <h1>Making summary statistics</h1>
+<p>We will finish today’s session with something simple, but powerful.</p>
+<p>If we want to create summary statistics of our data.frame, we need to think about which variable are we summarising over. In this case, we will count the number of samples for each of the strains.</p>
 <div id="counting-number-of-samples" class="section level2">
 <h2>Counting number of samples</h2>
 <pre class="r"><code>filter_data %&gt;% 

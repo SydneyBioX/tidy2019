@@ -10,7 +10,7 @@ output:
 
 # Learning outcomes of this session
 
-+ left_join data
++ `left_join` data
 + Making basic plots using `ggplot2`: boxplots, histograms and scatter plots
 + Joining two datasets together (`left_join`)
 + `pivot_longer` and `pivot_wider` to reshape data for visualisation purposes
@@ -26,11 +26,16 @@ library(tidyverse)
 
 # Loading cleaned sample data
 
+Let's begin today by loading the csv file that we created on Monday. 
+
 ```{r}
 session1_data = read_csv(file = "data/clean_sample_data.csv")
 ```
 
 # Reading in gene expression data (top 10 rows)
+
+We will also read in another data which we haven't dealt with yesterday. This is a gene expression data that was saved as a `txt` file. The delimiter is a tab, or `\t`. We will only read in the first 6 rows for convenience. 
+
 ```{r}
 raw_ge_data = read_delim(file = "data/GSE43251_NanoString_non-normalized.txt", delim = "\t", n_max = 6)
 # raw_ge_data = read_tsv(file = "data/GSE43251_NanoString_non-normalized.txt", n_max = 5)
@@ -45,6 +50,13 @@ clean_ge_data
 
 
 # left_join sample data
+
+We will now want to combine the sample data we have curated yesterday and the gene expression data. If you quickly check the number of samples in each of the datasets, you will realise that there isn't a one-to-one mapping between the samples. 
+
+This means we need to combine two datasets using a common sample name. `left_join` can help us with this. 
+
+
+
 ```{r}
 ge_sample_data = data.frame(
   sample = colnames(clean_ge_data)[-1],
@@ -59,14 +71,19 @@ joined_sample_data
 
 # DT
 
+We can use the datatable function from the DT package to quickly browse through which samples in the sample data did not have a matching gene expression data. 
+
 ```{r}
 joined_sample_data %>% 
   DT::datatable()
 ```
 
-
+So we see indeed, there are sample mismatching between the sample and the gene expression data. How should we combine these data in this case? Let us learn about the pivot function first before returning to this problem.
 
 # `tidyr::pivot_longer` the gene expression data
+
+The pivot_longer function takes a wide data into a long data. 
+
 
 ```{r}
 ge_data_long = clean_ge_data %>% 
@@ -79,6 +96,8 @@ ge_data_long
 ```
 
 
+We will now left_join this long data with the sample data and filter out the NA's in the data. 
+
 ```{r}
 long_sample_ge_data = session1_data %>% 
   left_join(ge_data_long, by = "sample") %>% 
@@ -90,8 +109,10 @@ long_sample_ge_data
 ```
 
 
-# `ggplot2` visualisation
+This will be the data we will use for visualisation purpose. 
 
+
+# `ggplot2` visualisation
 
 A blurb about ggplot framework. 
 
@@ -212,6 +233,8 @@ long_sample_ge_data %>%
 
 
 # `tidyr::pivot_wider` the gene expression data
+
+The pivor wider function undoes the pivot longer function. Why would we want to use such functions? It is because that we must think about how each variable maps to each plot. In the long format data, we considered each gene as observations. But now, if we want to plot two genes against each other, then we need to map them to the two axes. 
 
 ```{r}
 wide_sample_ge_data = long_sample_ge_data %>% 

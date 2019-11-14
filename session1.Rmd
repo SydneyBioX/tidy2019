@@ -205,21 +205,29 @@ mutate_data %>%
 
 # Filtering out problematic rows
 
+We will now filtering out the three rows of column headings, which we have converted into `NA` in the `time` and `dose` columns. 
+
+We will use the `filter` function from the `dplyr` package. The function takes in `logical` vectors of the same length as the `nrow(data)` as the input. 
+
 ```{r}
+## These are the rows we want to filter out
 mutate_data %>% 
   dplyr::filter(is.na(time))
 
+
+## The reverse of the above is written with a `!`. 
 filter_data = mutate_data %>% 
   dplyr::filter(!is.na(time))
-
-filter_data = mutate_data %>% 
-  dplyr::filter(complete.cases(time))
 
 filter_data
 ```
 
 
 # Making summary statistics 
+
+We will finish today's session with something simple, but powerful. 
+
+If we want to create summary statistics of our data.frame, we need to think about which variable are we summarising over. In this case, we will count the number of samples for each of the strains. 
 
 ## Counting number of samples
 ```{r}
@@ -233,6 +241,9 @@ filter_data %>%
 ```
 
 ## Counting with more variables
+
+
+
 ```{r}
 filter_data %>% 
   group_by(strain, dose) %>% 
