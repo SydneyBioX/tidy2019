@@ -109,44 +109,102 @@ long_sample_ge_data
 ```
 
 
-This will be the data we will use for visualisation purpose. 
+This will be the data we use for visualisation. 
 
 
 # `ggplot2` visualisation
 
-A blurb about ggplot framework. 
+There are many plotting systems and packages out there, so why should we use this `ggplot2` system?
+
+The `gg` in `ggplot2` stands for "grammar of graphics". That means in order to produce a ggplot, a very strict set of coding structure must be followed. These restrictions means that you can always look at a plot and know exactly which characteristic of the plot comes from which part of the data. This is extremely important for the purpose of reproducibility. 
+
+The `ggplot2` plotting system is based on a layered structure, which means the final plot can always be decompose into several layers. We will illustrate what this means now step-by-step. 
+
+
+Let's say we want to draw a scatter plot of the strains and the gene expression. We will first begin with a data and pipe that into the `ggplot()` function. This will give us a blank canvas for plotting. 
+
+```{r}
+long_sample_ge_data
+
+long_sample_ge_data %>% 
+  ggplot()
+```
+
+
+Now is a good time to think about what are the components of a scatter plot? 
+
++ x-coordinates of points
++ y-coordinates of points
++ Actually placement of points
+
+The first two components are referred to as "mapping" in ggplot. Because the x-coordinates should be stored as a column in the `data.frame`, so we will "map" this column to be a characteristic on our ggplot. Similary, the y-coordinates should also be a mapping. This is why we write our code in the following manner. Note, we are using the `aes()` function to wrap everything. 
+
 
 ```{r}
 long_sample_ge_data %>% 
-  ggplot()
+  ggplot(mapping = aes(x = strain, y = gene_expression))
+```
 
 
-long_sample_ge_data %>% 
-  ggplot(aes(x = strain, 
-             y = gene_expression))
+Now what we have is still a blank canvas, but notice how the x and y axes are now labelled with the variables/columns in the `data.frame`. So what are we missing for a scatter plot? 
 
+The points!
+
+In `ggplot2`, the final plot (whether it is a scatter plot or a boxplot or a mix of the two) is always a combination of layers. We now have a layer of blank canvas, we will want to draw on this canvas using `geom_point()` which places the actual points on the canvas based on the mapping we have already specified. 
+
+```{r}
 long_sample_ge_data %>% 
   ggplot(aes(x = strain, 
              y = gene_expression)) + 
   geom_point()
+```
 
 
+This is your first ggplot! Let's give it a title!
+
+```{r}
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) + 
+  geom_point() +
+  labs(title = "My first ggplot!")
+```
+
+
+
+We see that the scale of data points can be very different. This is due to some genes always tend to have a higher expression than others. So it will be a good idea to make a plot for each of the gene instead. This means that we need to make this plot according to the labelling in the `gene_symbol` column in our `data.frame`. 
+
+
+```{r}
 long_sample_ge_data %>% 
   ggplot(aes(x = strain, 
              y = gene_expression)) + 
   geom_point() +
   facet_wrap(~gene_symbol)
+```
+
+
+This plot shows that "Aldh3a1" is th main culprit that has a very different scale than all other five genes. One way to deal with this scaling is to use the logarithm scale. `ggplot2` has a very convenient way to doing this. 
 
 
 
+```{r}
 long_sample_ge_data %>% 
   ggplot(aes(x = strain, 
              y = gene_expression)) + 
   geom_point() +
   facet_wrap(~gene_symbol) +
   scale_y_log10()
+```
 
 
+Now that we have the scatter plot of the genes on a good scale, and we can see some interesting features from these plots. For example, the "Aldh3a1" gene seems to show off some differences between the two strains, and the "Bbs2" gene seems to have a different variance between the two strains. 
+
+So, how can we improve on this plot further?
+
+We can layer other plots onto this! We will now add a boxplot to each of the plot.
+
+```{r}
 long_sample_ge_data %>% 
   ggplot(aes(x = strain, 
              y = gene_expression)) + 
@@ -154,19 +212,14 @@ long_sample_ge_data %>%
   geom_boxplot() +
   facet_wrap(~gene_symbol) +
   scale_y_log10()
+```
+
+Now it is a good time to stop and think about what we did. We started off with a `data.frame` and a blank canvas with the aim to make a scatter plot. We added aesthetic mappings onto our ggplot and evaluated the quality of our plot as we go along. Every time we identify some deficiency in our plot, we simply add more layers to the plot. This almost detective-work is what makes `ggplot2` is so popular, because it is very flexible in handling new ideas and plotting aesthetics. But at the same time, every aesthetic of this plot can be traced back to a particular column in the `data.frame`. 
 
 
+There are so many functions and tricks that we can't really go through in details. Here is a very helpful [cheatsheet](https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf). And in general, the best way is to Google the plot that you want and copy the code that someone else already made. 
 
-long_sample_ge_data %>% 
-  ggplot(aes(x = strain, 
-             y = gene_expression)) + 
-  geom_point() +
-  geom_boxplot() +
-  facet_wrap(~gene_symbol) +
-  scale_y_log10(labels = scales::comma)
-
-
-
+```{r}
 long_sample_ge_data %>% 
   ggplot(aes(x = strain, 
              y = gene_expression)) + 
@@ -176,6 +229,8 @@ long_sample_ge_data %>%
   scale_y_log10(labels = scales::comma)
 ```
 
+
+Have a play with the following code. Try deleting components of the code to understand which aspect of the plot it was controlling
 
 
 ```{r}
@@ -185,21 +240,12 @@ long_sample_ge_data %>%
              colour = strain)) + 
   geom_point() +
   geom_boxplot() +
-  facet_wrap(~gene_symbol) +
-  scale_y_log10(labels = scales::comma)
-
-long_sample_ge_data %>% 
-  ggplot(aes(x = strain, 
-             y = gene_expression)) + 
-  geom_point(aes(colour = strain)) +
-  geom_boxplot() +
-  facet_wrap(~gene_symbol) +
-  scale_y_log10(labels = scales::comma)
+  facet_wrap(~gene_symbol, scales = "free_y") +
+  scale_y_log10(labels = scales::comma) +
+  labs(x = "Strain", 
+       y = "Gene Expression", 
+       title = "Boxplot of genes across strains")
 ```
-
-
-
-
 
 
 ## Histogram
