@@ -15,4 +15,6 @@ output_dir: "."
 output:
   html_document:
     theme: cosmo
-    highlight: textmate
+    highlight: kate # kind of required for copy to clipboard
+    includes:
+      in_header: header.html

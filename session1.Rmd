@@ -20,16 +20,14 @@ output:
 + Summaring a `data.frame`
 + Saving `data.frame` for next stage of analysis
 
+# Loading packages
 
-# Loading packages 
-```{r}
+```{r, message=FALSE}
 library(tidyverse)
 library(janitor)
 library(readxl)
 library(visdat)
 ```
-
-
 
 # Warm up: variable types
 
