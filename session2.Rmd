@@ -249,28 +249,44 @@ long_sample_ge_data %>%
 
 
 ## Histogram
+
+We will now try to make a histogram of each gene. 
+
+Let's begin with the question: what are the aesthetic mappings of a histogram? 
+
++ x-axis should be numerical values of gene expression 
++ y-axis should be either counts or density values of gene expression
+
+Let's try this out. For making a histogram, we need to use the `geom_histogram()` geometry. 
+
+
 ```{r}
 long_sample_ge_data %>% 
   ggplot(aes(x = gene_expression)) + 
   geom_histogram()
+```
 
+Here, we see the same scaling issue we saw with the boxplots above. Hence, we will try to apply the same functions to manipulate the plots, namely: 
 
++ `facet_wrap` which creates a plot for each gene in small panels,
++ `scale_x_log10` which plots the x-axis on the log10 scale
+
+```{r}
 long_sample_ge_data %>% 
   ggplot(aes(x = gene_expression)) + 
   geom_histogram() +
   facet_wrap(~gene_symbol) +
   scale_x_log10(labels = scales::comma)
+```
 
 
+This plot looks pretty good! We can see that some genes are unimodal while others are bimodal. This is an new characteristic of the data that we couldn't observe from the boxplots above. 
+
+We can make the modality more obvious by imposing the density of each gene onto the histogram. Let's try out the `geom_density` function then!
+
+```{r}
 long_sample_ge_data %>% 
   ggplot(aes(x = gene_expression)) + 
-  geom_histogram() +
-  geom_density() +
-  facet_wrap(~gene_symbol) +
-  scale_x_log10(labels = scales::comma)
-
-long_sample_ge_data %>% 
-  ggplot(aes(x = gene_expression, y = ..density..)) + 
   geom_histogram() +
   geom_density() +
   facet_wrap(~gene_symbol) +
@@ -278,28 +294,67 @@ long_sample_ge_data %>%
 ```
 
 
-# `tidyr::pivot_wider` the gene expression data
+This doesn't look quite right, so what happened?
 
-The pivor wider function undoes the pivot longer function. Why would we want to use such functions? It is because that we must think about how each variable maps to each plot. In the long format data, we considered each gene as observations. But now, if we want to plot two genes against each other, then we need to map them to the two axes. 
+If we pay attention to the y-axis of our ggplot so far, we see that it is `count`, which means that each of bin in the histograms is showing the number of observations in that interval. However, when we talk abotu density, that is on a very different scale to the number of counts. 
+
+So how can we make a density-based histogram? 
+
+Let's think this logically: right now, the count of observation is being mapped to the y-axis (default of `geom_histogram`), and we need to overwrite this by making density to be mapped to the y-axis. So the answer would be adding an extra input of `y = ..density..` into the `aes()` function. The reason that we can't use `y = density` is because in that case ggplot will interpret this line of code as mapping a column named `density` from the `data.frame` to the plot - but such column does not exist. The `..` is just a technical way that `ggplot` handles such problem which you don't have to worry too much on the details about. 
+
+
+```{r}
+long_sample_ge_data %>% 
+  ggplot(aes(x = gene_expression, y = ..density..)) + 
+  geom_histogram() +
+  geom_density() +
+  facet_wrap(~gene_symbol, scales = "free") +
+  scale_x_log10(labels = scales::comma)
+```
+
+
+# Plotting two genes against each other
+
+Now, let's consider how we could make a scatter plot of two genes, say the "Ahrrr" and the "Cxcr7" gene. So, let's answer the question, what are the components of a scatter plot in this case?
+
++ Ahrrr gene expression values on the x-axis
++ Cxcr7 gene expression values on the y-axis
+
+But if we look at the `data.frame` we are using for plotting, `long_sample_ge_data`, it has all the gene expression values mixed in that `gene_symbol` column. So we can't effectively map the expression of only "Ahrrr" and "Cxcr7" to the x and y axes respectively. 
+
+
+```{r}
+long_sample_ge_data 
+```
+
+
+
+So we need to think about how to separate out the gene expression values into distinct columns. You may realise this as to be exactly the opposite of the operation of `pivot_longer`. In the `tidyr` package, the `tidyr::pivot_wider` allows for this operation. 
 
 ```{r}
 wide_sample_ge_data = long_sample_ge_data %>% 
   tidyr::pivot_wider(names_from = "gene_symbol",
                      values_from = "gene_expression")
+
+wide_sample_ge_data
 ```
 
-## Visualisation
+
+Now that we have each gene as a column, we can perform our familiar ggplot operations. Have a play with each of the layers below. Notice that we also added the colour of the strain as well as a new geometry, `geom_smooth` that allows for adding linear regression lines. 
+
 ```{r}
 wide_sample_ge_data %>% 
   ggplot(aes(x = Ahrr,
              y = Cxcr7,
              colour = strain)) +
   geom_point() +
+  geom_smooth(method = "lm") +
   scale_x_log10(labels = scales::comma) +
-  scale_y_log10(labels = scales::comma) +
-geom_smooth(method = "lm")
+  scale_y_log10(labels = scales::comma)
 ```
 
+
+# Saving data
 
 ```{r}
 write_csv(long_sample_ge_data, path = "data/long_sample_ge_data.csv")

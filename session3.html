@@ -319,6 +319,7 @@ $(document).ready(function () {
 </div>
 <div id="loading-cleaned-sample-data" class="section level1">
 <h1>Loading cleaned sample data</h1>
+<p>This session3 data is almost identical to the <code>wide_sample_ge_data.csv</code> file that we just saved. Except that we actually used all the genes in the database.</p>
 <pre class="r"><code>session3_data = read_csv(file = &quot;data/session3_data.csv&quot;) %&gt;% 
   dplyr::select(-time, -dose)</code></pre>
 <pre><code>## Parsed with column specification:
@@ -331,14 +332,35 @@ $(document).ready(function () {
 <pre class="r"><code>clean_data = session3_data %&gt;% 
   dplyr::mutate_if(is.numeric, .funs = log)
 
-hw_data = clean_data %&gt;% 
-  dplyr::filter(strain == &quot;HW&quot;)
-
-le_data = clean_data %&gt;% 
-  dplyr::filter(strain == &quot;LE&quot;)</code></pre>
+clean_data</code></pre>
+<pre><code>## # A tibble: 154 x 56
+##    strain sample  Ahrr Aldh3a1  Bbs2 Ccbl1 Cxcr7 Col18a1 Cyb5a Cyp1a1
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 HW     HW1    2.57     1.65  3.52  5.47  3.16    7.43 10.1    2.90
+##  2 HW     HW2    0.352    2.14  3.82  5.49  3.30    7.56 10.2    4.22
+##  3 HW     HW3    0.254    2.05  3.47  5.17  2.74    6.82 10.1    3.47
+##  4 HW     HW4    2.30     5.73  4.24  5.62  4.22    7.77 10.4    9.20
+##  5 HW     HW5    2.02     4.18  3.97  5.76  3.53    7.43 10.2    8.84
+##  6 HW     HW6    1.70     4.40  3.87  5.50  3.70    7.78 10.00   8.88
+##  7 HW     WW45   2.90     7.98  4.13  6.34  3.62    7.19  9.90  10.7 
+##  8 HW     WW46   3.11     7.01  4.30  6.26  3.73    7.05  9.85  10.3 
+##  9 HW     WW47   3.36     7.73  3.97  6.48  4.31    7.49  9.83  10.7 
+## 10 HW     WW48   2.04     7.96  3.74  6.26  3.85    6.90  9.67  10.3 
+## # … with 144 more rows, and 46 more variables: Cyp1a2 &lt;dbl&gt;, Cyp1b1 &lt;dbl&gt;,
+## #   Cyp2a1 &lt;dbl&gt;, Cyp2s1 &lt;dbl&gt;, Eef1a1 &lt;dbl&gt;, Eml4 &lt;dbl&gt;, Exoc3 &lt;dbl&gt;,
+## #   Fdft1 &lt;dbl&gt;, Fmo1 &lt;dbl&gt;, Gapdh &lt;dbl&gt;, Gfer &lt;dbl&gt;, Ghr &lt;dbl&gt;,
+## #   Glud1 &lt;dbl&gt;, Hagh &lt;dbl&gt;, Hprt1 &lt;dbl&gt;, Hsd17b12 &lt;dbl&gt;, Ivns1abp &lt;dbl&gt;,
+## #   Lasp1 &lt;dbl&gt;, Uvrag &lt;dbl&gt;, Inmt &lt;dbl&gt;, Pbld &lt;dbl&gt;, Mug1 &lt;dbl&gt;,
+## #   Neu1 &lt;dbl&gt;, Nfe2l2 &lt;dbl&gt;, Nqo1 &lt;dbl&gt;, Nrbp2 &lt;dbl&gt;, Nudt4 &lt;dbl&gt;,
+## #   Pde2a &lt;dbl&gt;, Perp &lt;dbl&gt;, Pgk1 &lt;dbl&gt;, Pmm1 &lt;dbl&gt;, Ppia &lt;dbl&gt;,
+## #   Psmb4 &lt;dbl&gt;, Pomp &lt;dbl&gt;, Derl1 &lt;dbl&gt;, Ern1 &lt;dbl&gt;, Rpl13a &lt;dbl&gt;,
+## #   Scn4b &lt;dbl&gt;, Sdc1 &lt;dbl&gt;, Sdha &lt;dbl&gt;, Slco1a1 &lt;dbl&gt;, Srxn1 &lt;dbl&gt;,
+## #   Tiparp &lt;dbl&gt;, Tpm1 &lt;dbl&gt;, Ugt1a1 &lt;dbl&gt;, Zfp422 &lt;dbl&gt;</code></pre>
 </div>
 <div id="t-test" class="section level1">
 <h1>t-test</h1>
+<p>A typical task in bioinformatics is to perform differential gene expression analysis. That is, we want to identify genes that has a different expression patterns between two conditions. While there are many ways that this can be done, we will opt for the simplest approach of using a t-test.</p>
+<p>In <code>R</code>, t-test can be performed using the <code>t.test</code> function. Below, we will perform a t-test on the Ahrrr gene between the two strains of mice.</p>
 <pre class="r"><code>t.test(Ahrr ~ strain, data = clean_data)</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
@@ -351,18 +373,7 @@ le_data = clean_data %&gt;%
 ## sample estimates:
 ## mean in group HW mean in group LE 
 ##         2.998168         3.150164</code></pre>
-<pre class="r"><code>t.test(Cxcr7 ~ strain, data = clean_data)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  Cxcr7 by strain
-## t = -6.7356, df = 92.864, p-value = 1.343e-09
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -1.5401323 -0.8387663
-## sample estimates:
-## mean in group HW mean in group LE 
-##         3.568083         4.757532</code></pre>
+<p>However, the output of the <code>t.test</code> function can be a bit hard to read or manipulate into a data.frame. This is where the <code>tidy()</code> function from the <code>broom</code> package can help.</p>
 <pre class="r"><code>t.test(Ahrr ~ strain, data = clean_data) %&gt;% 
   broom::tidy()</code></pre>
 <pre><code>## # A tibble: 1 x 10
@@ -371,6 +382,7 @@ le_data = clean_data %&gt;%
 ## 1   -0.152      3.00      3.15    -0.757   0.450      149.   -0.549
 ## # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
 ## #   alternative &lt;chr&gt;</code></pre>
+<p>Similarly, we can do the same for the Cxcr7 gene.</p>
 <pre class="r"><code>t.test(Cxcr7 ~ strain, data = clean_data) %&gt;% 
   broom::tidy()</code></pre>
 <pre><code>## # A tibble: 1 x 10
@@ -379,12 +391,24 @@ le_data = clean_data %&gt;%
 ## 1    -1.19      3.57      4.76     -6.74 1.34e-9      92.9    -1.54
 ## # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
 ## #   alternative &lt;chr&gt;</code></pre>
+</div>
+<div id="doing-multiple-t-tests" class="section level1">
+<h1>Doing multiple t-tests</h1>
+<p>In the <code>clean_data</code>, we have 54 genes in total. If we want to perform t-test on each gene, should we type out 54 lines of code?</p>
+<p>The answer is obviously no. Because such practice is very time inefficient and not generalisable if we receive another dataset in the future.</p>
+<p>Now, let’s think about this very difficult task (in a more abstract level). First, we simply run the <code>t.test</code> and <code>broom::tidy</code> function on gene expression values for a selected gene. Then, we do exactly the same operation for another 53 genes. So the whole task is repetitive and we really are apply the following function to 54 datasets (each dataset only contains one selected gene).</p>
+<pre class="r"><code>tidy_test = function(this_data){
+  t.test(gene_expression ~ strain, data = this_data) %&gt;% 
+    broom::tidy()
+}</code></pre>
+<p>So now, our very difficult task of performing 54 t-tests is simplified to spliting <code>clean_data</code> into 54 datasets, one for each gene.</p>
+<p>While there are many ways this can be done in <code>R</code>, we will use a <code>tidyverse</code> framework that has the advantage of readable codes and generalisability.</p>
+<p>First, let’s pivot our data into a long format.</p>
 <pre class="r"><code>gene_long = clean_data %&gt;%
   tidyr::pivot_longer(
     cols = -c(&quot;strain&quot;, &quot;sample&quot;),
     names_to = &quot;gene_symbols&quot;,
     values_to = &quot;gene_expression&quot;)
-
 
 gene_long</code></pre>
 <pre><code>## # A tibble: 8,316 x 4
@@ -401,6 +425,7 @@ gene_long</code></pre>
 ##  9 HW     HW1    Cyp1a2                 10.6 
 ## 10 HW     HW1    Cyp1b1                  1.87
 ## # … with 8,306 more rows</code></pre>
+<p>Then we will use the <code>group_by</code> function and then apply the <code>nest</code> function from the <code>tidyr</code> package.</p>
 <pre class="r"><code>gene_nest = gene_long %&gt;% 
   group_by(gene_symbols) %&gt;% 
   tidyr::nest()
@@ -460,13 +485,9 @@ gene_nest</code></pre>
 ##  9 HW     WW47              7.73
 ## 10 HW     WW48              7.96
 ## # … with 144 more rows</code></pre>
-<pre class="r"><code>tidy_test = function(this_data){
-  t.test(gene_expression ~ strain, data = this_data) %&gt;% 
-    broom::tidy()
-}
-
-
-gene_test = gene_nest %&gt;% 
+<p>So, a lot of things happened here. Let’s explain.</p>
+<p>You might remember the <code>group_by</code> function when we were trying to use the <code>summarise</code> function to calculate summary statistics. This is exactly what we want to achieve here with <code>gene_nest</code>. Each gene used to have 154 observations (number rows of <code>clean_data</code>), but in <code>gene_nest</code>, each gene only has “one observation”, which corresponds to a row in the <code>data</code> column. <strong>Each row of the <code>data</code> column is a <code>data.frame</code> of size 154 rows and 3 columns</strong>, indicated by the <code>[154 x 3]</code>. In each of the <code>[154 x 3]</code> data.frame, you will see three columns (all the columns that we didn’t put into <code>group_by</code>).</p>
+<pre class="r"><code>gene_test = gene_nest %&gt;% 
   dplyr::mutate(
     tidy_result = purrr::map(
       .x = data,
@@ -480,7 +501,7 @@ gene_model_long %&gt;%
   ggplot(aes(x = p.value)) +
   geom_histogram()</code></pre>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="session3_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <pre class="r"><code>gene_model_long %&gt;% 
   dplyr::filter(p.value &lt; 0.0001) %&gt;% 
   tidyr::unnest(data) %&gt;% 
@@ -492,17 +513,24 @@ gene_model_long %&gt;%
              y = gene_expression)) +
   geom_boxplot() +
   facet_wrap(~ label, scales = &quot;free&quot;)</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<p><img src="session3_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
 </div>
 <div id="regression-analysis-extension" class="section level1">
 <h1>Regression analysis (extension)</h1>
-<pre class="r"><code>clean_data %&gt;% 
+<pre class="r"><code>hw_data = clean_data %&gt;% 
+  dplyr::filter(strain == &quot;HW&quot;)
+
+le_data = clean_data %&gt;% 
+  dplyr::filter(strain == &quot;LE&quot;)
+
+
+clean_data %&gt;% 
   ggplot(aes(x = Ahrr,
              y = Cxcr7,
              colour = strain)) +
   geom_point() +
   geom_smooth(method = &quot;lm&quot;)</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="session3_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>lm(Cxcr7 ~ Ahrr, data = clean_data)</code></pre>
 <pre><code>## 
 ## Call:
@@ -698,13 +726,13 @@ gene_model_wide %&gt;%
   ggplot(aes(x = HW, y = LE)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, colour = &quot;red&quot;)</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="session3_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>gene_model_wide %&gt;% 
   ggplot(aes(x = HW, y = LE,
              label = gene_symbols)) +
   geom_text() +
   geom_abline(slope = 1, intercept = 0, colour = &quot;red&quot;)</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<p><img src="session3_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 </div>
 <div id="session-info" class="section level1">
 <h1>Session Info</h1>
@@ -743,13 +771,13 @@ gene_model_wide %&gt;%
 ## [34] withr_2.1.2       later_1.0.0       grid_3.6.1       
 ## [37] nlme_3.1-141      jsonlite_1.6      xtable_1.8-4     
 ## [40] gtable_0.3.0      lifecycle_0.1.0   magrittr_1.5     
-## [43] scales_1.0.0      cli_1.1.0         stringi_1.4.3    
-## [46] promises_1.1.0    snakecase_0.11.0  xml2_1.2.2       
-## [49] ellipsis_0.3.0    generics_0.0.2    vctrs_0.2.0      
-## [52] tools_3.6.1       glue_1.3.1        hms_0.5.2        
-## [55] crosstalk_1.0.0   fastmap_1.0.1     yaml_2.2.0       
-## [58] colorspace_1.4-1  rvest_0.3.4       knitr_1.25       
-## [61] haven_2.2.0</code></pre>
+## [43] scales_1.1.0      cli_1.1.0         stringi_1.4.3    
+## [46] farver_2.0.1      promises_1.1.0    snakecase_0.11.0 
+## [49] xml2_1.2.2        ellipsis_0.3.0    generics_0.0.2   
+## [52] vctrs_0.2.0       tools_3.6.1       glue_1.3.1       
+## [55] hms_0.5.2         crosstalk_1.0.0   fastmap_1.0.1    
+## [58] yaml_2.2.0        colorspace_1.4-1  rvest_0.3.4      
+## [61] knitr_1.25        haven_2.2.0</code></pre>
 </div>
 
 
