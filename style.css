@@ -11,6 +11,7 @@ body{
 }
 
 .btn-copy-ex {
+  font-size: 10pt;
   position: absolute;
   right: 0;
   /* use top: 0 without code folding */
