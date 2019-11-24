@@ -1,0 +1,73 @@
+---
+title: "Enter the `tidyverse` with R and RStudio"
+subtitle: ""
+author: "Kevin Wang and Garth Tarr"
+date: "2-3 December 2019, Sydney, Australia"
+output:
+  xaringan::moon_reader:
+    css: ["default", "assets/sydney-fonts.css", "assets/sydney.css"]
+    self_contained: false # if true, fonts will be stored locally
+    seal: true # show a title slide with YAML information
+    includes:
+      in_header: "assets/mathjax-equation-numbers.html"
+    nature:
+      beforeInit: ["assets/remark-zoom.js", "https://platform.twitter.com/widgets.js"]
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: true
+      ratio: '16:9' # alternatives '16:9' or '4:3' or others e.g. 13:9
+      navigation:
+        scroll: false # disable slide transitions by scrolling
+---
+
+
+# Your instructors
+
+---
+
+# Ice breaker
+
+---
+
+# Workshop outline
+
+---
+
+# A simple bioinformatics data
+
++ We will be working on a real gene expression data from [this article](https://rnajournal.cshlp.org/content/19/1/51.full). 
+
++ The original data was generated to answer a biological question of mice diet and also the reproducibility of three gene expression technologies.  
+
++ There are two pieces of data: 
+
+  1. **The sample data** was downloaded from the [journal's website](https://rnajournal.cshlp.org/content/19/1/51/suppl/DC1).
+  1. **The gene expression data** was downloaded from the [Gene Expression Omnibus](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE43251&format=file&file=GSE43251%5FNanoString%5Fnon%2Dnormalized%2Etxt%2Egz), accession ID GSE43251.
+
+---
+
+# Challenges of this data
+
+1. Understanding the data structure and read the two data into `R`.
+1. Basic manipulation of the two data. 
+1. Merging the two data. 
+1. Visualising the data.
+1. Reshaping the data for visualisation and modelling purpose.
+1. Perform basic modelling on the data and extract insights.
+
+
+---
+
+# Session 1: reading data and basic manipulations
+
+---
+
+# Session 2: visualisation with `ggplot2` 
+
+---
+
+# Session 3: modelling with `tidyverse`
+
+---
+
+# Final remarks
