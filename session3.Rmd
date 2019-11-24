@@ -68,17 +68,40 @@ t.test(Cxcr7 ~ strain, data = clean_data) %>%
 
 
 
-# (Kevin:) introduce for loop here?
+# `for` loops
 
+`for` loops are common in any programming language. It simply list out the instructions and the iterations are specified using an index. For example, the following code prints out 1 to 5.
 
-# Doing multiple t-tests
+```{r}
+for (i in 1:5){
+  print(i)
+}
+```
 
 In the `clean_data`, we have 54 genes in total. If we want to perform t-test on each gene, should we type out 54 lines of code? 
 
 The answer is obviously no. Because such practice is very time inefficient and not generalisable if we receive another dataset in the future. 
 
 
-Now, let's think about this very difficult task (in a more abstract level). First, we simply run the `t.test` and `broom::tidy` function on gene expression values for a selected gene. Then, we do exactly the same operation for another 53 genes. So the whole task is repetitive and we really are apply the following function to 54 datasets (each dataset only contains one selected gene). 
+We can use the `for` loop to go through each column in `clean_data`, calculate the t-test statistics and print them out. However, this output is often not plotting-friendly because it is to merge this output with the original gene expression values. 
+
+```{r, eval = FALSE}
+for(i in 3:56){
+  t.test(clean_data %>% pull(i) ~ clean_data$strain) %>%
+    broom::tidy() %>% 
+    print()
+}
+```
+
+This is why we want to use a tidyverse framework to achive the same thing. 
+
+
+# Nesting data
+
+Now, let's think about the task of calculating a t-test for each gene. This may seem like a very difficult task, but we can identify some of its components to achieve simplifications and generalisations. 
+
+First, we should run the `t.test` and the `broom::tidy` function on gene expression values for a selected gene. Then, we do exactly the same operation for another 53 genes. So the grand overall task is actually very repetitive and we are really just applying the following function to 54 datasets (each dataset only contains one selected gene). 
+
 
 ```{r}
 tidy_test = function(this_data){
@@ -138,19 +161,9 @@ for(i in 1:54){
 ```
 
 
-# Writing iterations
+# `map` function in `purrr`
 
-## `for` loop
-
-`for` loops are common in any programming language. It simply list out the instructions and the iterations are specified using an index. For example, the following code prints out 1 to 5.
-
-```{r}
-for (i in 1:5){
-  print(i)
-}
-```
-
-We can use the `for` loop to compute the `tidy_test` output for all 54 genes. 
+We could use the `for` loop to compute the `tidy_test` output for all 54 genes. 
 
 ```{r, eval = FALSE}
 for (i in 1:54){
@@ -159,8 +172,6 @@ for (i in 1:54){
 ```
 
 However, the output of this loop is a `list` object requiring further manipulations to make it suitable for visualisation purposes. Hence, we will learn a new way for plotting. 
-
-## `map` function in `purrr`
 
 The `map` function from the `purrr` package is a tremendously powerful function. In simply terms, it allows us to write a `for` loop is a very simply and readable way. 
 
