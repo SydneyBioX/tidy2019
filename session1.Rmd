@@ -7,20 +7,21 @@ output:
     css: style.css
 ---
 
-# Learning outcomes of this session
+# Learning outcomes
 
 + Understand basic variable types in `R`, in particular the `data.frame`
-+ Loading in an Excel sheet as data. 
-+ Cleaning columns names 
-+ Selection of `data.frame` columns
-+ Renaming `data.frame` columns
-+ Creating new `data.frame` columns
-+ Looking for missing values in `data.frame`
-+ Filtering `data.frame` rows
-+ Summaring a `data.frame`
-+ Saving `data.frame` for next stage of analysis
++ Loading in an Excel sheet as an R data frame
++ Cleaning and renaming columns names 
++ Selecting and creating new columns
++ Looking for missing values
++ Filtering rows and summarising
++ Saving cleaned data for next stage of analysis
 
 # Loading packages
+
+When working in R, there are some functions and data sets that are always available, but the real strength of R comes from its community of developers who continually improve the set of available features and add additional functionality through an ecosystem of "packages". 
+
+The following packages have already been installed in RStudio Cloud, but you might need to install them when working on your own machine using `install.packages("name_of_package_to_be_installed")`.
 
 ```{r, message=FALSE}
 library(tidyverse)
@@ -31,145 +32,170 @@ library(visdat)
 
 # Warm up: variable types
 
-Before we take a dive into the `tidyverse`, let's take a quick minute to revise on some variable types in `R`. The reason that we want to do this is because everything in `R` is stored as a variable/object which ultimately determines its behaviours. 
+Before we take a dive into the **tidyverse**, let's take a minute to learn a bit variable types in R. The reason that we want to do this is because everything in R is stored as an object which ultimately determines its behaviour. 
+
+<!-- GT: NOT SURE ABOUT THIS SECTION, THINK ALL WE REALLY NEED IS TO CONSIDER THE VARIABLE TYPE GIVEN IN dplyr::glimpse() -->
 
 ```{r}
-logical = c(TRUE, FALSE)
-logical
-class(logical)
+obj1 = c(TRUE, FALSE)
+obj1
+class(obj1)
 
-integer = 1:5
-integer
-class(integer)
+obj2 = 1:5
+obj2
+class(obj2)
 
-numeric = rnorm(5)
-numeric
-class(numeric)
+obj3 = rnorm(5)
+obj3
+class(obj3)
 
-character = c("a", "b")
-character
-class(character)
+obj4 = c("a", "b")
+obj4
+class(obj4)
 
-what_am_i = c(integer, character)
-what_am_i
-class(what_am_i)
+obj5 = c(obj1, obj2)
+obj5
+class(obj5)
 
-how_about_me = list(integer, character)
-how_about_me
-class(how_about_me[[1]])
-class(how_about_me[[2]])
+obj6 = list(obj1, obj2)
+obj6
+class(obj6[[1]])
+class(obj6[[2]])
 
 data(diamonds, package = "ggplot2")
 diamonds
 class(diamonds)
+dplyr::glimpse(diamonds)
 ```
-
-
-
 
 # Reading in data
 
-In this session, we will read in a Excel dataset (`xls` format). We will use the [`readxl` package](https://readxl.tidyverse.org/) to perform this task. 
+In this session, we will read in a Excel dataset (`.xls` format). We will use the [**readxl** package](https://readxl.tidyverse.org/) to perform this task. 
 
-Of course, `xls` is not the only data type that `R` can deal with. Have a look at this [cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf) to see some data types that the [`readr` package](https://readr.tidyverse.org/) is able to handle. If you want to read in SAS or SPSS files, have a look at the [`haven` package](https://haven.tidyverse.org/).  
+Of course, `.xls` is not the only data type that `R` can deal with. Have a look at this [cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf) to see some data types that the [**readr** package](https://readr.tidyverse.org/) is able to handle. If you want to read in SAS or SPSS files, have a look at the [**haven** package](https://haven.tidyverse.org/).  
 
 ## First attempt
 
-The `read_xls` function from the `readxl` package is perfect to read in a `xls` data, let's try that!
+The `read_excel()` function from the **readxl** package is perfect to read in a `.xls` file, let's try that!
 
 ```{r}
-raw_data = readxl::read_xls(path = "data/sample_data.xls")
-
+raw_data = readxl::read_excel(path = "data/sample_data.xls")
 head(raw_data)
 ```
 
 Oh, no! We seemed to read in a very ugly dataset. What happened? 
 
-If we open up the `xls` dataset up in Excel, we see that `R` didn't do anything wrong! It actually faithfully read in everything that you can see in the Excel sheet. 
-This `xls` data is poorly formatte with the first three rows being non-sense that is not relevant for data analysis. We should ask the function `read_xls` to skip the first three rows, use the 4th row as the data headings. How can we do that?
+If we open the `sample_data.xls` file in Excel, we see that R didn't do anything wrong! It actually faithfully read in everything that you can see in the Excel sheet. 
+
+This `.xls` file is poorly formatted with the first three rows being notes that are not part of the data table. We should ask the function `read_excel` to skip the first three rows, use the 4th row as the column headings. How can we do that?
 
 ## Second attempt
 
-Have a look at this!
+We use the `skip` argument to the `read_excel()` function. Have a look at this!
 
 ```{r}
-raw_data = readxl::read_xls("data/sample_data.xls", skip = 3)
+raw_data = readxl::read_excel("data/sample_data.xls", skip = 3)
 head(raw_data)
 ```
 
-
 # Cleaning column names
 
-The column names of this dataset isn't quite as nice as we would like. For example, the "time" column has some strange symbols. We can remove these using the `clean_names` function from the `janitor` package. Even though this package is not a part of the `tidyverse`, but it is a very useful package nonetheless. 
+The column names of this dataset isn't quite as nice as we would like. 
 
 ```{r}
-clean_col_data = raw_data %>% 
-  janitor::clean_names()
-
-clean_col_data
+colnames(raw_data)
 ```
 
+We can tidy them using the `clean_names()` function from the **janitor** package. Even though this package is not officially part of the **tidyverse**, it is a very useful package nonetheless. 
+
+```{r}
+colnames(raw_data)
+clean_col_data = raw_data %>% 
+  janitor::clean_names()
+```
+
+We can see the new column names:
+
+```{r}
+colnames(clean_col_data)
+```
+
+Note that we have also used the **pipe operator**, `%>%`, which passes the results from one function into the next function.  In the above case, these two lines of code would give identical results:
+
+```
+raw_data %>% janitor::clean_names()
+janitor::clean_names(raw_data)
+```
+
+We will use the pipe operator a lot over the next two days, it's a game changer for the way you write R code.
 
 # Selecting data
 
-
 ## Selecting certain columns
 
-We will now use the `dplyr` package to perform some basic data cleaning. The `dplyr` package is one of the most popular packages inside the `tidyverse`. Its main functions are designed to interact with the `data.frame` object in `R` in a very intuitive way. This is why its name is an excellent pun: it is a **ply**e**r** for  **d**ata (okay, maybe it depends on your sense of humour). 
+We will now use the **dplyr** package to perform some basic data cleaning. The **dplyr** package is one of the most popular packages in the **tidyverse**. Its main functions are designed to interact with the `data.frame` object in R in a very intuitive way. This is why its name is an excellent pun: it is a **ply**e**r** for  **d**ata frames (okay, maybe it depends on your sense of humour).
 
-Let's see `dplyr` in action. If we want to select only the `strain` column of this data, then we can use the `select` function from the `dplyr` package.
-
+Let's see **dplyr** in action. If we want to select only the `strain` column of this data, then we can use the `select` function from the **dplyr** package.
 
 ```{r}
 sub_data = clean_col_data %>% 
   dplyr::select(strain)
-
-sub_data
+glimpse(sub_data)
 ```
-
 
 # Selecting columns by character vector
 
-If we want to select multiple columns in the data, we could include more names (unquoted) into the `select` function. 
+If we want to select multiple columns in the data, we could include more names (unquoted) into the `dplyr::select()` function. 
 
 However, sometimes it is useful to select columns using a character vector, especially considering the "dose" column has a Greek symbol (nano-gram) inside. 
 
-
 ```{r}
+# select using unquoted column names
 clean_col_data %>% 
-  dplyr::select(strain, sample)
+  dplyr::select(strain, sample) %>% 
+  dplyr::glimpse()
 
+# or the first four columns
+clean_col_data %>% 
+  dplyr::select(1:4) %>% 
+  dplyr::glimpse()
 
-colnames(clean_col_data) %>% tolower()
+# a range of columns
+clean_col_data %>% 
+  dplyr::select(strain:rin) %>% 
+  dplyr::glimpse()
+
+# columns starting with a particular string
+clean_col_data %>% 
+  dplyr::select(starts_with("s")) %>% 
+  dplyr::glimpse()
+
+# select using character vector
 select_columns = colnames(clean_col_data)[1:4]
-select_columns
-
 sub_data = clean_col_data %>% 
   dplyr::select(one_of(select_columns))
-
-sub_data
+glimpse(sub_data)
 ```
-
 
 # Renaming columns
 
 We can also rename the columns. 
 
 ```{r}
-sub_data %>% 
-  dplyr::rename(time = time_hours)
-
-rename_columns = c("strain", "sample", "time", "dose")
-
 sub_data = sub_data %>% 
-  dplyr::rename_at(vars(select_columns), ~ rename_columns)
-
-sub_data 
+  dplyr::rename(time = time_hours,
+                dose = dose_µg_kg)
+glimpse(sub_data)
+# not sure about rename_at (bit advanced?)
+# rename_columns = c("strain", "sample", "time", "dose")
+# sub_data = sub_data %>% 
+#   dplyr::rename_at(vars(select_columns), ~ rename_columns)
+# sub_data 
 ```
 
 # Mutating columns
 
-The `mutate` function in `dplyr` does exactly what you would expect: it changes an entire column. It has the structure that `new column = some changes to the (old column)`. 
+The `dplyr::mutate()` function does exactly what you would expect: it changes an entire column. It has the structure that `new column = some changes to the (old column)`. 
 
 ```{r}
 sub_data %>% 
@@ -179,22 +205,19 @@ sub_data %>%
 If the new column has the same name as the old column, then this column will be over-written. 
 
 ```{r}
-mutate_data =  sub_data %>% 
+mutate_data = sub_data %>% 
   dplyr::mutate(time = as.numeric(time),
                 dose = as.numeric(dose))
-
 mutate_data
 ```
 
-
 # Missing values 
 
-When we mutated our data, we saw that there was a warning message about `NA`, which is `R`'s way to represent a missing value. So what happened?
+When we mutated our data, we saw that there was a warning message, `NAs introduced by coercion`. The `NA` is is R's way to represent a missing value. So what happened?
 
 If we have a quick look at the original `xls` file, we see that someone must have copied the data with the heading four times. This is why when we converted `time` into a numeric variable, `R` recognised the column headings in the middle of the data as weird values and assigned those with `NA`. 
 
-We can visualise `NA` in our data using the `vis_miss` function from `visdat`. 
-
+We can visualise `NA` in our data using the `vis_miss()` function from the **visdat** package. 
 
 ```{r}
 mutate_data %>% 
@@ -205,13 +228,14 @@ mutate_data %>%
 
 We will now filtering out the three rows of column headings, which we have converted into `NA` in the `time` and `dose` columns. 
 
-We will use the `filter` function from the `dplyr` package. The function takes in `logical` vectors of the same length as the `nrow(data)` as the input. 
+We will use the `filter()` function from the **dplyr** package. The function takes in `logical` vectors of the same length as the `nrow(data)` as the input. 
+
+<!-- consider using `drop_na()` -->
 
 ```{r}
 ## These are the rows we want to filter out
 mutate_data %>% 
   dplyr::filter(is.na(time))
-
 
 ## The reverse of the above is written with a `!`. 
 filter_data = mutate_data %>% 
@@ -220,7 +244,6 @@ filter_data = mutate_data %>%
 filter_data
 ```
 
-
 # Making summary statistics 
 
 We will finish today's session with something simple, but powerful. 
@@ -228,6 +251,7 @@ We will finish today's session with something simple, but powerful.
 If we want to create summary statistics of our data.frame, we need to think about which variable are we summarising over. In this case, we will count the number of samples for each of the strains. 
 
 ## Counting number of samples
+
 ```{r}
 filter_data %>% 
   group_by(strain) %>% 
@@ -240,8 +264,6 @@ filter_data %>%
 
 ## Counting with more variables
 
-
-
 ```{r}
 filter_data %>% 
   group_by(strain, dose) %>% 
@@ -252,17 +274,33 @@ filter_data %>%
   count()
 ```
 
-
-
 # Saving data
 
 ```{r}
 write_csv(filter_data, path = "data/clean_sample_data.csv")
 ```
 
-
 # Session Info 
+
 ```{r}
 sessionInfo()
 ```
 
+# References
+
+Need to reference the tidyverse, there's a new canonical way to do that, one reference for all tidyverse packages.
+
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
+```
+@Article{Tidyverse:2019,
+    title = {Welcome to the {tidyverse}},
+    author = {Hadley Wickham and Mara Averick and Jennifer Bryan and Winston Chang and Lucy D'Agostino McGowan and Romain François and Garrett Grolemund and Alex Hayes and Lionel Henry and Jim Hester and Max Kuhn and Thomas Lin Pedersen and Evan Miller and Stephan Milton Bache and Kirill Müller and Jeroen Ooms and David Robinson and Dana Paige Seidel and Vitalie Spinu and Kohske Takahashi and Davis Vaughan and Claus Wilke and Kara Woo and Hiroaki Yutani},
+    year = {2019},
+    journal = {Journal of Open Source Software},
+    volume = {4},
+    number = {43},
+    pages = {1686},
+    doi = {10.21105/joss.01686},
+  }
+```

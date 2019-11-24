@@ -33,9 +33,9 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -45,16 +45,14 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -66,7 +64,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-le
 div.sourceCode
   { color: #1f1c1b; background-color: #ffffff; }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+a.sourceLine::before { text-decoration: underline; }
 }
 code span. { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
@@ -390,69 +388,69 @@ $(document).ready(function () {
 </div>
 
 
-<div id="learning-outcomes-of-this-session" class="section level1">
-<h1>Learning outcomes of this session</h1>
+<div id="learning-outcomes" class="section level1">
+<h1>Learning outcomes</h1>
 <ul>
 <li>Understand basic variable types in <code>R</code>, in particular the <code>data.frame</code></li>
-<li>Loading in an Excel sheet as data.</li>
-<li>Cleaning columns names</li>
-<li>Selection of <code>data.frame</code> columns</li>
-<li>Renaming <code>data.frame</code> columns</li>
-<li>Creating new <code>data.frame</code> columns</li>
-<li>Looking for missing values in <code>data.frame</code></li>
-<li>Filtering <code>data.frame</code> rows</li>
-<li>Summaring a <code>data.frame</code></li>
-<li>Saving <code>data.frame</code> for next stage of analysis</li>
+<li>Loading in an Excel sheet as an R data frame</li>
+<li>Cleaning and renaming columns names</li>
+<li>Selecting and creating new columns</li>
+<li>Looking for missing values</li>
+<li>Filtering rows and summarising</li>
+<li>Saving cleaned data for next stage of analysis</li>
 </ul>
 </div>
 <div id="loading-packages" class="section level1">
 <h1>Loading packages</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(janitor)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(readxl)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(visdat)</span></code></pre></div>
+<p>When working in R, there are some functions and data sets that are always available, but the real strength of R comes from its community of developers who continually improve the set of available features and add additional functionality through an ecosystem of “packages”.</p>
+<p>The following packages have already been installed in RStudio Cloud, but you might need to install them when working on your own machine using <code>install.packages(&quot;name_of_package_to_be_installed&quot;)</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(janitor)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(visdat)</a></code></pre></div>
 </div>
 <div id="warm-up-variable-types" class="section level1">
 <h1>Warm up: variable types</h1>
-<p>Before we take a dive into the <code>tidyverse</code>, let’s take a quick minute to revise on some variable types in <code>R</code>. The reason that we want to do this is because everything in <code>R</code> is stored as a variable/object which ultimately determines its behaviours.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>logical =<span class="st"> </span><span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>logical</span></code></pre></div>
+<p>Before we take a dive into the <strong>tidyverse</strong>, let’s take a minute to learn a bit variable types in R. The reason that we want to do this is because everything in R is stored as an object which ultimately determines its behaviour.</p>
+<!-- GT: NOT SURE ABOUT THIS SECTION, THINK ALL WE REALLY NEED IS TO CONSIDER THE VARIABLE TYPE GIVEN IN dplyr::glimpse() -->
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">obj1 =<span class="st"> </span><span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">obj1</a></code></pre></div>
 <pre><code>## [1]  TRUE FALSE</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">class</span>(logical)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">class</span>(obj1)</a></code></pre></div>
 <pre><code>## [1] &quot;logical&quot;</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>integer =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>integer</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">obj2 =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">obj2</a></code></pre></div>
 <pre><code>## [1] 1 2 3 4 5</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">class</span>(integer)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">class</span>(obj2)</a></code></pre></div>
 <pre><code>## [1] &quot;integer&quot;</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>numeric =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">5</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a>numeric</span></code></pre></div>
-<pre><code>## [1] -1.5528895  0.1064369 -0.3968735 -1.6287393  0.8479587</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">class</span>(numeric)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">obj3 =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">obj3</a></code></pre></div>
+<pre><code>## [1]  0.9534842 -0.2886649  0.8971328 -0.7737632  1.1943846</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">class</span>(obj3)</a></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>character =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
-<span id="cb14-2"><a href="#cb14-2"></a>character</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">obj4 =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">obj4</a></code></pre></div>
 <pre><code>## [1] &quot;a&quot; &quot;b&quot;</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">class</span>(character)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">class</span>(obj4)</a></code></pre></div>
 <pre><code>## [1] &quot;character&quot;</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>what_am_i =<span class="st"> </span><span class="kw">c</span>(integer, character)</span>
-<span id="cb18-2"><a href="#cb18-2"></a>what_am_i</span></code></pre></div>
-<pre><code>## [1] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;a&quot; &quot;b&quot;</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">class</span>(what_am_i)</span></code></pre></div>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>how_about_me =<span class="st"> </span><span class="kw">list</span>(integer, character)</span>
-<span id="cb22-2"><a href="#cb22-2"></a>how_about_me</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">obj5 =<span class="st"> </span><span class="kw">c</span>(obj1, obj2)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">obj5</a></code></pre></div>
+<pre><code>## [1] 1 0 1 2 3 4 5</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">class</span>(obj5)</a></code></pre></div>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">obj6 =<span class="st"> </span><span class="kw">list</span>(obj1, obj2)</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">obj6</a></code></pre></div>
 <pre><code>## [[1]]
-## [1] 1 2 3 4 5
+## [1]  TRUE FALSE
 ## 
 ## [[2]]
-## [1] &quot;a&quot; &quot;b&quot;</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">class</span>(how_about_me[[<span class="dv">1</span>]])</span></code></pre></div>
+## [1] 1 2 3 4 5</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">class</span>(obj6[[<span class="dv">1</span>]])</a></code></pre></div>
+<pre><code>## [1] &quot;logical&quot;</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">class</span>(obj6[[<span class="dv">2</span>]])</a></code></pre></div>
 <pre><code>## [1] &quot;integer&quot;</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">class</span>(how_about_me[[<span class="dv">2</span>]])</span></code></pre></div>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">data</span>(diamonds, <span class="dt">package =</span> <span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb28-2"><a href="#cb28-2"></a>diamonds</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">data</span>(diamonds, <span class="dt">package =</span> <span class="st">&quot;ggplot2&quot;</span>)</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">diamonds</a></code></pre></div>
 <pre><code>## # A tibble: 53,940 x 10
 ##    carat cut       color clarity depth table price     x     y     z
 ##    &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -467,17 +465,30 @@ $(document).ready(function () {
 ##  9 0.22  Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
 ## 10 0.23  Very Good H     VS1      59.4    61   338  4     4.05  2.39
 ## # … with 53,930 more rows</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="kw">class</span>(diamonds)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">class</span>(diamonds)</a></code></pre></div>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">dplyr<span class="op">::</span><span class="kw">glimpse</span>(diamonds)</a></code></pre></div>
+<pre><code>## Observations: 53,940
+## Variables: 10
+## $ carat   &lt;dbl&gt; 0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22, 0.23, 0…
+## $ cut     &lt;ord&gt; Ideal, Premium, Good, Premium, Good, Very Good, Very Good, Ve…
+## $ color   &lt;ord&gt; E, E, E, I, J, J, I, H, E, H, J, J, F, J, E, E, I, J, J, J, I…
+## $ clarity &lt;ord&gt; SI2, SI1, VS1, VS2, SI2, VVS2, VVS1, SI1, VS2, VS1, SI1, VS1,…
+## $ depth   &lt;dbl&gt; 61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1, 59.4, 6…
+## $ table   &lt;dbl&gt; 55, 61, 65, 58, 58, 57, 57, 55, 61, 61, 55, 56, 61, 54, 62, 5…
+## $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340, 3…
+## $ x       &lt;dbl&gt; 3.95, 3.89, 4.05, 4.20, 4.34, 3.94, 3.95, 4.07, 3.87, 4.00, 4…
+## $ y       &lt;dbl&gt; 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, 4.05, 4…
+## $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49, 2.39, 2…</code></pre>
 </div>
 <div id="reading-in-data" class="section level1">
 <h1>Reading in data</h1>
-<p>In this session, we will read in a Excel dataset (<code>xls</code> format). We will use the <a href="https://readxl.tidyverse.org/"><code>readxl</code> package</a> to perform this task.</p>
-<p>Of course, <code>xls</code> is not the only data type that <code>R</code> can deal with. Have a look at this <a href="https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf">cheatsheet</a> to see some data types that the <a href="https://readr.tidyverse.org/"><code>readr</code> package</a> is able to handle. If you want to read in SAS or SPSS files, have a look at the <a href="https://haven.tidyverse.org/"><code>haven</code> package</a>.</p>
+<p>In this session, we will read in a Excel dataset (<code>.xls</code> format). We will use the <a href="https://readxl.tidyverse.org/"><strong>readxl</strong> package</a> to perform this task.</p>
+<p>Of course, <code>.xls</code> is not the only data type that <code>R</code> can deal with. Have a look at this <a href="https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf">cheatsheet</a> to see some data types that the <a href="https://readr.tidyverse.org/"><strong>readr</strong> package</a> is able to handle. If you want to read in SAS or SPSS files, have a look at the <a href="https://haven.tidyverse.org/"><strong>haven</strong> package</a>.</p>
 <div id="first-attempt" class="section level2">
 <h2>First attempt</h2>
-<p>The <code>read_xls</code> function from the <code>readxl</code> package is perfect to read in a <code>xls</code> data, let’s try that!</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>raw_data =<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_xls</span>(<span class="dt">path =</span> <span class="st">&quot;data/sample_data.xls&quot;</span>)</span></code></pre></div>
+<p>The <code>read_excel()</code> function from the <strong>readxl</strong> package is perfect to read in a <code>.xls</code> file, let’s try that!</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">raw_data =<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="dt">path =</span> <span class="st">&quot;data/sample_data.xls&quot;</span>)</a></code></pre></div>
 <pre><code>## New names:
 ## * `` -&gt; ...2
 ## * `` -&gt; ...3
@@ -485,173 +496,148 @@ $(document).ready(function () {
 ## * `` -&gt; ...5
 ## * `` -&gt; ...6
 ## * … and 1 more problem</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="kw">head</span>(raw_data)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">head</span>(raw_data)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 7
-##   `Supplementary Table … ...2   ...3     ...4    ...5     ...6     ...7    
-##   &lt;chr&gt;                  &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   
-## 1 Sample Treatment and … &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;    
-## 2 &lt;NA&gt;                   &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;    
-## 3 Strain                 Sample &quot;Time\n… &quot;Dose\… RIN      [ ng/µL… 260/280 
-## 4 HW                     HW1    1.5      0       9.80000… 1425.97  2.12000…
-## 5 HW                     HW2    1.5      0       9.80000… 2006.33… 2.10999…
-## 6 HW                     HW3    1.5      0       9.90000… 1043.49  2.14000…</code></pre>
+##   `Supplementary Table 4… ...2   ...3     ...4     ...5      ...6      ...7     
+##   &lt;chr&gt;                   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;    
+## 1 Sample Treatment and R… &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     
+## 2 &lt;NA&gt;                    &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     
+## 3 Strain                  Sample &quot;Time\n… &quot;Dose\n… RIN       [ ng/µL ] 260/280  
+## 4 HW                      HW1    1.5      0        9.800000… 1425.97   2.120000…
+## 5 HW                      HW2    1.5      0        9.800000… 2006.339… 2.109999…
+## 6 HW                      HW3    1.5      0        9.900000… 1043.49   2.140000…</code></pre>
 <p>Oh, no! We seemed to read in a very ugly dataset. What happened?</p>
-<p>If we open up the <code>xls</code> dataset up in Excel, we see that <code>R</code> didn’t do anything wrong! It actually faithfully read in everything that you can see in the Excel sheet. This <code>xls</code> data is poorly formatte with the first three rows being non-sense that is not relevant for data analysis. We should ask the function <code>read_xls</code> to skip the first three rows, use the 4th row as the data headings. How can we do that?</p>
+<p>If we open the <code>sample_data.xls</code> file in Excel, we see that R didn’t do anything wrong! It actually faithfully read in everything that you can see in the Excel sheet.</p>
+<p>This <code>.xls</code> file is poorly formatted with the first three rows being notes that are not part of the data table. We should ask the function <code>read_excel</code> to skip the first three rows, use the 4th row as the column headings. How can we do that?</p>
 </div>
 <div id="second-attempt" class="section level2">
 <h2>Second attempt</h2>
-<p>Have a look at this!</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>raw_data =<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_xls</span>(<span class="st">&quot;data/sample_data.xls&quot;</span>, <span class="dt">skip =</span> <span class="dv">3</span>)</span>
-<span id="cb36-2"><a href="#cb36-2"></a><span class="kw">head</span>(raw_data)</span></code></pre></div>
+<p>We use the <code>skip</code> argument to the <code>read_excel()</code> function. Have a look at this!</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">raw_data =<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="st">&quot;data/sample_data.xls&quot;</span>, <span class="dt">skip =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw">head</span>(raw_data)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 7
-##   Strain Sample `Time\n(hours)` `Dose\n(µg/kg)` RIN   `[ ng/µL ]` `260/280`
-##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;    
-## 1 HW     HW1    1.5             0               9.80… 1425.97     2.120000…
-## 2 HW     HW2    1.5             0               9.80… 2006.33999… 2.109999…
-## 3 HW     HW3    1.5             0               9.90… 1043.49     2.140000…
-## 4 HW     HW4    1.5             100             9.59… 1931.45     2.109999…
-## 5 HW     HW5    1.5             100             10    524.259999… 2.129999…
-## 6 HW     HW6    1.5             100             9.5   2077.04     2.089999…</code></pre>
+##   Strain Sample `Time\n(hours)` `Dose\n(µg/kg)` RIN      `[ ng/µL ]`  `260/280` 
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     
+## 1 HW     HW1    1.5             0               9.80000… 1425.97      2.1200000…
+## 2 HW     HW2    1.5             0               9.80000… 2006.339999… 2.1099999…
+## 3 HW     HW3    1.5             0               9.90000… 1043.49      2.1400000…
+## 4 HW     HW4    1.5             100             9.59999… 1931.45      2.1099999…
+## 5 HW     HW5    1.5             100             10       524.2599999… 2.1299999…
+## 6 HW     HW6    1.5             100             9.5      2077.04      2.0899999…</code></pre>
 </div>
 </div>
 <div id="cleaning-column-names" class="section level1">
 <h1>Cleaning column names</h1>
-<p>The column names of this dataset isn’t quite as nice as we would like. For example, the “time” column has some strange symbols. We can remove these using the <code>clean_names</code> function from the <code>janitor</code> package. Even though this package is not a part of the <code>tidyverse</code>, but it is a very useful package nonetheless.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>clean_col_data =<span class="st"> </span>raw_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb38-2"><a href="#cb38-2"></a><span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>()</span>
-<span id="cb38-3"><a href="#cb38-3"></a></span>
-<span id="cb38-4"><a href="#cb38-4"></a>clean_col_data</span></code></pre></div>
-<pre><code>## # A tibble: 168 x 7
-##    strain sample time_hours dose_µg_kg rin         ng_µ_l      x260_280    
-##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;       
-##  1 HW     HW1    1.5        0          9.80000000… 1425.97     2.120000000…
-##  2 HW     HW2    1.5        0          9.80000000… 2006.33999… 2.109999999…
-##  3 HW     HW3    1.5        0          9.90000000… 1043.49     2.140000000…
-##  4 HW     HW4    1.5        100        9.59999999… 1931.45     2.109999999…
-##  5 HW     HW5    1.5        100        10          524.259999… 2.129999999…
-##  6 HW     HW6    1.5        100        9.5         2077.04     2.089999999…
-##  7 HW     WW45   3          100        9.80000000… 896.940000… 2.129999999…
-##  8 HW     WW46   3          100        9.80000000… 623.610000… 2.129999999…
-##  9 HW     WW47   3          100        9.40000000… 2351.84999… 2.080000000…
-## 10 HW     WW48   3          100        10          1588.03     2.089999999…
-## # … with 158 more rows</code></pre>
+<p>The column names of this dataset isn’t quite as nice as we would like.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">colnames</span>(raw_data)</a></code></pre></div>
+<pre><code>## [1] &quot;Strain&quot;        &quot;Sample&quot;        &quot;Time\n(hours)&quot; &quot;Dose\n(µg/kg)&quot;
+## [5] &quot;RIN&quot;           &quot;[ ng/µL ]&quot;     &quot;260/280&quot;</code></pre>
+<p>We can tidy them using the <code>clean_names()</code> function from the <strong>janitor</strong> package. Even though this package is not officially part of the <strong>tidyverse</strong>, it is a very useful package nonetheless.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw">colnames</span>(raw_data)</a></code></pre></div>
+<pre><code>## [1] &quot;Strain&quot;        &quot;Sample&quot;        &quot;Time\n(hours)&quot; &quot;Dose\n(µg/kg)&quot;
+## [5] &quot;RIN&quot;           &quot;[ ng/µL ]&quot;     &quot;260/280&quot;</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">clean_col_data =<span class="st"> </span>raw_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>()</a></code></pre></div>
+<p>We can see the new column names:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">colnames</span>(clean_col_data)</a></code></pre></div>
+<pre><code>## [1] &quot;strain&quot;     &quot;sample&quot;     &quot;time_hours&quot; &quot;dose_µg_kg&quot; &quot;rin&quot;       
+## [6] &quot;ng_µ_l&quot;     &quot;x260_280&quot;</code></pre>
+<p>Note that we have also used the <strong>pipe operator</strong>, <code>%&gt;%</code>, which passes the results from one function into the next function. In the above case, these two lines of code would give identical results:</p>
+<pre><code>raw_data %&gt;% janitor::clean_names()
+janitor::clean_names(raw_data)</code></pre>
+<p>We will use the pipe operator a lot over the next two days, it’s a game changer for the way you write R code.</p>
 </div>
 <div id="selecting-data" class="section level1">
 <h1>Selecting data</h1>
 <div id="selecting-certain-columns" class="section level2">
 <h2>Selecting certain columns</h2>
-<p>We will now use the <code>dplyr</code> package to perform some basic data cleaning. The <code>dplyr</code> package is one of the most popular packages inside the <code>tidyverse</code>. Its main functions are designed to interact with the <code>data.frame</code> object in <code>R</code> in a very intuitive way. This is why its name is an excellent pun: it is a <strong>ply</strong>e<strong>r</strong> for <strong>d</strong>ata (okay, maybe it depends on your sense of humour).</p>
-<p>Let’s see <code>dplyr</code> in action. If we want to select only the <code>strain</code> column of this data, then we can use the <code>select</code> function from the <code>dplyr</code> package.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>sub_data =<span class="st"> </span>clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb40-2"><a href="#cb40-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(strain)</span>
-<span id="cb40-3"><a href="#cb40-3"></a></span>
-<span id="cb40-4"><a href="#cb40-4"></a>sub_data</span></code></pre></div>
-<pre><code>## # A tibble: 168 x 1
-##    strain
-##    &lt;chr&gt; 
-##  1 HW    
-##  2 HW    
-##  3 HW    
-##  4 HW    
-##  5 HW    
-##  6 HW    
-##  7 HW    
-##  8 HW    
-##  9 HW    
-## 10 HW    
-## # … with 158 more rows</code></pre>
+<p>We will now use the <strong>dplyr</strong> package to perform some basic data cleaning. The <strong>dplyr</strong> package is one of the most popular packages in the <strong>tidyverse</strong>. Its main functions are designed to interact with the <code>data.frame</code> object in R in a very intuitive way. This is why its name is an excellent pun: it is a <strong>ply</strong>e<strong>r</strong> for <strong>d</strong>ata frames (okay, maybe it depends on your sense of humour).</p>
+<p>Let’s see <strong>dplyr</strong> in action. If we want to select only the <code>strain</code> column of this data, then we can use the <code>select</code> function from the <strong>dplyr</strong> package.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">sub_data =<span class="st"> </span>clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(strain)</a>
+<a class="sourceLine" id="cb48-3" data-line-number="3"><span class="kw">glimpse</span>(sub_data)</a></code></pre></div>
+<pre><code>## Observations: 168
+## Variables: 1
+## $ strain &lt;chr&gt; &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;H…</code></pre>
 </div>
 </div>
 <div id="selecting-columns-by-character-vector" class="section level1">
 <h1>Selecting columns by character vector</h1>
-<p>If we want to select multiple columns in the data, we could include more names (unquoted) into the <code>select</code> function.</p>
+<p>If we want to select multiple columns in the data, we could include more names (unquoted) into the <code>dplyr::select()</code> function.</p>
 <p>However, sometimes it is useful to select columns using a character vector, especially considering the “dose” column has a Greek symbol (nano-gram) inside.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb42-2"><a href="#cb42-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(strain, sample)</span></code></pre></div>
-<pre><code>## # A tibble: 168 x 2
-##    strain sample
-##    &lt;chr&gt;  &lt;chr&gt; 
-##  1 HW     HW1   
-##  2 HW     HW2   
-##  3 HW     HW3   
-##  4 HW     HW4   
-##  5 HW     HW5   
-##  6 HW     HW6   
-##  7 HW     WW45  
-##  8 HW     WW46  
-##  9 HW     WW47  
-## 10 HW     WW48  
-## # … with 158 more rows</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="kw">colnames</span>(clean_col_data) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tolower</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;strain&quot;     &quot;sample&quot;     &quot;time_hours&quot; &quot;dose_µg_kg&quot; &quot;rin&quot;       
-## [6] &quot;ng_µ_l&quot;     &quot;x260_280&quot;</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>select_columns =<span class="st"> </span><span class="kw">colnames</span>(clean_col_data)[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]</span>
-<span id="cb46-2"><a href="#cb46-2"></a>select_columns</span></code></pre></div>
-<pre><code>## [1] &quot;strain&quot;     &quot;sample&quot;     &quot;time_hours&quot; &quot;dose_µg_kg&quot;</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>sub_data =<span class="st"> </span>clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb48-2"><a href="#cb48-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">one_of</span>(select_columns))</span>
-<span id="cb48-3"><a href="#cb48-3"></a></span>
-<span id="cb48-4"><a href="#cb48-4"></a>sub_data</span></code></pre></div>
-<pre><code>## # A tibble: 168 x 4
-##    strain sample time_hours dose_µg_kg
-##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;     
-##  1 HW     HW1    1.5        0         
-##  2 HW     HW2    1.5        0         
-##  3 HW     HW3    1.5        0         
-##  4 HW     HW4    1.5        100       
-##  5 HW     HW5    1.5        100       
-##  6 HW     HW6    1.5        100       
-##  7 HW     WW45   3          100       
-##  8 HW     WW46   3          100       
-##  9 HW     WW47   3          100       
-## 10 HW     WW48   3          100       
-## # … with 158 more rows</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="co"># select using unquoted column names</span></a>
+<a class="sourceLine" id="cb50-2" data-line-number="2">clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(strain, sample) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-4" data-line-number="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">glimpse</span>()</a></code></pre></div>
+<pre><code>## Observations: 168
+## Variables: 2
+## $ strain &lt;chr&gt; &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;H…
+## $ sample &lt;chr&gt; &quot;HW1&quot;, &quot;HW2&quot;, &quot;HW3&quot;, &quot;HW4&quot;, &quot;HW5&quot;, &quot;HW6&quot;, &quot;WW45&quot;, &quot;WW46&quot;, &quot;WW4…</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="co"># or the first four columns</span></a>
+<a class="sourceLine" id="cb52-2" data-line-number="2">clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb52-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb52-4" data-line-number="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">glimpse</span>()</a></code></pre></div>
+<pre><code>## Observations: 168
+## Variables: 4
+## $ strain     &lt;chr&gt; &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;…
+## $ sample     &lt;chr&gt; &quot;HW1&quot;, &quot;HW2&quot;, &quot;HW3&quot;, &quot;HW4&quot;, &quot;HW5&quot;, &quot;HW6&quot;, &quot;WW45&quot;, &quot;WW46&quot;, …
+## $ time_hours &lt;chr&gt; &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;…
+## $ dose_µg_kg &lt;chr&gt; &quot;0&quot;, &quot;0&quot;, &quot;0&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;…</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># a range of columns</span></a>
+<a class="sourceLine" id="cb54-2" data-line-number="2">clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb54-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(strain<span class="op">:</span>rin) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb54-4" data-line-number="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">glimpse</span>()</a></code></pre></div>
+<pre><code>## Observations: 168
+## Variables: 5
+## $ strain     &lt;chr&gt; &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;…
+## $ sample     &lt;chr&gt; &quot;HW1&quot;, &quot;HW2&quot;, &quot;HW3&quot;, &quot;HW4&quot;, &quot;HW5&quot;, &quot;HW6&quot;, &quot;WW45&quot;, &quot;WW46&quot;, …
+## $ time_hours &lt;chr&gt; &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;…
+## $ dose_µg_kg &lt;chr&gt; &quot;0&quot;, &quot;0&quot;, &quot;0&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;…
+## $ rin        &lt;chr&gt; &quot;9.8000000000000007&quot;, &quot;9.8000000000000007&quot;, &quot;9.90000000000…</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="co"># columns starting with a particular string</span></a>
+<a class="sourceLine" id="cb56-2" data-line-number="2">clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;s&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-4" data-line-number="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">glimpse</span>()</a></code></pre></div>
+<pre><code>## Observations: 168
+## Variables: 2
+## $ strain &lt;chr&gt; &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;H…
+## $ sample &lt;chr&gt; &quot;HW1&quot;, &quot;HW2&quot;, &quot;HW3&quot;, &quot;HW4&quot;, &quot;HW5&quot;, &quot;HW6&quot;, &quot;WW45&quot;, &quot;WW46&quot;, &quot;WW4…</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="co"># select using character vector</span></a>
+<a class="sourceLine" id="cb58-2" data-line-number="2">select_columns =<span class="st"> </span><span class="kw">colnames</span>(clean_col_data)[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb58-3" data-line-number="3">sub_data =<span class="st"> </span>clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb58-4" data-line-number="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">one_of</span>(select_columns))</a>
+<a class="sourceLine" id="cb58-5" data-line-number="5"><span class="kw">glimpse</span>(sub_data)</a></code></pre></div>
+<pre><code>## Observations: 168
+## Variables: 4
+## $ strain     &lt;chr&gt; &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;…
+## $ sample     &lt;chr&gt; &quot;HW1&quot;, &quot;HW2&quot;, &quot;HW3&quot;, &quot;HW4&quot;, &quot;HW5&quot;, &quot;HW6&quot;, &quot;WW45&quot;, &quot;WW46&quot;, …
+## $ time_hours &lt;chr&gt; &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;…
+## $ dose_µg_kg &lt;chr&gt; &quot;0&quot;, &quot;0&quot;, &quot;0&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;…</code></pre>
 </div>
 <div id="renaming-columns" class="section level1">
 <h1>Renaming columns</h1>
 <p>We can also rename the columns.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>sub_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb50-2"><a href="#cb50-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">time =</span> time_hours)</span></code></pre></div>
-<pre><code>## # A tibble: 168 x 4
-##    strain sample time  dose_µg_kg
-##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;     
-##  1 HW     HW1    1.5   0         
-##  2 HW     HW2    1.5   0         
-##  3 HW     HW3    1.5   0         
-##  4 HW     HW4    1.5   100       
-##  5 HW     HW5    1.5   100       
-##  6 HW     HW6    1.5   100       
-##  7 HW     WW45   3     100       
-##  8 HW     WW46   3     100       
-##  9 HW     WW47   3     100       
-## 10 HW     WW48   3     100       
-## # … with 158 more rows</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>rename_columns =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;strain&quot;</span>, <span class="st">&quot;sample&quot;</span>, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;dose&quot;</span>)</span>
-<span id="cb52-2"><a href="#cb52-2"></a></span>
-<span id="cb52-3"><a href="#cb52-3"></a>sub_data =<span class="st"> </span>sub_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb52-4"><a href="#cb52-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename_at</span>(<span class="kw">vars</span>(select_columns), <span class="op">~</span><span class="st"> </span>rename_columns)</span>
-<span id="cb52-5"><a href="#cb52-5"></a></span>
-<span id="cb52-6"><a href="#cb52-6"></a>sub_data </span></code></pre></div>
-<pre><code>## # A tibble: 168 x 4
-##    strain sample time  dose 
-##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
-##  1 HW     HW1    1.5   0    
-##  2 HW     HW2    1.5   0    
-##  3 HW     HW3    1.5   0    
-##  4 HW     HW4    1.5   100  
-##  5 HW     HW5    1.5   100  
-##  6 HW     HW6    1.5   100  
-##  7 HW     WW45   3     100  
-##  8 HW     WW46   3     100  
-##  9 HW     WW47   3     100  
-## 10 HW     WW48   3     100  
-## # … with 158 more rows</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">sub_data =<span class="st"> </span>sub_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">time =</span> time_hours,</a>
+<a class="sourceLine" id="cb60-3" data-line-number="3">                <span class="dt">dose =</span> dose_µg_kg)</a>
+<a class="sourceLine" id="cb60-4" data-line-number="4"><span class="kw">glimpse</span>(sub_data)</a></code></pre></div>
+<pre><code>## Observations: 168
+## Variables: 4
+## $ strain &lt;chr&gt; &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;HW&quot;, &quot;H…
+## $ sample &lt;chr&gt; &quot;HW1&quot;, &quot;HW2&quot;, &quot;HW3&quot;, &quot;HW4&quot;, &quot;HW5&quot;, &quot;HW6&quot;, &quot;WW45&quot;, &quot;WW46&quot;, &quot;WW4…
+## $ time   &lt;chr&gt; &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;1.5&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, …
+## $ dose   &lt;chr&gt; &quot;0&quot;, &quot;0&quot;, &quot;0&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;…</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="co"># not sure about rename_at (bit advanced?)</span></a>
+<a class="sourceLine" id="cb62-2" data-line-number="2"><span class="co"># rename_columns = c(&quot;strain&quot;, &quot;sample&quot;, &quot;time&quot;, &quot;dose&quot;)</span></a>
+<a class="sourceLine" id="cb62-3" data-line-number="3"><span class="co"># sub_data = sub_data %&gt;% </span></a>
+<a class="sourceLine" id="cb62-4" data-line-number="4"><span class="co">#   dplyr::rename_at(vars(select_columns), ~ rename_columns)</span></a>
+<a class="sourceLine" id="cb62-5" data-line-number="5"><span class="co"># sub_data </span></a></code></pre></div>
 </div>
 <div id="mutating-columns" class="section level1">
 <h1>Mutating columns</h1>
-<p>The <code>mutate</code> function in <code>dplyr</code> does exactly what you would expect: it changes an entire column. It has the structure that <code>new column = some changes to the (old column)</code>.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>sub_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb54-2"><a href="#cb54-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">time_2 =</span> <span class="kw">as.numeric</span>(time))</span></code></pre></div>
+<p>The <code>dplyr::mutate()</code> function does exactly what you would expect: it changes an entire column. It has the structure that <code>new column = some changes to the (old column)</code>.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1">sub_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb63-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">time_2 =</span> <span class="kw">as.numeric</span>(time))</a></code></pre></div>
 <pre><code>## Warning: NAs introduced by coercion</code></pre>
 <pre><code>## # A tibble: 168 x 5
 ##    strain sample time  dose  time_2
@@ -668,13 +654,13 @@ $(document).ready(function () {
 ## 10 HW     WW48   3     100      3  
 ## # … with 158 more rows</code></pre>
 <p>If the new column has the same name as the old column, then this column will be over-written.</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a>mutate_data =<span class="st">  </span>sub_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb57-2"><a href="#cb57-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">as.numeric</span>(time),</span>
-<span id="cb57-3"><a href="#cb57-3"></a>                <span class="dt">dose =</span> <span class="kw">as.numeric</span>(dose))</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1">mutate_data =<span class="st"> </span>sub_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb66-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">as.numeric</span>(time),</a>
+<a class="sourceLine" id="cb66-3" data-line-number="3">                <span class="dt">dose =</span> <span class="kw">as.numeric</span>(dose))</a></code></pre></div>
 <pre><code>## Warning: NAs introduced by coercion
 
 ## Warning: NAs introduced by coercion</code></pre>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>mutate_data</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1">mutate_data</a></code></pre></div>
 <pre><code>## # A tibble: 168 x 4
 ##    strain sample  time  dose
 ##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
@@ -692,31 +678,32 @@ $(document).ready(function () {
 </div>
 <div id="missing-values" class="section level1">
 <h1>Missing values</h1>
-<p>When we mutated our data, we saw that there was a warning message about <code>NA</code>, which is <code>R</code>’s way to represent a missing value. So what happened?</p>
+<p>When we mutated our data, we saw that there was a warning message, <code>NAs introduced by coercion</code>. The <code>NA</code> is is R’s way to represent a missing value. So what happened?</p>
 <p>If we have a quick look at the original <code>xls</code> file, we see that someone must have copied the data with the heading four times. This is why when we converted <code>time</code> into a numeric variable, <code>R</code> recognised the column headings in the middle of the data as weird values and assigned those with <code>NA</code>.</p>
-<p>We can visualise <code>NA</code> in our data using the <code>vis_miss</code> function from <code>visdat</code>.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>mutate_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb61-2"><a href="#cb61-2"></a><span class="st">  </span>visdat<span class="op">::</span><span class="kw">vis_miss</span>()</span></code></pre></div>
-<p><img src="session1_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>We can visualise <code>NA</code> in our data using the <code>vis_miss()</code> function from the <strong>visdat</strong> package.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">mutate_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb70-2" data-line-number="2"><span class="st">  </span>visdat<span class="op">::</span><span class="kw">vis_miss</span>()</a></code></pre></div>
+<p><img src="session1_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 <div id="filtering-out-problematic-rows" class="section level1">
 <h1>Filtering out problematic rows</h1>
 <p>We will now filtering out the three rows of column headings, which we have converted into <code>NA</code> in the <code>time</code> and <code>dose</code> columns.</p>
-<p>We will use the <code>filter</code> function from the <code>dplyr</code> package. The function takes in <code>logical</code> vectors of the same length as the <code>nrow(data)</code> as the input.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="co">## These are the rows we want to filter out</span></span>
-<span id="cb62-2"><a href="#cb62-2"></a>mutate_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb62-3"><a href="#cb62-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="kw">is.na</span>(time))</span></code></pre></div>
+<p>We will use the <code>filter()</code> function from the <strong>dplyr</strong> package. The function takes in <code>logical</code> vectors of the same length as the <code>nrow(data)</code> as the input.</p>
+<!-- consider using `drop_na()` -->
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="co">## These are the rows we want to filter out</span></a>
+<a class="sourceLine" id="cb71-2" data-line-number="2">mutate_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb71-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="kw">is.na</span>(time))</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 4
 ##   strain sample  time  dose
 ##   &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Strain Sample    NA    NA
 ## 2 Strain Sample    NA    NA
 ## 3 Strain Sample    NA    NA</code></pre>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a><span class="co">## The reverse of the above is written with a `!`. </span></span>
-<span id="cb64-2"><a href="#cb64-2"></a>filter_data =<span class="st"> </span>mutate_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb64-3"><a href="#cb64-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(time))</span>
-<span id="cb64-4"><a href="#cb64-4"></a></span>
-<span id="cb64-5"><a href="#cb64-5"></a>filter_data</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1"><span class="co">## The reverse of the above is written with a `!`. </span></a>
+<a class="sourceLine" id="cb73-2" data-line-number="2">filter_data =<span class="st"> </span>mutate_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb73-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(time))</a>
+<a class="sourceLine" id="cb73-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb73-5" data-line-number="5">filter_data</a></code></pre></div>
 <pre><code>## # A tibble: 165 x 4
 ##    strain sample  time  dose
 ##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
@@ -738,18 +725,18 @@ $(document).ready(function () {
 <p>If we want to create summary statistics of our data.frame, we need to think about which variable are we summarising over. In this case, we will count the number of samples for each of the strains.</p>
 <div id="counting-number-of-samples" class="section level2">
 <h2>Counting number of samples</h2>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>filter_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb66-2"><a href="#cb66-2"></a><span class="st">  </span><span class="kw">group_by</span>(strain) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb66-3"><a href="#cb66-3"></a><span class="st">  </span><span class="kw">count</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1">filter_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb75-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(strain) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb75-3" data-line-number="3"><span class="st">  </span><span class="kw">count</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ## # Groups:   strain [2]
 ##   strain     n
 ##   &lt;chr&gt;  &lt;int&gt;
 ## 1 HW        85
 ## 2 LE        80</code></pre>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>filter_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb68-2"><a href="#cb68-2"></a><span class="st">  </span><span class="kw">group_by</span>(strain) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb68-3"><a href="#cb68-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="kw">n</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" data-line-number="1">filter_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(strain) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-3" data-line-number="3"><span class="st">  </span><span class="kw">summarise</span>(<span class="kw">n</span>())</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   strain `n()`
 ##   &lt;chr&gt;  &lt;int&gt;
@@ -758,9 +745,9 @@ $(document).ready(function () {
 </div>
 <div id="counting-with-more-variables" class="section level2">
 <h2>Counting with more variables</h2>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>filter_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb70-2"><a href="#cb70-2"></a><span class="st">  </span><span class="kw">group_by</span>(strain, dose) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb70-3"><a href="#cb70-3"></a><span class="st">  </span><span class="kw">count</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1">filter_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb79-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(strain, dose) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb79-3" data-line-number="3"><span class="st">  </span><span class="kw">count</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 18 x 3
 ## # Groups:   strain, dose [18]
 ##    strain     dose     n
@@ -783,9 +770,9 @@ $(document).ready(function () {
 ## 16 LE       50         4
 ## 17 LE      100        25
 ## 18 LE     1000         4</code></pre>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>filter_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb72-2"><a href="#cb72-2"></a><span class="st">  </span><span class="kw">group_by</span>(strain, dose, time) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb72-3"><a href="#cb72-3"></a><span class="st">  </span><span class="kw">count</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" data-line-number="1">filter_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(strain, dose, time) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-3" data-line-number="3"><span class="st">  </span><span class="kw">count</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 36 x 4
 ## # Groups:   strain, dose, time [36]
 ##    strain   dose  time     n
@@ -805,14 +792,14 @@ $(document).ready(function () {
 </div>
 <div id="saving-data" class="section level1">
 <h1>Saving data</h1>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a><span class="kw">write_csv</span>(filter_data, <span class="dt">path =</span> <span class="st">&quot;data/clean_sample_data.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1"><span class="kw">write_csv</span>(filter_data, <span class="dt">path =</span> <span class="st">&quot;data/clean_sample_data.csv&quot;</span>)</a></code></pre></div>
 </div>
 <div id="session-info" class="section level1">
 <h1>Session Info</h1>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" data-line-number="1"><span class="kw">sessionInfo</span>()</a></code></pre></div>
 <pre><code>## R version 3.6.1 (2019-07-05)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS Mojave 10.14.6
+## Running under: macOS Catalina 10.15.1
 ## 
 ## Matrix products: default
 ## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
@@ -825,24 +812,41 @@ $(document).ready(function () {
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] visdat_0.5.3    readxl_1.3.1    janitor_1.2.0   forcats_0.4.0  
-##  [5] stringr_1.4.0   dplyr_0.8.3     purrr_0.3.3     readr_1.3.1    
-##  [9] tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1   tidyverse_1.2.1
+##  [1] visdat_0.5.3         readxl_1.3.1         janitor_1.2.0       
+##  [4] forcats_0.4.0        stringr_1.4.0        dplyr_0.8.3         
+##  [7] purrr_0.3.3          readr_1.3.1          tidyr_1.0.0         
+## [10] tibble_2.1.3         ggplot2_3.2.1        tidyverse_1.3.0.9000
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] tidyselect_0.2.5 xfun_0.10        haven_2.2.0      lattice_0.20-38 
+##  [1] tidyselect_0.2.5 xfun_0.11        haven_2.2.0      lattice_0.20-38 
 ##  [5] snakecase_0.11.0 colorspace_1.4-1 vctrs_0.2.0      generics_0.0.2  
 ##  [9] htmltools_0.4.0  yaml_2.2.0       utf8_1.1.4       rlang_0.4.1     
-## [13] pillar_1.4.2     glue_1.3.1       withr_2.1.2      modelr_0.1.5    
-## [17] lifecycle_0.1.0  munsell_0.5.0    gtable_0.3.0     cellranger_1.1.0
-## [21] rvest_0.3.4      evaluate_0.14    labeling_0.3     knitr_1.25      
-## [25] fansi_0.4.0      broom_0.5.2      Rcpp_1.0.3       scales_1.1.0    
-## [29] backports_1.1.5  jsonlite_1.6     farver_2.0.1     hms_0.5.2       
-## [33] digest_0.6.22    stringi_1.4.3    grid_3.6.1       cli_1.1.0       
-## [37] tools_3.6.1      magrittr_1.5     lazyeval_0.2.2   crayon_1.3.4    
-## [41] pkgconfig_2.0.3  zeallot_0.1.0    ellipsis_0.3.0   xml2_1.2.2      
-## [45] lubridate_1.7.4  assertthat_0.2.1 rmarkdown_1.16   httr_1.4.1      
-## [49] rstudioapi_0.10  R6_2.4.1         nlme_3.1-141     compiler_3.6.1</code></pre>
+## [13] pillar_1.4.2     glue_1.3.1       withr_2.1.2      DBI_1.0.0       
+## [17] dbplyr_1.4.2     modelr_0.1.5     lifecycle_0.1.0  munsell_0.5.0   
+## [21] gtable_0.3.0     cellranger_1.1.0 rvest_0.3.5      evaluate_0.14   
+## [25] labeling_0.3     knitr_1.26       fansi_0.4.0      broom_0.5.2     
+## [29] Rcpp_1.0.3       scales_1.1.0     backports_1.1.5  jsonlite_1.6    
+## [33] farver_2.0.1     fs_1.3.1         hms_0.5.2        digest_0.6.22   
+## [37] stringi_1.4.3    grid_3.6.1       cli_1.1.0        tools_3.6.1     
+## [41] magrittr_1.5     lazyeval_0.2.2   crayon_1.3.4     pkgconfig_2.0.3 
+## [45] zeallot_0.1.0    ellipsis_0.3.0   xml2_1.2.2       reprex_0.3.0    
+## [49] lubridate_1.7.4  assertthat_0.2.1 rmarkdown_1.17   httr_1.4.1      
+## [53] rstudioapi_0.10  R6_2.4.1         nlme_3.1-141     compiler_3.6.1</code></pre>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Need to reference the tidyverse, there’s a new canonical way to do that, one reference for all tidyverse packages.</p>
+<p>Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, <a href="https://doi.org/10.21105/joss.01686" class="uri">https://doi.org/10.21105/joss.01686</a></p>
+<pre><code>@Article{Tidyverse:2019,
+    title = {Welcome to the {tidyverse}},
+    author = {Hadley Wickham and Mara Averick and Jennifer Bryan and Winston Chang and Lucy D&#39;Agostino McGowan and Romain François and Garrett Grolemund and Alex Hayes and Lionel Henry and Jim Hester and Max Kuhn and Thomas Lin Pedersen and Evan Miller and Stephan Milton Bache and Kirill Müller and Jeroen Ooms and David Robinson and Dana Paige Seidel and Vitalie Spinu and Kohske Takahashi and Davis Vaughan and Claus Wilke and Kara Woo and Hiroaki Yutani},
+    year = {2019},
+    journal = {Journal of Open Source Software},
+    volume = {4},
+    number = {43},
+    pages = {1686},
+    doi = {10.21105/joss.01686},
+  }</code></pre>
 </div>
 
 
