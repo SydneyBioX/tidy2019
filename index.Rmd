@@ -40,7 +40,6 @@ In this session, we will focus on the modelling of our cleaned data from the pre
 
 Some of the packages to be covered: `tibble`, `broom` and `purrr`.
 
-
 # Prerequisites
 
 Ideally, you should at least know what `R` is, since this is not a programming workshop, you can still pick up important practical skills by running the codes we provided. 
@@ -49,10 +48,8 @@ Ideally, you should at least know what `R` is, since this is not a programming w
 
 We will use RStudio Cloud to run this workshop.
 
-
 # Clipboard
 
-In some circumstances, we might need to share codes beyond the existing materials. Please click [here](https://docs.google.com/document/d/136YffzxjkUM8RIGsnjD_yOkCTWw4Ijdwjy4_58nC-zc/edit?usp=sharing) to access these codes. 
-
+In some circumstances, we might need to share codes beyond the existing materials. Please click [here](https://docs.google.com/document/d/136YffzxjkUM8RIGsnjD_yOkCTWw4Ijdwjy4_58nC-zc/edit?usp=sharing) to access these codes.
 
 # References
