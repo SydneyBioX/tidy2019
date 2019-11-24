@@ -11,6 +11,7 @@ output:
 
 # Learning outcomes of this session
 
++ tibbles are better than data.frames
 + More plotting with `ggplot2`
 + `for` loops and `purrr::map` functions
 + Modelling with `broom`
@@ -67,6 +68,9 @@ t.test(Cxcr7 ~ strain, data = clean_data) %>%
 
 
 
+# (Kevin:) introduce for loop here?
+
+
 # Doing multiple t-tests
 
 In the `clean_data`, we have 54 genes in total. If we want to perform t-test on each gene, should we type out 54 lines of code? 
@@ -95,7 +99,7 @@ First, let's pivot our data into a long format.
 gene_long = clean_data %>%
   tidyr::pivot_longer(
     cols = -c("strain", "sample"),
-    names_to = "gene_symbols",
+    names_to = "gene_symbol",
     values_to = "gene_expression")
 
 gene_long
@@ -106,149 +110,260 @@ Then we will use the `group_by` function and then apply the `nest` function from
 
 ```{r}
 gene_nest = gene_long %>% 
-  group_by(gene_symbols) %>% 
-  tidyr::nest()
+  group_by(gene_symbol) %>% 
+  tidyr::nest(.key = "small_data") %>% 
+  dplyr::ungroup()
 
 gene_nest
 
-gene_nest$data[1:2]
+gene_nest$small_data[1:2]
 ```
 
 
 So, a lot of things happened here. Let's explain. 
 
-You might remember the `group_by` function when we were trying to use the `summarise` function to calculate summary statistics. This is exactly what we want to achieve here with `gene_nest`. Each gene used to have 154 observations (number rows of `clean_data`), but in `gene_nest`, each gene only has "one observation", which corresponds to a row in the `data` column. **Each row of the `data` column is a `data.frame` of size 154 rows and 3 columns**, indicated by the `[154 x 3]`. In each of the `[154 x 3]` data.frame, you will see three columns (all the columns that we didn't put into `group_by`). 
+You might remember the `group_by` function when we were trying to use the `summarise` function to calculate summary statistics. This is exactly what we want to achieve with `gene_nest`. 
 
+Each gene had 154 observations (number rows of `clean_data`), but in `gene_nest`, each gene only has "one observation", which corresponds to a row in the `small_data` column. **Each row of the `small_data` column is a `data.frame` of size 154 rows and 3 columns** (indicated by the `[154 x 3]`). In each of the `[154 x 3]` data.frame, you will see three columns (all the columns that we didn't put into `group_by`). 
+
+Remember, our original aim is to split the `gene_long` data into 54 smaller data, and we have achived that here with the `small_data` column. 
+
+
+Now, we simply need to apply the `tidy_test` function onto the `small_data` column in this `gene_nest` data.frame. 
+
+```{r, eval = FALSE}
+for(i in 1:54){
+  tidy_test(gene_nest$small_data[[i]])
+}
+```
+
+
+# Writing iterations
+
+## `for` loop
+
+`for` loops are common in any programming language. It simply list out the instructions and the iterations are specified using an index. For example, the following code prints out 1 to 5.
+
+```{r}
+for (i in 1:5){
+  print(i)
+}
+```
+
+We can use the `for` loop to compute the `tidy_test` output for all 54 genes. 
+
+```{r, eval = FALSE}
+for (i in 1:54){
+  tidy_test(gene_nest$small_data[[i]])
+}
+```
+
+However, the output of this loop is a `list` object requiring further manipulations to make it suitable for visualisation purposes. Hence, we will learn a new way for plotting. 
+
+## `map` function in `purrr`
+
+The `map` function from the `purrr` package is a tremendously powerful function. In simply terms, it allows us to write a `for` loop is a very simply and readable way. 
+
+```{r, eval = FALSE}
+purrr::map(.x = gene_nest$small_data,
+           .f = tidy_test)
+```
+
+
+Why is this code better than the `for` loop even though they achieved the same output? The biggest reason is that **we don't have to read and understand individual lines** inside the `for` loop. We simply need to know: 
+
++ `.x`, the input
++ `.f`, the function
+
+Then the function `.f` will be applied onto every element of the `.x` input. 
+
+Another reason why `map` function is superior to a `for` loop is how easy it can work with the `mutate` function in `dplyr`. The following code can be read as: 
+
++ In the `gene_nest` data, we want to `mutate` (create) a new column
++ This new column will be called `tidy_result` and it is defined as mapping the `tidy_test` function to every element if the `small_data` column. 
 
 ```{r}
 gene_test = gene_nest %>% 
   dplyr::mutate(
     tidy_result = purrr::map(
-      .x = data,
-      .f = tidy_test))
+      .x = small_data,
+      .f = tidy_test)
+  )
 
-gene_model_long = gene_test %>% 
+gene_test
+```
+
+
+This is a very powerful framework, because it allows us to create new statistics horizonally inside a `data.frame`, keep in track of the matching genes/observations. You may not realise this, but one of the most common mistake in data analysis is mis-matching of rows when combining datasets and statistics. The use of the `mutate` and `map` functions allows all intermediate steps to be stored as a column inside a data.frame, precenting any mis-matchings. 
+
+# Plotting t-test results
+
+The `tidy_result` column in `gene_test` is now a list of tibbles (think of them as data.frames). Each of these tibbles contains t-test statistic and p-value associated with each gene. We will now need to expand this column. The function we will use is `unnest` from the `tidyr` package. As you may already guess, this function undo the `nest` operation. In this case, we want to undo the `tidy_result` column only. 
+
+```{r}
+gene_test$tidy_result[1:2]
+
+gene_test_long = gene_test %>% 
   tidyr::unnest(tidy_result)
 
+gene_test_long
+```
 
-gene_model_long %>% 
+Armed with all the t-test statistics and p-values, we may want to perform some quick visualisations. 
+
+```{r}
+gene_test_long %>% 
   ggplot(aes(x = p.value)) +
   geom_histogram()
+```
+
+This histogram shows that we actually have about 1/3 of genes significantly differentially expressed (DE) between the two strains. This is usually a problem with gene expression analysis because if all t-test assumptions are met, the p-values should be uniformly distributed over the [0,1] interval. This inflation is could be attributed to normalisation issues with the data since we have only taken the most naive approach of taking the logarithm. Additionally, we should also note that this is a _targeted_ gene expression data where genes are typically selected due to differential patterns they showed in pilot studies. We will not commenton the biological implication of this histogram further, but proceed with another common analysis, which is to create boxplots of the top differentially expressed genes. 
 
 
-gene_model_long %>% 
-  dplyr::filter(p.value < 0.0001) %>% 
-  tidyr::unnest(data) %>% 
-  dplyr::mutate(
-    label = paste0(gene_symbols, 
-                   ", p-value = ", 
-                   signif(p.value, 2))) %>% 
+## Boxplots of top differentially expressed genes
+
+In this section, we will first extract the top 6 DE genes and make a boxplot for each of them between the two strains.
+
+The following code allows us to subset the data.frame to the 6 genes with smallest p-values (i.e. most differentially expressed). However, we shouldn't forget that all the gene expression values are still stored in the `small_data` column. We need to apply the `unnest` operation to extract these values.
+
+```{r}
+gene_test_long %>% 
+  dplyr::filter(rank(p.value) <= 6) 
+
+boxplot_data = gene_test_long %>% 
+  dplyr::filter(rank(p.value) <= 6) %>% 
+  tidyr::unnest(small_data)
+
+boxplot_data
+```
+
+
+
+And now, let's perform the final plotting! 
+
+```{r}
+boxplot_data %>% 
   ggplot(aes(x = strain, 
              y = gene_expression)) +
   geom_boxplot() +
-  facet_wrap(~ label, scales = "free")
+  facet_wrap(~ gene_symbol, scales = "free")
 ```
 
 
-
-# Regression analysis (extension)
+We can also prettify the plots by creating a `label` column, which combines the gene symbols and p-values. 
 
 ```{r}
-
-
-hw_data = clean_data %>% 
-  dplyr::filter(strain == "HW")
-
-le_data = clean_data %>% 
-  dplyr::filter(strain == "LE")
-
-
-clean_data %>% 
-  ggplot(aes(x = Ahrr,
-             y = Cxcr7,
-             colour = strain)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-
-lm(Cxcr7 ~ Ahrr, data = clean_data)
-lm(Cxcr7 ~ Ahrr, data = hw_data)
-lm(Cxcr7 ~ Ahrr, data = le_data)
-
-lm_Cxcr7_Ahrr = function(this_data){
-  lm(Cxcr7 ~ Ahrr, data = this_data)
-}
-
-list_data = list(
-  clean_data = clean_data, 
-  hw_data = hw_data,
-  le_data = le_data)
-
-purrr::map(.x = list_data, 
-           .f = lm_Cxcr7_Ahrr)
-
-purrr::map(.x = list_data, 
-           .f = lm_Cxcr7_Ahrr) %>% 
-  purrr::map(.f = broom::tidy)
+boxplot_data %>% 
+  dplyr::mutate(label = paste0(
+    gene_symbol, ", p-value = ", signif(p.value, 2))) %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) +
+  geom_boxplot() +
+  facet_wrap(~ label, scales = "free") +
+  labs(x = "Strains", 
+       y = "Gene expression values")
 ```
 
 
 
+<!-- # Regression analysis (extension) -->
 
-```{r}
-gene_long = clean_data %>%
-  tidyr::pivot_longer(
-    cols = -c("strain", "Cxcr7", "sample"),
-    names_to = "gene_symbols",
-    values_to = "gene_expression")
-
-gene_long
-
-gene_nest = gene_long %>% 
-  group_by(strain, gene_symbols) %>% 
-  tidyr::nest()
-
-gene_nest$data[1:2]
-
-lm_Cxcr7_ge = function(this_data){
-  lm(Cxcr7 ~ gene_expression, data = this_data)
-}
-
-gene_model = gene_nest %>% 
-  dplyr::mutate(lm_obj = purrr::map(.x = data, 
-                                    .f = lm_Cxcr7_ge),
-                lm_tidy = purrr::map(.x = lm_obj,
-                                     .f = broom::tidy))
+<!-- ```{r} -->
 
 
+<!-- hw_data = clean_data %>%  -->
+<!--   dplyr::filter(strain == "HW") -->
 
-gene_model_long = gene_model %>% 
-  dplyr::select(-data, -lm_obj) %>% 
-  tidyr::unnest(lm_tidy) %>% 
-  dplyr::select(strain, gene_symbols, term, estimate) %>% 
-  dplyr::filter(term == "gene_expression")
-
-
-gene_model_long
+<!-- le_data = clean_data %>%  -->
+<!--   dplyr::filter(strain == "LE") -->
 
 
-gene_model_wide = gene_model_long %>% 
-  dplyr::ungroup() %>% 
-  tidyr::pivot_wider(names_from = "strain",
-                     values_from = "estimate")
+<!-- clean_data %>%  -->
+<!--   ggplot(aes(x = Ahrr, -->
+<!--              y = Cxcr7, -->
+<!--              colour = strain)) + -->
+<!--   geom_point() + -->
+<!--   geom_smooth(method = "lm") -->
 
 
-gene_model_wide %>% 
-  ggplot(aes(x = HW, y = LE)) +
-  geom_point() +
-  geom_abline(slope = 1, intercept = 0, colour = "red")
+<!-- lm(Cxcr7 ~ Ahrr, data = clean_data) -->
+<!-- lm(Cxcr7 ~ Ahrr, data = hw_data) -->
+<!-- lm(Cxcr7 ~ Ahrr, data = le_data) -->
 
-gene_model_wide %>% 
-  ggplot(aes(x = HW, y = LE,
-             label = gene_symbols)) +
-  geom_text() +
-  geom_abline(slope = 1, intercept = 0, colour = "red")
-```
+<!-- lm_Cxcr7_Ahrr = function(this_data){ -->
+<!--   lm(Cxcr7 ~ Ahrr, data = this_data) -->
+<!-- } -->
+
+<!-- list_data = list( -->
+<!--   clean_data = clean_data,  -->
+<!--   hw_data = hw_data, -->
+<!--   le_data = le_data) -->
+
+<!-- purrr::map(.x = list_data,  -->
+<!--            .f = lm_Cxcr7_Ahrr) -->
+
+<!-- purrr::map(.x = list_data,  -->
+<!--            .f = lm_Cxcr7_Ahrr) %>%  -->
+<!--   purrr::map(.f = broom::tidy) -->
+<!-- ``` -->
+
+
+
+
+<!-- ```{r} -->
+<!-- gene_long = clean_data %>% -->
+<!--   tidyr::pivot_longer( -->
+<!--     cols = -c("strain", "Cxcr7", "sample"), -->
+<!--     names_to = "gene_symbol", -->
+<!--     values_to = "gene_expression") -->
+
+<!-- gene_long -->
+
+<!-- gene_nest = gene_long %>%  -->
+<!--   group_by(strain, gene_symbol) %>%  -->
+<!--   tidyr::nest() -->
+
+<!-- gene_nest$data[1:2] -->
+
+<!-- lm_Cxcr7_ge = function(this_data){ -->
+<!--   lm(Cxcr7 ~ gene_expression, data = this_data) -->
+<!-- } -->
+
+<!-- gene_model = gene_nest %>%  -->
+<!--   dplyr::mutate(lm_obj = purrr::map(.x = data,  -->
+<!--                                     .f = lm_Cxcr7_ge), -->
+<!--                 lm_tidy = purrr::map(.x = lm_obj, -->
+<!--                                      .f = broom::tidy)) -->
+
+
+
+<!-- gene_model_long = gene_model %>%  -->
+<!--   dplyr::select(-data, -lm_obj) %>%  -->
+<!--   tidyr::unnest(lm_tidy) %>%  -->
+<!--   dplyr::select(strain, gene_symbol, term, estimate) %>%  -->
+<!--   dplyr::filter(term == "gene_expression") -->
+
+
+<!-- gene_model_long -->
+
+
+<!-- gene_model_wide = gene_model_long %>%  -->
+<!--   dplyr::ungroup() %>%  -->
+<!--   tidyr::pivot_wider(names_from = "strain", -->
+<!--                      values_from = "estimate") -->
+
+
+<!-- gene_model_wide %>%  -->
+<!--   ggplot(aes(x = HW, y = LE)) + -->
+<!--   geom_point() + -->
+<!--   geom_abline(slope = 1, intercept = 0, colour = "red") -->
+
+<!-- gene_model_wide %>%  -->
+<!--   ggplot(aes(x = HW, y = LE, -->
+<!--              label = gene_symbols)) + -->
+<!--   geom_text() + -->
+<!--   geom_abline(slope = 1, intercept = 0, colour = "red") -->
+<!-- ``` -->
 
 
 

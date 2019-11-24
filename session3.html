@@ -393,6 +393,7 @@ $(document).ready(function () {
 <div id="learning-outcomes-of-this-session" class="section level1">
 <h1>Learning outcomes of this session</h1>
 <ul>
+<li>tibbles are better than data.frames</li>
 <li>More plotting with <code>ggplot2</code></li>
 <li><code>for</code> loops and <code>purrr::map</code> functions</li>
 <li>Modelling with <code>broom</code></li>
@@ -477,6 +478,9 @@ $(document).ready(function () {
 ## # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
 ## #   alternative &lt;chr&gt;</code></pre>
 </div>
+<div id="kevin-introduce-for-loop-here" class="section level1">
+<h1>(Kevin:) introduce for loop here?</h1>
+</div>
 <div id="doing-multiple-t-tests" class="section level1">
 <h1>Doing multiple t-tests</h1>
 <p>In the <code>clean_data</code>, we have 54 genes in total. If we want to perform t-test on each gene, should we type out 54 lines of code?</p>
@@ -492,46 +496,46 @@ $(document).ready(function () {
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>gene_long =<span class="st"> </span>clean_data <span class="op">%&gt;%</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</span>
 <span id="cb14-3"><a href="#cb14-3"></a>    <span class="dt">cols =</span> <span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;strain&quot;</span>, <span class="st">&quot;sample&quot;</span>),</span>
-<span id="cb14-4"><a href="#cb14-4"></a>    <span class="dt">names_to =</span> <span class="st">&quot;gene_symbols&quot;</span>,</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    <span class="dt">names_to =</span> <span class="st">&quot;gene_symbol&quot;</span>,</span>
 <span id="cb14-5"><a href="#cb14-5"></a>    <span class="dt">values_to =</span> <span class="st">&quot;gene_expression&quot;</span>)</span>
 <span id="cb14-6"><a href="#cb14-6"></a></span>
 <span id="cb14-7"><a href="#cb14-7"></a>gene_long</span></code></pre></div>
 <pre><code>## # A tibble: 8,316 x 4
-##    strain sample gene_symbols gene_expression
-##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;                  &lt;dbl&gt;
-##  1 HW     HW1    Ahrr                    2.57
-##  2 HW     HW1    Aldh3a1                 1.65
-##  3 HW     HW1    Bbs2                    3.52
-##  4 HW     HW1    Ccbl1                   5.47
-##  5 HW     HW1    Cxcr7                   3.16
-##  6 HW     HW1    Col18a1                 7.43
-##  7 HW     HW1    Cyb5a                  10.1 
-##  8 HW     HW1    Cyp1a1                  2.90
-##  9 HW     HW1    Cyp1a2                 10.6 
-## 10 HW     HW1    Cyp1b1                  1.87
+##    strain sample gene_symbol gene_expression
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;                 &lt;dbl&gt;
+##  1 HW     HW1    Ahrr                   2.57
+##  2 HW     HW1    Aldh3a1                1.65
+##  3 HW     HW1    Bbs2                   3.52
+##  4 HW     HW1    Ccbl1                  5.47
+##  5 HW     HW1    Cxcr7                  3.16
+##  6 HW     HW1    Col18a1                7.43
+##  7 HW     HW1    Cyb5a                 10.1 
+##  8 HW     HW1    Cyp1a1                 2.90
+##  9 HW     HW1    Cyp1a2                10.6 
+## 10 HW     HW1    Cyp1b1                 1.87
 ## # … with 8,306 more rows</code></pre>
 <p>Then we will use the <code>group_by</code> function and then apply the <code>nest</code> function from the <code>tidyr</code> package.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>gene_nest =<span class="st"> </span>gene_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="st">  </span><span class="kw">group_by</span>(gene_symbols) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">nest</span>()</span>
-<span id="cb16-4"><a href="#cb16-4"></a></span>
-<span id="cb16-5"><a href="#cb16-5"></a>gene_nest</span></code></pre></div>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="st">  </span><span class="kw">group_by</span>(gene_symbol) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">nest</span>(<span class="dt">.key =</span> <span class="st">&quot;small_data&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>()</span></code></pre></div>
+<pre><code>## Warning: `.key` is deprecated</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>gene_nest</span></code></pre></div>
 <pre><code>## # A tibble: 54 x 2
-## # Groups:   gene_symbols [54]
-##    gene_symbols           data
-##    &lt;chr&gt;        &lt;list&lt;df[,3]&gt;&gt;
-##  1 Ahrr              [154 × 3]
-##  2 Aldh3a1           [154 × 3]
-##  3 Bbs2              [154 × 3]
-##  4 Ccbl1             [154 × 3]
-##  5 Cxcr7             [154 × 3]
-##  6 Col18a1           [154 × 3]
-##  7 Cyb5a             [154 × 3]
-##  8 Cyp1a1            [154 × 3]
-##  9 Cyp1a2            [154 × 3]
-## 10 Cyp1b1            [154 × 3]
+##    gene_symbol     small_data
+##    &lt;chr&gt;       &lt;list&lt;df[,3]&gt;&gt;
+##  1 Ahrr             [154 × 3]
+##  2 Aldh3a1          [154 × 3]
+##  3 Bbs2             [154 × 3]
+##  4 Ccbl1            [154 × 3]
+##  5 Cxcr7            [154 × 3]
+##  6 Col18a1          [154 × 3]
+##  7 Cyb5a            [154 × 3]
+##  8 Cyp1a1           [154 × 3]
+##  9 Cyp1a2           [154 × 3]
+## 10 Cyp1b1           [154 × 3]
 ## # … with 44 more rows</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>gene_nest<span class="op">$</span>data[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>gene_nest<span class="op">$</span>small_data[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</span></code></pre></div>
 <pre><code>## &lt;list_of&lt;
 ##   tbl_df&lt;
 ##     strain         : character
@@ -571,257 +575,247 @@ $(document).ready(function () {
 ## 10 HW     WW48              7.96
 ## # … with 144 more rows</code></pre>
 <p>So, a lot of things happened here. Let’s explain.</p>
-<p>You might remember the <code>group_by</code> function when we were trying to use the <code>summarise</code> function to calculate summary statistics. This is exactly what we want to achieve here with <code>gene_nest</code>. Each gene used to have 154 observations (number rows of <code>clean_data</code>), but in <code>gene_nest</code>, each gene only has “one observation”, which corresponds to a row in the <code>data</code> column. <strong>Each row of the <code>data</code> column is a <code>data.frame</code> of size 154 rows and 3 columns</strong>, indicated by the <code>[154 x 3]</code>. In each of the <code>[154 x 3]</code> data.frame, you will see three columns (all the columns that we didn’t put into <code>group_by</code>).</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>gene_test =<span class="st"> </span>gene_nest <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(</span>
-<span id="cb20-3"><a href="#cb20-3"></a>    <span class="dt">tidy_result =</span> purrr<span class="op">::</span><span class="kw">map</span>(</span>
-<span id="cb20-4"><a href="#cb20-4"></a>      <span class="dt">.x =</span> data,</span>
-<span id="cb20-5"><a href="#cb20-5"></a>      <span class="dt">.f =</span> tidy_test))</span>
-<span id="cb20-6"><a href="#cb20-6"></a></span>
-<span id="cb20-7"><a href="#cb20-7"></a>gene_model_long =<span class="st"> </span>gene_test <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb20-8"><a href="#cb20-8"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(tidy_result)</span>
-<span id="cb20-9"><a href="#cb20-9"></a></span>
-<span id="cb20-10"><a href="#cb20-10"></a></span>
-<span id="cb20-11"><a href="#cb20-11"></a>gene_model_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb20-12"><a href="#cb20-12"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> p.value)) <span class="op">+</span></span>
-<span id="cb20-13"><a href="#cb20-13"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span></code></pre></div>
-<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>gene_model_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb22-2"><a href="#cb22-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(p.value <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.0001</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb22-3"><a href="#cb22-3"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(data) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb22-4"><a href="#cb22-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(</span>
-<span id="cb22-5"><a href="#cb22-5"></a>    <span class="dt">label =</span> <span class="kw">paste0</span>(gene_symbols, </span>
-<span id="cb22-6"><a href="#cb22-6"></a>                   <span class="st">&quot;, p-value = &quot;</span>, </span>
-<span id="cb22-7"><a href="#cb22-7"></a>                   <span class="kw">signif</span>(p.value, <span class="dv">2</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb22-8"><a href="#cb22-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> strain, </span>
-<span id="cb22-9"><a href="#cb22-9"></a>             <span class="dt">y =</span> gene_expression)) <span class="op">+</span></span>
-<span id="cb22-10"><a href="#cb22-10"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
-<span id="cb22-11"><a href="#cb22-11"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>label, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
-<p><img src="session3_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<p>You might remember the <code>group_by</code> function when we were trying to use the <code>summarise</code> function to calculate summary statistics. This is exactly what we want to achieve with <code>gene_nest</code>.</p>
+<p>Each gene had 154 observations (number rows of <code>clean_data</code>), but in <code>gene_nest</code>, each gene only has “one observation”, which corresponds to a row in the <code>small_data</code> column. <strong>Each row of the <code>small_data</code> column is a <code>data.frame</code> of size 154 rows and 3 columns</strong> (indicated by the <code>[154 x 3]</code>). In each of the <code>[154 x 3]</code> data.frame, you will see three columns (all the columns that we didn’t put into <code>group_by</code>).</p>
+<p>Remember, our original aim is to split the <code>gene_long</code> data into 54 smaller data, and we have achived that here with the <code>small_data</code> column.</p>
+<p>Now, we simply need to apply the <code>tidy_test</code> function onto the <code>small_data</code> column in this <code>gene_nest</code> data.frame.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">54</span>){</span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="kw">tidy_test</span>(gene_nest<span class="op">$</span>small_data[[i]])</span>
+<span id="cb22-3"><a href="#cb22-3"></a>}</span></code></pre></div>
 </div>
-<div id="regression-analysis-extension" class="section level1">
-<h1>Regression analysis (extension)</h1>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>hw_data =<span class="st"> </span>clean_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb23-2"><a href="#cb23-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(strain <span class="op">==</span><span class="st"> &quot;HW&quot;</span>)</span>
-<span id="cb23-3"><a href="#cb23-3"></a></span>
-<span id="cb23-4"><a href="#cb23-4"></a>le_data =<span class="st"> </span>clean_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb23-5"><a href="#cb23-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(strain <span class="op">==</span><span class="st"> &quot;LE&quot;</span>)</span>
-<span id="cb23-6"><a href="#cb23-6"></a></span>
-<span id="cb23-7"><a href="#cb23-7"></a></span>
-<span id="cb23-8"><a href="#cb23-8"></a>clean_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb23-9"><a href="#cb23-9"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Ahrr,</span>
-<span id="cb23-10"><a href="#cb23-10"></a>             <span class="dt">y =</span> Cxcr7,</span>
-<span id="cb23-11"><a href="#cb23-11"></a>             <span class="dt">colour =</span> strain)) <span class="op">+</span></span>
-<span id="cb23-12"><a href="#cb23-12"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb23-13"><a href="#cb23-13"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
-<p><img src="session3_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">lm</span>(Cxcr7 <span class="op">~</span><span class="st"> </span>Ahrr, <span class="dt">data =</span> clean_data)</span></code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = Cxcr7 ~ Ahrr, data = clean_data)
-## 
-## Coefficients:
-## (Intercept)         Ahrr  
-##      2.2446       0.6054</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">lm</span>(Cxcr7 <span class="op">~</span><span class="st"> </span>Ahrr, <span class="dt">data =</span> hw_data)</span></code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = Cxcr7 ~ Ahrr, data = hw_data)
-## 
-## Coefficients:
-## (Intercept)         Ahrr  
-##      2.5755       0.3311</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">lm</span>(Cxcr7 <span class="op">~</span><span class="st"> </span>Ahrr, <span class="dt">data =</span> le_data)</span></code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = Cxcr7 ~ Ahrr, data = le_data)
-## 
-## Coefficients:
-## (Intercept)         Ahrr  
-##      1.8324       0.9286</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>lm_Cxcr7_Ahrr =<span class="st"> </span><span class="cf">function</span>(this_data){</span>
-<span id="cb30-2"><a href="#cb30-2"></a>  <span class="kw">lm</span>(Cxcr7 <span class="op">~</span><span class="st"> </span>Ahrr, <span class="dt">data =</span> this_data)</span>
-<span id="cb30-3"><a href="#cb30-3"></a>}</span>
-<span id="cb30-4"><a href="#cb30-4"></a></span>
-<span id="cb30-5"><a href="#cb30-5"></a>list_data =<span class="st"> </span><span class="kw">list</span>(</span>
-<span id="cb30-6"><a href="#cb30-6"></a>  <span class="dt">clean_data =</span> clean_data, </span>
-<span id="cb30-7"><a href="#cb30-7"></a>  <span class="dt">hw_data =</span> hw_data,</span>
-<span id="cb30-8"><a href="#cb30-8"></a>  <span class="dt">le_data =</span> le_data)</span>
-<span id="cb30-9"><a href="#cb30-9"></a></span>
-<span id="cb30-10"><a href="#cb30-10"></a>purrr<span class="op">::</span><span class="kw">map</span>(<span class="dt">.x =</span> list_data, </span>
-<span id="cb30-11"><a href="#cb30-11"></a>           <span class="dt">.f =</span> lm_Cxcr7_Ahrr)</span></code></pre></div>
-<pre><code>## $clean_data
-## 
-## Call:
-## lm(formula = Cxcr7 ~ Ahrr, data = this_data)
-## 
-## Coefficients:
-## (Intercept)         Ahrr  
-##      2.2446       0.6054  
-## 
-## 
-## $hw_data
-## 
-## Call:
-## lm(formula = Cxcr7 ~ Ahrr, data = this_data)
-## 
-## Coefficients:
-## (Intercept)         Ahrr  
-##      2.5755       0.3311  
-## 
-## 
-## $le_data
-## 
-## Call:
-## lm(formula = Cxcr7 ~ Ahrr, data = this_data)
-## 
-## Coefficients:
-## (Intercept)         Ahrr  
-##      1.8324       0.9286</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>purrr<span class="op">::</span><span class="kw">map</span>(<span class="dt">.x =</span> list_data, </span>
-<span id="cb32-2"><a href="#cb32-2"></a>           <span class="dt">.f =</span> lm_Cxcr7_Ahrr) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb32-3"><a href="#cb32-3"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">map</span>(<span class="dt">.f =</span> broom<span class="op">::</span>tidy)</span></code></pre></div>
-<pre><code>## $clean_data
-## # A tibble: 2 x 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)    2.24     0.195       11.5 1.78e-22
-## 2 Ahrr           0.605    0.0589      10.3 3.75e-19
-## 
-## $hw_data
-## # A tibble: 2 x 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)    2.58     0.134      19.2  3.02e-32
-## 2 Ahrr           0.331    0.0412      8.03 5.56e-12
-## 
-## $le_data
-## # A tibble: 2 x 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)    1.83     0.260       7.05 1.22e- 9
-## 2 Ahrr           0.929    0.0771     12.0  2.07e-18</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>gene_long =<span class="st"> </span>clean_data <span class="op">%&gt;%</span></span>
-<span id="cb34-2"><a href="#cb34-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</span>
-<span id="cb34-3"><a href="#cb34-3"></a>    <span class="dt">cols =</span> <span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;strain&quot;</span>, <span class="st">&quot;Cxcr7&quot;</span>, <span class="st">&quot;sample&quot;</span>),</span>
-<span id="cb34-4"><a href="#cb34-4"></a>    <span class="dt">names_to =</span> <span class="st">&quot;gene_symbols&quot;</span>,</span>
-<span id="cb34-5"><a href="#cb34-5"></a>    <span class="dt">values_to =</span> <span class="st">&quot;gene_expression&quot;</span>)</span>
-<span id="cb34-6"><a href="#cb34-6"></a></span>
-<span id="cb34-7"><a href="#cb34-7"></a>gene_long</span></code></pre></div>
-<pre><code>## # A tibble: 8,162 x 5
-##    strain sample Cxcr7 gene_symbols gene_expression
-##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;                  &lt;dbl&gt;
-##  1 HW     HW1     3.16 Ahrr                    2.57
-##  2 HW     HW1     3.16 Aldh3a1                 1.65
-##  3 HW     HW1     3.16 Bbs2                    3.52
-##  4 HW     HW1     3.16 Ccbl1                   5.47
-##  5 HW     HW1     3.16 Col18a1                 7.43
-##  6 HW     HW1     3.16 Cyb5a                  10.1 
-##  7 HW     HW1     3.16 Cyp1a1                  2.90
-##  8 HW     HW1     3.16 Cyp1a2                 10.6 
-##  9 HW     HW1     3.16 Cyp1b1                  1.87
-## 10 HW     HW1     3.16 Cyp2a1                  8.40
-## # … with 8,152 more rows</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>gene_nest =<span class="st"> </span>gene_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb36-2"><a href="#cb36-2"></a><span class="st">  </span><span class="kw">group_by</span>(strain, gene_symbols) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb36-3"><a href="#cb36-3"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">nest</span>()</span>
-<span id="cb36-4"><a href="#cb36-4"></a></span>
-<span id="cb36-5"><a href="#cb36-5"></a>gene_nest<span class="op">$</span>data[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</span></code></pre></div>
-<pre><code>## &lt;list_of&lt;
-##   tbl_df&lt;
-##     sample         : character
-##     Cxcr7          : double
-##     gene_expression: double
-##   &gt;
-## &gt;[2]&gt;
-## [[1]]
-## # A tibble: 85 x 3
-##    sample Cxcr7 gene_expression
-##    &lt;chr&gt;  &lt;dbl&gt;           &lt;dbl&gt;
-##  1 HW1     3.16           2.57 
-##  2 HW2     3.30           0.352
-##  3 HW3     2.74           0.254
-##  4 HW4     4.22           2.30 
-##  5 HW5     3.53           2.02 
-##  6 HW6     3.70           1.70 
-##  7 WW45    3.62           2.90 
-##  8 WW46    3.73           3.11 
-##  9 WW47    4.31           3.36 
-## 10 WW48    3.85           2.04 
-## # … with 75 more rows
+<div id="writing-iterations" class="section level1">
+<h1>Writing iterations</h1>
+<div id="for-loop" class="section level2">
+<h2><code>for</code> loop</h2>
+<p><code>for</code> loops are common in any programming language. It simply list out the instructions and the iterations are specified using an index. For example, the following code prints out 1 to 5.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>){</span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="kw">print</span>(i)</span>
+<span id="cb23-3"><a href="#cb23-3"></a>}</span></code></pre></div>
+<pre><code>## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5</code></pre>
+<p>We can use the <code>for</code> loop to compute the <code>tidy_test</code> output for all 54 genes.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">54</span>){</span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="kw">tidy_test</span>(gene_nest<span class="op">$</span>small_data[[i]])</span>
+<span id="cb25-3"><a href="#cb25-3"></a>}</span></code></pre></div>
+<p>However, the output of this loop is a <code>list</code> object requiring further manipulations to make it suitable for visualisation purposes. Hence, we will learn a new way for plotting.</p>
+</div>
+<div id="map-function-in-purrr" class="section level2">
+<h2><code>map</code> function in <code>purrr</code></h2>
+<p>The <code>map</code> function from the <code>purrr</code> package is a tremendously powerful function. In simply terms, it allows us to write a <code>for</code> loop is a very simply and readable way.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>purrr<span class="op">::</span><span class="kw">map</span>(<span class="dt">.x =</span> gene_nest<span class="op">$</span>small_data,</span>
+<span id="cb26-2"><a href="#cb26-2"></a>           <span class="dt">.f =</span> tidy_test)</span></code></pre></div>
+<p>Why is this code better than the <code>for</code> loop even though they achieved the same output? The biggest reason is that <strong>we don’t have to read and understand individual lines</strong> inside the <code>for</code> loop. We simply need to know:</p>
+<ul>
+<li><code>.x</code>, the input</li>
+<li><code>.f</code>, the function</li>
+</ul>
+<p>Then the function <code>.f</code> will be applied onto every element of the <code>.x</code> input.</p>
+<p>Another reason why <code>map</code> function is superior to a <code>for</code> loop is how easy it can work with the <code>mutate</code> function in <code>dplyr</code>. The following code can be read as:</p>
+<ul>
+<li>In the <code>gene_nest</code> data, we want to <code>mutate</code> (create) a new column</li>
+<li>This new column will be called <code>tidy_result</code> and it is defined as mapping the <code>tidy_test</code> function to every element if the <code>small_data</code> column.</li>
+</ul>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>gene_test =<span class="st"> </span>gene_nest <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(</span>
+<span id="cb27-3"><a href="#cb27-3"></a>    <span class="dt">tidy_result =</span> purrr<span class="op">::</span><span class="kw">map</span>(</span>
+<span id="cb27-4"><a href="#cb27-4"></a>      <span class="dt">.x =</span> small_data,</span>
+<span id="cb27-5"><a href="#cb27-5"></a>      <span class="dt">.f =</span> tidy_test)</span>
+<span id="cb27-6"><a href="#cb27-6"></a>  )</span>
+<span id="cb27-7"><a href="#cb27-7"></a></span>
+<span id="cb27-8"><a href="#cb27-8"></a>gene_test</span></code></pre></div>
+<pre><code>## # A tibble: 54 x 3
+##    gene_symbol     small_data tidy_result      
+##    &lt;chr&gt;       &lt;list&lt;df[,3]&gt;&gt; &lt;list&gt;           
+##  1 Ahrr             [154 × 3] &lt;tibble [1 × 10]&gt;
+##  2 Aldh3a1          [154 × 3] &lt;tibble [1 × 10]&gt;
+##  3 Bbs2             [154 × 3] &lt;tibble [1 × 10]&gt;
+##  4 Ccbl1            [154 × 3] &lt;tibble [1 × 10]&gt;
+##  5 Cxcr7            [154 × 3] &lt;tibble [1 × 10]&gt;
+##  6 Col18a1          [154 × 3] &lt;tibble [1 × 10]&gt;
+##  7 Cyb5a            [154 × 3] &lt;tibble [1 × 10]&gt;
+##  8 Cyp1a1           [154 × 3] &lt;tibble [1 × 10]&gt;
+##  9 Cyp1a2           [154 × 3] &lt;tibble [1 × 10]&gt;
+## 10 Cyp1b1           [154 × 3] &lt;tibble [1 × 10]&gt;
+## # … with 44 more rows</code></pre>
+<p>This is a very powerful framework, because it allows us to create new statistics horizonally inside a <code>data.frame</code>, keep in track of the matching genes/observations. You may not realise this, but one of the most common mistake in data analysis is mis-matching of rows when combining datasets and statistics. The use of the <code>mutate</code> and <code>map</code> functions allows all intermediate steps to be stored as a column inside a data.frame, precenting any mis-matchings.</p>
+</div>
+</div>
+<div id="plotting-t-test-results" class="section level1">
+<h1>Plotting t-test results</h1>
+<p>The <code>tidy_result</code> column in <code>gene_test</code> is now a list of tibbles (think of them as data.frames). Each of these tibbles contains t-test statistic and p-value associated with each gene. We will now need to expand this column. The function we will use is <code>unnest</code> from the <code>tidyr</code> package. As you may already guess, this function undo the <code>nest</code> operation. In this case, we want to undo the <code>tidy_result</code> column only.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>gene_test<span class="op">$</span>tidy_result[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## [[1]]
+## # A tibble: 1 x 10
+##   estimate estimate1 estimate2 statistic p.value parameter conf.low
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1   -0.152      3.00      3.15    -0.757   0.450      149.   -0.549
+## # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+## #   alternative &lt;chr&gt;
 ## 
 ## [[2]]
-## # A tibble: 85 x 3
-##    sample Cxcr7 gene_expression
-##    &lt;chr&gt;  &lt;dbl&gt;           &lt;dbl&gt;
-##  1 HW1     3.16            1.65
-##  2 HW2     3.30            2.14
-##  3 HW3     2.74            2.05
-##  4 HW4     4.22            5.73
-##  5 HW5     3.53            4.18
-##  6 HW6     3.70            4.40
-##  7 WW45    3.62            7.98
-##  8 WW46    3.73            7.01
-##  9 WW47    4.31            7.73
-## 10 WW48    3.85            7.96
-## # … with 75 more rows</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>lm_Cxcr7_ge =<span class="st"> </span><span class="cf">function</span>(this_data){</span>
-<span id="cb38-2"><a href="#cb38-2"></a>  <span class="kw">lm</span>(Cxcr7 <span class="op">~</span><span class="st"> </span>gene_expression, <span class="dt">data =</span> this_data)</span>
-<span id="cb38-3"><a href="#cb38-3"></a>}</span>
-<span id="cb38-4"><a href="#cb38-4"></a></span>
-<span id="cb38-5"><a href="#cb38-5"></a>gene_model =<span class="st"> </span>gene_nest <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb38-6"><a href="#cb38-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">lm_obj =</span> purrr<span class="op">::</span><span class="kw">map</span>(<span class="dt">.x =</span> data, </span>
-<span id="cb38-7"><a href="#cb38-7"></a>                                    <span class="dt">.f =</span> lm_Cxcr7_ge),</span>
-<span id="cb38-8"><a href="#cb38-8"></a>                <span class="dt">lm_tidy =</span> purrr<span class="op">::</span><span class="kw">map</span>(<span class="dt">.x =</span> lm_obj,</span>
-<span id="cb38-9"><a href="#cb38-9"></a>                                     <span class="dt">.f =</span> broom<span class="op">::</span>tidy))</span>
-<span id="cb38-10"><a href="#cb38-10"></a></span>
-<span id="cb38-11"><a href="#cb38-11"></a></span>
-<span id="cb38-12"><a href="#cb38-12"></a></span>
-<span id="cb38-13"><a href="#cb38-13"></a>gene_model_long =<span class="st"> </span>gene_model <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb38-14"><a href="#cb38-14"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>data, <span class="op">-</span>lm_obj) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb38-15"><a href="#cb38-15"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(lm_tidy) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb38-16"><a href="#cb38-16"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(strain, gene_symbols, term, estimate) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb38-17"><a href="#cb38-17"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;gene_expression&quot;</span>)</span>
-<span id="cb38-18"><a href="#cb38-18"></a></span>
-<span id="cb38-19"><a href="#cb38-19"></a></span>
-<span id="cb38-20"><a href="#cb38-20"></a>gene_model_long</span></code></pre></div>
-<pre><code>## # A tibble: 106 x 4
-## # Groups:   strain, gene_symbols [106]
-##    strain gene_symbols term            estimate
-##    &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;              &lt;dbl&gt;
-##  1 HW     Ahrr         gene_expression    0.331
-##  2 HW     Aldh3a1      gene_expression    0.121
-##  3 HW     Bbs2         gene_expression    0.616
-##  4 HW     Ccbl1        gene_expression    0.573
-##  5 HW     Col18a1      gene_expression    0.300
-##  6 HW     Cyb5a        gene_expression    0.760
-##  7 HW     Cyp1a1       gene_expression    0.115
-##  8 HW     Cyp1a2       gene_expression    0.307
-##  9 HW     Cyp1b1       gene_expression    0.140
-## 10 HW     Cyp2a1       gene_expression    0.742
-## # … with 96 more rows</code></pre>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>gene_model_wide =<span class="st"> </span>gene_model_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb40-2"><a href="#cb40-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb40-3"><a href="#cb40-3"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> <span class="st">&quot;strain&quot;</span>,</span>
-<span id="cb40-4"><a href="#cb40-4"></a>                     <span class="dt">values_from =</span> <span class="st">&quot;estimate&quot;</span>)</span>
-<span id="cb40-5"><a href="#cb40-5"></a></span>
-<span id="cb40-6"><a href="#cb40-6"></a></span>
-<span id="cb40-7"><a href="#cb40-7"></a>gene_model_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb40-8"><a href="#cb40-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> HW, <span class="dt">y =</span> LE)) <span class="op">+</span></span>
-<span id="cb40-9"><a href="#cb40-9"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb40-10"><a href="#cb40-10"></a><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
-<p><img src="session3_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>gene_model_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb41-2"><a href="#cb41-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> HW, <span class="dt">y =</span> LE,</span>
-<span id="cb41-3"><a href="#cb41-3"></a>             <span class="dt">label =</span> gene_symbols)) <span class="op">+</span></span>
-<span id="cb41-4"><a href="#cb41-4"></a><span class="st">  </span><span class="kw">geom_text</span>() <span class="op">+</span></span>
-<span id="cb41-5"><a href="#cb41-5"></a><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
-<p><img src="session3_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+## # A tibble: 1 x 10
+##   estimate estimate1 estimate2 statistic p.value parameter conf.low
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1   -0.494      6.36      6.86    -0.959   0.339      145.    -1.51
+## # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+## #   alternative &lt;chr&gt;</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>gene_test_long =<span class="st"> </span>gene_test <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-2"><a href="#cb31-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(tidy_result)</span>
+<span id="cb31-3"><a href="#cb31-3"></a></span>
+<span id="cb31-4"><a href="#cb31-4"></a>gene_test_long</span></code></pre></div>
+<pre><code>## # A tibble: 54 x 12
+##    gene_symbol small_data estimate estimate1 estimate2 statistic p.value
+##    &lt;chr&gt;       &lt;list&lt;df[&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Ahrr         [154 × 3]  -0.152       3.00      3.15    -0.757 4.50e-1
+##  2 Aldh3a1      [154 × 3]  -0.494       6.36      6.86    -0.959 3.39e-1
+##  3 Bbs2         [154 × 3]  -0.264       4.18      4.44    -3.25  1.44e-3
+##  4 Ccbl1        [154 × 3]  -0.0702      6.25      6.32    -0.640 5.23e-1
+##  5 Cxcr7        [154 × 3]  -1.19        3.57      4.76    -6.74  1.34e-9
+##  6 Col18a1      [154 × 3]  -0.0752      7.27      7.35    -1.03  3.02e-1
+##  7 Cyb5a        [154 × 3]   0.0783     10.2      10.1      1.48  1.40e-1
+##  8 Cyp1a1       [154 × 3]  -0.485       8.89      9.38    -1.03  3.07e-1
+##  9 Cyp1a2       [154 × 3]  -0.216      12.0      12.2     -1.17  2.42e-1
+## 10 Cyp1b1       [154 × 3]  -0.502       4.84      5.35    -1.11  2.68e-1
+## # … with 44 more rows, and 5 more variables: parameter &lt;dbl&gt;,
+## #   conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;, method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
+<p>Armed with all the t-test statistics and p-values, we may want to perform some quick visualisations.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>gene_test_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> p.value)) <span class="op">+</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="session3_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>This histogram shows that we actually have about 1/3 of genes significantly differentially expressed (DE) between the two strains. This is usually a problem with gene expression analysis because if all t-test assumptions are met, the p-values should be uniformly distributed over the [0,1] interval. This inflation is could be attributed to normalisation issues with the data since we have only taken the most naive approach of taking the logarithm. Additionally, we should also note that this is a <em>targeted</em> gene expression data where genes are typically selected due to differential patterns they showed in pilot studies. We will not commenton the biological implication of this histogram further, but proceed with another common analysis, which is to create boxplots of the top differentially expressed genes.</p>
+<div id="boxplots-of-top-differentially-expressed-genes" class="section level2">
+<h2>Boxplots of top differentially expressed genes</h2>
+<p>In this section, we will first extract the top 6 DE genes and make a boxplot for each of them between the two strains.</p>
+<p>The following code allows us to subset the data.frame to the 6 genes with smallest p-values (i.e. most differentially expressed). However, we shouldn’t forget that all the gene expression values are still stored in the <code>small_data</code> column. We need to apply the <code>unnest</code> operation to extract these values.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>gene_test_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="kw">rank</span>(p.value) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">6</span>) </span></code></pre></div>
+<pre><code>## # A tibble: 6 x 12
+##   gene_symbol small_data estimate estimate1 estimate2 statistic  p.value
+##   &lt;chr&gt;       &lt;list&lt;df[&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Cxcr7        [154 × 3]   -1.19       3.57      4.76     -6.74 1.34e- 9
+## 2 Cyp2a1       [154 × 3]   -0.560      8.71      9.27     -4.93 2.43e- 6
+## 3 Mug1         [154 × 3]   -0.779      9.91     10.7      -8.34 5.71e-14
+## 4 Nqo1         [154 × 3]   -1.21       7.00      8.21     -5.93 2.01e- 8
+## 5 Derl1        [154 × 3]   -0.242      6.82      7.07     -4.69 6.15e- 6
+## 6 Tpm1         [154 × 3]   -0.339      3.62      3.96     -5.06 1.23e- 6
+## # … with 5 more variables: parameter &lt;dbl&gt;, conf.low &lt;dbl&gt;,
+## #   conf.high &lt;dbl&gt;, method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>boxplot_data =<span class="st"> </span>gene_test_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="kw">rank</span>(p.value) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(small_data)</span>
+<span id="cb37-4"><a href="#cb37-4"></a></span>
+<span id="cb37-5"><a href="#cb37-5"></a>boxplot_data</span></code></pre></div>
+<pre><code>## # A tibble: 924 x 14
+##    gene_symbol strain sample gene_expression estimate estimate1 estimate2
+##    &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;            &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Cxcr7       HW     HW1               3.16    -1.19      3.57      4.76
+##  2 Cxcr7       HW     HW2               3.30    -1.19      3.57      4.76
+##  3 Cxcr7       HW     HW3               2.74    -1.19      3.57      4.76
+##  4 Cxcr7       HW     HW4               4.22    -1.19      3.57      4.76
+##  5 Cxcr7       HW     HW5               3.53    -1.19      3.57      4.76
+##  6 Cxcr7       HW     HW6               3.70    -1.19      3.57      4.76
+##  7 Cxcr7       HW     WW45              3.62    -1.19      3.57      4.76
+##  8 Cxcr7       HW     WW46              3.73    -1.19      3.57      4.76
+##  9 Cxcr7       HW     WW47              4.31    -1.19      3.57      4.76
+## 10 Cxcr7       HW     WW48              3.85    -1.19      3.57      4.76
+## # … with 914 more rows, and 7 more variables: statistic &lt;dbl&gt;,
+## #   p.value &lt;dbl&gt;, parameter &lt;dbl&gt;, conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;,
+## #   method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
+<p>And now, let’s perform the final plotting!</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>boxplot_data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> strain, </span>
+<span id="cb39-3"><a href="#cb39-3"></a>             <span class="dt">y =</span> gene_expression)) <span class="op">+</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>gene_symbol, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<p><img src="session3_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>We can also prettify the plots by creating a <code>label</code> column, which combines the gene symbols and p-values.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>boxplot_data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">label =</span> <span class="kw">paste0</span>(</span>
+<span id="cb40-3"><a href="#cb40-3"></a>    gene_symbol, <span class="st">&quot;, p-value = &quot;</span>, <span class="kw">signif</span>(p.value, <span class="dv">2</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb40-4"><a href="#cb40-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> strain, </span>
+<span id="cb40-5"><a href="#cb40-5"></a>             <span class="dt">y =</span> gene_expression)) <span class="op">+</span></span>
+<span id="cb40-6"><a href="#cb40-6"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
+<span id="cb40-7"><a href="#cb40-7"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>label, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="op">+</span></span>
+<span id="cb40-8"><a href="#cb40-8"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Strains&quot;</span>, </span>
+<span id="cb40-9"><a href="#cb40-9"></a>       <span class="dt">y =</span> <span class="st">&quot;Gene expression values&quot;</span>)</span></code></pre></div>
+<p><img src="session3_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<!-- # Regression analysis (extension) -->
+<!-- ```{r} -->
+<!-- hw_data = clean_data %>%  -->
+<!--   dplyr::filter(strain == "HW") -->
+<!-- le_data = clean_data %>%  -->
+<!--   dplyr::filter(strain == "LE") -->
+<!-- clean_data %>%  -->
+<!--   ggplot(aes(x = Ahrr, -->
+<!--              y = Cxcr7, -->
+<!--              colour = strain)) + -->
+<!--   geom_point() + -->
+<!--   geom_smooth(method = "lm") -->
+<!-- lm(Cxcr7 ~ Ahrr, data = clean_data) -->
+<!-- lm(Cxcr7 ~ Ahrr, data = hw_data) -->
+<!-- lm(Cxcr7 ~ Ahrr, data = le_data) -->
+<!-- lm_Cxcr7_Ahrr = function(this_data){ -->
+<!--   lm(Cxcr7 ~ Ahrr, data = this_data) -->
+<!-- } -->
+<!-- list_data = list( -->
+<!--   clean_data = clean_data,  -->
+<!--   hw_data = hw_data, -->
+<!--   le_data = le_data) -->
+<!-- purrr::map(.x = list_data,  -->
+<!--            .f = lm_Cxcr7_Ahrr) -->
+<!-- purrr::map(.x = list_data,  -->
+<!--            .f = lm_Cxcr7_Ahrr) %>%  -->
+<!--   purrr::map(.f = broom::tidy) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- gene_long = clean_data %>% -->
+<!--   tidyr::pivot_longer( -->
+<!--     cols = -c("strain", "Cxcr7", "sample"), -->
+<!--     names_to = "gene_symbol", -->
+<!--     values_to = "gene_expression") -->
+<!-- gene_long -->
+<!-- gene_nest = gene_long %>%  -->
+<!--   group_by(strain, gene_symbol) %>%  -->
+<!--   tidyr::nest() -->
+<!-- gene_nest$data[1:2] -->
+<!-- lm_Cxcr7_ge = function(this_data){ -->
+<!--   lm(Cxcr7 ~ gene_expression, data = this_data) -->
+<!-- } -->
+<!-- gene_model = gene_nest %>%  -->
+<!--   dplyr::mutate(lm_obj = purrr::map(.x = data,  -->
+<!--                                     .f = lm_Cxcr7_ge), -->
+<!--                 lm_tidy = purrr::map(.x = lm_obj, -->
+<!--                                      .f = broom::tidy)) -->
+<!-- gene_model_long = gene_model %>%  -->
+<!--   dplyr::select(-data, -lm_obj) %>%  -->
+<!--   tidyr::unnest(lm_tidy) %>%  -->
+<!--   dplyr::select(strain, gene_symbol, term, estimate) %>%  -->
+<!--   dplyr::filter(term == "gene_expression") -->
+<!-- gene_model_long -->
+<!-- gene_model_wide = gene_model_long %>%  -->
+<!--   dplyr::ungroup() %>%  -->
+<!--   tidyr::pivot_wider(names_from = "strain", -->
+<!--                      values_from = "estimate") -->
+<!-- gene_model_wide %>%  -->
+<!--   ggplot(aes(x = HW, y = LE)) + -->
+<!--   geom_point() + -->
+<!--   geom_abline(slope = 1, intercept = 0, colour = "red") -->
+<!-- gene_model_wide %>%  -->
+<!--   ggplot(aes(x = HW, y = LE, -->
+<!--              label = gene_symbols)) + -->
+<!--   geom_text() + -->
+<!--   geom_abline(slope = 1, intercept = 0, colour = "red") -->
+<!-- ``` -->
+</div>
 </div>
 <div id="session-info" class="section level1">
 <h1>Session Info</h1>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 3.6.1 (2019-07-05)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
 ## Running under: macOS Mojave 10.14.6
