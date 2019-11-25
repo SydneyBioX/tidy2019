@@ -5,13 +5,13 @@ author: "Kevin Wang and Garth Tarr"
 date: "2-3 December 2019, Sydney, Australia"
 output:
   xaringan::moon_reader:
-    css: ["default", "assets/sydney-fonts.css", "assets/sydney.css"]
+    css: ["default", "../assets/sydney-fonts.css", "../assets/sydney.css"]
     self_contained: false # if true, fonts will be stored locally
     seal: true # show a title slide with YAML information
     includes:
-      in_header: "assets/mathjax-equation-numbers.html"
+      in_header: "../assets/mathjax-equation-numbers.html"
     nature:
-      beforeInit: ["assets/remark-zoom.js", "https://platform.twitter.com/widgets.js"]
+      beforeInit: ["../assets/remark-zoom.js", "https://platform.twitter.com/widgets.js"]
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: true
