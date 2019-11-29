@@ -34,13 +34,78 @@ class: center, middle, inverse, title-slide
 
 # Your instructors
 
++ Kevin: PhD candidate in statistics and bioinformatics. The minion of Garth. 
++ Garth: Senior lecturer in statistics. 
+
 ---
 
 # Ice breaker
 
+Ask Garth about this. 
+
 ---
 
 # Workshop outline
+
++ We want you to make a boxplot similar to [this](https://www.nature.com/articles/cmi2014102.pdf)
+
+
+&lt;center&gt;
+&lt;img src="../assets/publication_boxplot.png", width="40%"&gt;
+&lt;/center&gt;
+
+1. Get gene expression data
+1. Get clinical data
+1. Understand what the data structure
+1. Figure out how to join the two data
+1. Reshape the data
+1. Visualisation
+
+---
+
+# What is tidy data?
+
+1. Each row is an observation unit
+1. Each column is a variable 
+1. Each cell is one value
+
+
+
+
+```r
+sample_n(tidy_data, size = 10)
+```
+
+```
+## # A tibble: 10 x 4
+##    strain sample   time  dose
+##    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1 LE     LE10D35   240     0
+##  2 HW     WW44        6   100
+##  3 HW     WW29       19  1000
+##  4 LE     LE69       19     1
+##  5 HW     WW22       19    10
+##  6 LE     LE10D34   240   100
+##  7 LE     LE10D30   240   100
+##  8 LE     LE10D24   240     0
+##  9 LE     LE92        6   100
+## 10 LE     LE93        6   100
+```
+
+---
+
+# Why tidy data?
+
++ Because it will make our analyses and visualisation easier.
+
+
+---
+
+# Visualisation Gallery
+
++ https://twitter.com/50_first_data/status/1189658282618699776
+
++ Some code that you can run to make a cool plot
 
 ---
 
@@ -52,8 +117,8 @@ class: center, middle, inverse, title-slide
 
 + There are two pieces of data: 
 
-  1. **The sample data** was downloaded from the [journal's website](https://rnajournal.cshlp.org/content/19/1/51/suppl/DC1).
-  1. **The gene expression data** was downloaded from the [Gene Expression Omnibus](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE43251&amp;format=file&amp;file=GSE43251%5FNanoString%5Fnon%2Dnormalized%2Etxt%2Egz), accession ID GSE43251.
+1. **The sample data** was downloaded from the [journal's website](https://rnajournal.cshlp.org/content/19/1/51/suppl/DC1).
+1. **The gene expression data** was downloaded from the [Gene Expression Omnibus](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE43251&amp;format=file&amp;file=GSE43251%5FNanoString%5Fnon%2Dnormalized%2Etxt%2Egz), accession ID GSE43251.
 
 ---
 
@@ -75,6 +140,64 @@ class: center, middle, inverse, title-slide
 
 # Session 2: visualisation with `ggplot2` 
 
++ A rigorous framework for plotting
+
+---
+
+## Tidy is goal-dependent: treating each year as independent
+
+
+
+
+
+
+
+```r
+divorce_margarine_scaled %&gt;% 
+  ggplot(aes(
+    x = divorce,
+    y = margarine,
+    label = year)) +
+  geom_point() +
+  geom_text() +
+  labs(title = "Divorce rate and margarine consumption")
+```
+
+![](slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
++ divorce is mapped to the x-axis
++ margarine is mapped to the y-axis
++ year is mapped to the labelling on scatter plot
++ Put points on plot
++ Put text on plot
+
+---
+
+## Tidy is goal-dependent: treating each year as time
+
+
+```r
+divorce_margarine_scaled %&gt;%
+  tidyr::pivot_longer(
+    cols = -c("year"),
+    names_to = "type",
+    values_to = "values") %&gt;%
+  ggplot(aes(x = year,
+             y = values,
+             colour = type)) +
+  geom_point() +
+  geom_path() +
+  labs(title = "Divorce rate and margarine consumption")
+```
+
+![](slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
++ year is mapped to the x-axis
++ values is mapped to the y-axis
++ type is mapped to the colouring of plot
++ Put points on plot
++ Put path
 ---
 
 # Session 3: modelling with `tidyverse`
@@ -134,7 +257,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 (function() {

@@ -362,6 +362,26 @@ write_csv(wide_sample_ge_data, path = "data/wide_sample_ge_data.csv")
 ```
 
 
+# Extension
+
+```{r}
+read_csv(file = "data/session3_data.csv") %>% 
+  dplyr::filter(strain == "HW", 
+                time == 1.5, 
+                dose == 0) %>% 
+  tidyr::pivot_longer(
+    cols = -c("strain", "sample", "time", "dose"),
+    names_to = "gene_symbol",
+    values_to = "gene_expression") %>% 
+  # dplyr::mutate(gene_expression = log10(gene_expression)) %>% 
+  tidyr::pivot_wider(
+    names_from = "sample",
+    values_from = "gene_expression") %>% 
+  ggplot(aes(x = HW1, y = HW2)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() 
+```
 
 
 # Session Info
