@@ -5,4 +5,5 @@ install.packages(c(
   "DT",
   "janitor",
   "readxl",
-  "remotes"))
+  "remotes",
+  "visdat"))
