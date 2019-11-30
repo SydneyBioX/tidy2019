@@ -12,9 +12,8 @@
 
 <meta name="author" content="Kevin Wang and Garth Tarr" />
 
-<meta name="date" content="2019-05-11" />
 
-<title>session1</title>
+<title>Session1</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,6 +21,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script defer src="https://pro.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-d84LGg2pm9KhR4mCAs3N29GQ4OYNy+K+FBHX8WhimHpPm86c839++MDABegrZ3gn" crossorigin="anonymous"></script>
 
@@ -336,6 +338,63 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -343,6 +402,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -363,13 +432,13 @@ $(document).ready(function () {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="session1.html">Mon: session 1</a>
+  <a href="session1.html">Session 1</a>
 </li>
 <li>
-  <a href="session2.html">Tue: session 2</a>
+  <a href="session2.html">Session 2</a>
 </li>
 <li>
-  <a href="session3.html">Tue: session 3</a>
+  <a href="session3.html">Session 3</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -383,15 +452,15 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">session1</h1>
+<h1 class="title toc-ignore">Session1</h1>
 <h4 class="author">Kevin Wang and Garth Tarr</h4>
-<h4 class="date">05/11/2019</h4>
+<h4 class="date">2 Dec 2019</h4>
 
 </div>
 
 
 <div id="learning-outcomes" class="section level1">
-<h1>Learning outcomes</h1>
+<h1><span class="header-section-number">1</span> Learning outcomes</h1>
 <ul>
 <li>Understand basic variable types in <code>R</code>, in particular the <code>data.frame</code></li>
 <li>Loading in an Excel sheet as an R data frame</li>
@@ -403,7 +472,7 @@ $(document).ready(function () {
 </ul>
 </div>
 <div id="loading-packages" class="section level1">
-<h1>Loading packages</h1>
+<h1><span class="header-section-number">2</span> Loading packages</h1>
 <p>When working in R, there are some functions and data sets that are always available, but the real strength of R comes from its community of developers who continually improve the set of available features and add additional functionality through an ecosystem of “packages”.</p>
 <p>The following packages have already been installed in RStudio Cloud, but you might need to install them when working on your own machine using <code>install.packages("name_of_package_to_be_installed")</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
@@ -412,7 +481,7 @@ $(document).ready(function () {
 <span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(visdat)</span></code></pre></div>
 </div>
 <div id="warm-up-variable-types" class="section level1">
-<h1>Warm up: variable types</h1>
+<h1><span class="header-section-number">3</span> Warm up: variable types</h1>
 <p>Before we take a dive into the <strong>tidyverse</strong>, let’s take a minute to learn a bit variable types in R. The reason that we want to do this is because everything in R is stored as an object which ultimately determines its behaviour.</p>
 <!-- GT: NOT SURE ABOUT THIS SECTION, THINK ALL WE REALLY NEED IS TO CONSIDER THE VARIABLE TYPE GIVEN IN dplyr::glimpse() -->
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>obj1 =<span class="st"> </span><span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>)</span>
@@ -427,7 +496,7 @@ $(document).ready(function () {
 <pre><code>## [1] &quot;integer&quot;</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>obj3 =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">5</span>)</span>
 <span id="cb10-2"><a href="#cb10-2"></a>obj3</span></code></pre></div>
-<pre><code>## [1]  0.01835457  0.67163391  0.36771840 -0.67702595 -0.93962817</code></pre>
+<pre><code>## [1] -0.6497465  0.3890152  0.6474709 -0.3604214  1.1494315</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">class</span>(obj3)</span></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>obj4 =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
@@ -484,11 +553,11 @@ $(document).ready(function () {
 ## $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49, 2.…</code></pre>
 </div>
 <div id="reading-in-data" class="section level1">
-<h1>Reading in data</h1>
+<h1><span class="header-section-number">4</span> Reading in data</h1>
 <p>In this session, we will read in a Excel dataset (<code>.xls</code> format). We will use the <a href="https://readxl.tidyverse.org/"><strong>readxl</strong> package</a> to perform this task.</p>
 <p>Of course, <code>.xls</code> is not the only data type that <code>R</code> can deal with. Have a look at this <a href="https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf">cheatsheet</a> to see some data types that the <a href="https://readr.tidyverse.org/"><strong>readr</strong> package</a> is able to handle. If you want to read in SAS or SPSS files, have a look at the <a href="https://haven.tidyverse.org/"><strong>haven</strong> package</a>.</p>
 <div id="first-attempt" class="section level2">
-<h2>First attempt</h2>
+<h2><span class="header-section-number">4.1</span> First attempt</h2>
 <p>The <code>read_excel()</code> function from the <strong>readxl</strong> package is perfect to read in a <code>.xls</code> file, let’s try that!</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>raw_data =<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="dt">path =</span> <span class="st">&quot;data/sample_data.xls&quot;</span>)</span></code></pre></div>
 <pre><code>## New names:
@@ -513,7 +582,7 @@ $(document).ready(function () {
 <p>This <code>.xls</code> file is poorly formatted with the first three rows being notes that are not part of the data table. We should ask the function <code>read_excel</code> to skip the first three rows, use the 4th row as the column headings. How can we do that?</p>
 </div>
 <div id="second-attempt" class="section level2">
-<h2>Second attempt</h2>
+<h2><span class="header-section-number">4.2</span> Second attempt</h2>
 <p>We use the <code>skip</code> argument to the <code>read_excel()</code> function. Have a look at this!</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>raw_data =<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="st">&quot;data/sample_data.xls&quot;</span>, <span class="dt">skip =</span> <span class="dv">3</span>)</span>
 <span id="cb38-2"><a href="#cb38-2"></a><span class="kw">head</span>(raw_data)</span></code></pre></div>
@@ -529,7 +598,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="cleaning-column-names" class="section level1">
-<h1>Cleaning column names</h1>
+<h1><span class="header-section-number">5</span> Cleaning column names</h1>
 <p>The column names of this dataset isn’t quite as nice as we would like.</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="kw">colnames</span>(raw_data)</span></code></pre></div>
 <pre><code>## [1] &quot;Strain&quot;        &quot;Sample&quot;        &quot;Time\n(hours)&quot; &quot;Dose\n(µg/kg)&quot;
@@ -550,9 +619,9 @@ janitor::clean_names(raw_data)</code></pre>
 <p>We will use the pipe operator a lot over the next two days, it’s a game changer for the way you write R code.</p>
 </div>
 <div id="selecting-data" class="section level1">
-<h1>Selecting data</h1>
+<h1><span class="header-section-number">6</span> Selecting data</h1>
 <div id="selecting-certain-columns" class="section level2">
-<h2>Selecting certain columns</h2>
+<h2><span class="header-section-number">6.1</span> Selecting certain columns</h2>
 <p>We will now use the <strong>dplyr</strong> package to perform some basic data cleaning. The <strong>dplyr</strong> package is one of the most popular packages in the <strong>tidyverse</strong>. Its main functions are designed to interact with the <code>data.frame</code> object in R in a very intuitive way. This is why its name is an excellent pun: it is a <strong>ply</strong>e<strong>r</strong> for <strong>d</strong>ata frames (okay, maybe it depends on your sense of humour).</p>
 <p>Let’s see <strong>dplyr</strong> in action. If we want to select only the <code>strain</code> column of this data, then we can use the <code>select</code> function from the <strong>dplyr</strong> package.</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>sub_data =<span class="st"> </span>clean_col_data <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -564,7 +633,7 @@ janitor::clean_names(raw_data)</code></pre>
 </div>
 </div>
 <div id="selecting-columns-by-character-vector" class="section level1">
-<h1>Selecting columns by character vector</h1>
+<h1><span class="header-section-number">7</span> Selecting columns by character vector</h1>
 <p>If we want to select multiple columns in the data, we could include more names (unquoted) into the <code>dplyr::select()</code> function.</p>
 <p>However, sometimes it is useful to select columns using a character vector, especially considering the “dose” column has a Greek symbol (nano-gram) inside.</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="co"># select using unquoted column names</span></span>
@@ -617,7 +686,7 @@ janitor::clean_names(raw_data)</code></pre>
 ## $ dose_µg_kg &lt;chr&gt; &quot;0&quot;, &quot;0&quot;, &quot;0&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;100&quot;, &quot;10…</code></pre>
 </div>
 <div id="renaming-columns" class="section level1">
-<h1>Renaming columns</h1>
+<h1><span class="header-section-number">8</span> Renaming columns</h1>
 <p>We can also rename the columns.</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>sub_data =<span class="st"> </span>sub_data <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb60-2"><a href="#cb60-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">time =</span> time_hours,</span>
@@ -636,7 +705,7 @@ janitor::clean_names(raw_data)</code></pre>
 <span id="cb62-5"><a href="#cb62-5"></a><span class="co"># sub_data </span></span></code></pre></div>
 </div>
 <div id="mutating-columns" class="section level1">
-<h1>Mutating columns</h1>
+<h1><span class="header-section-number">9</span> Mutating columns</h1>
 <p>The <code>dplyr::mutate()</code> function does exactly what you would expect: it changes an entire column. It has the structure that <code>new column = some changes to the (old column)</code>.</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>sub_data <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb63-2"><a href="#cb63-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">time_2 =</span> <span class="kw">as.numeric</span>(time))</span></code></pre></div>
@@ -679,16 +748,16 @@ janitor::clean_names(raw_data)</code></pre>
 ## # … with 158 more rows</code></pre>
 </div>
 <div id="missing-values" class="section level1">
-<h1>Missing values</h1>
+<h1><span class="header-section-number">10</span> Missing values</h1>
 <p>When we mutated our data, we saw that there was a warning message, <code>NAs introduced by coercion</code>. The <code>NA</code> is is R’s way to represent a missing value. So what happened?</p>
 <p>If we have a quick look at the original <code>xls</code> file, we see that someone must have copied the data with the heading four times. This is why when we converted <code>time</code> into a numeric variable, <code>R</code> recognised the column headings in the middle of the data as weird values and assigned those with <code>NA</code>.</p>
 <p>We can visualise <code>NA</code> in our data using the <code>vis_miss()</code> function from the <strong>visdat</strong> package.</p>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>mutate_data <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb70-2"><a href="#cb70-2"></a><span class="st">  </span>visdat<span class="op">::</span><span class="kw">vis_miss</span>()</span></code></pre></div>
-<p><img src="session1_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="session1_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
 </div>
 <div id="filtering-out-problematic-rows" class="section level1">
-<h1>Filtering out problematic rows</h1>
+<h1><span class="header-section-number">11</span> Filtering out problematic rows</h1>
 <p>We will now filtering out the three rows of column headings, which we have converted into <code>NA</code> in the <code>time</code> and <code>dose</code> columns.</p>
 <p>We will use the <code>filter()</code> function from the <strong>dplyr</strong> package. The function takes in <code>logical</code> vectors of the same length as the <code>nrow(data)</code> as the input.</p>
 <!-- consider using `drop_na()` -->
@@ -722,11 +791,11 @@ janitor::clean_names(raw_data)</code></pre>
 ## # … with 155 more rows</code></pre>
 </div>
 <div id="making-summary-statistics" class="section level1">
-<h1>Making summary statistics</h1>
+<h1><span class="header-section-number">12</span> Making summary statistics</h1>
 <p>We will finish today’s session with something simple, but powerful.</p>
 <p>If we want to create summary statistics of our data.frame, we need to think about which variable are we summarising over. In this case, we will count the number of samples for each of the strains.</p>
 <div id="counting-number-of-samples" class="section level2">
-<h2>Counting number of samples</h2>
+<h2><span class="header-section-number">12.1</span> Counting number of samples</h2>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a>filter_data <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb75-2"><a href="#cb75-2"></a><span class="st">  </span><span class="kw">group_by</span>(strain) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb75-3"><a href="#cb75-3"></a><span class="st">  </span><span class="kw">count</span>()</span></code></pre></div>
@@ -746,7 +815,7 @@ janitor::clean_names(raw_data)</code></pre>
 ## 2 LE        80</code></pre>
 </div>
 <div id="counting-with-more-variables" class="section level2">
-<h2>Counting with more variables</h2>
+<h2><span class="header-section-number">12.2</span> Counting with more variables</h2>
 <div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>filter_data <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb79-2"><a href="#cb79-2"></a><span class="st">  </span><span class="kw">group_by</span>(strain, dose) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb79-3"><a href="#cb79-3"></a><span class="st">  </span><span class="kw">count</span>()</span></code></pre></div>
@@ -793,11 +862,11 @@ janitor::clean_names(raw_data)</code></pre>
 </div>
 </div>
 <div id="saving-data" class="section level1">
-<h1>Saving data</h1>
+<h1><span class="header-section-number">13</span> Saving data</h1>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a><span class="kw">write_csv</span>(filter_data, <span class="dt">path =</span> <span class="st">&quot;data/clean_sample_data.csv&quot;</span>)</span></code></pre></div>
 </div>
 <div id="session-info" class="section level1">
-<h1>Session Info</h1>
+<h1><span class="header-section-number">14</span> Session Info</h1>
 <div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 3.6.1 (2019-07-05)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
@@ -821,20 +890,20 @@ janitor::clean_names(raw_data)</code></pre>
 ## loaded via a namespace (and not attached):
 ##  [1] tidyselect_0.2.5 xfun_0.10        haven_2.2.0      lattice_0.20-38 
 ##  [5] snakecase_0.11.0 colorspace_1.4-1 vctrs_0.2.0      generics_0.0.2  
-##  [9] htmltools_0.4.0  yaml_2.2.0       utf8_1.1.4       rlang_0.4.1     
+##  [9] htmltools_0.4.0  yaml_2.2.0       utf8_1.1.4       rlang_0.4.2     
 ## [13] pillar_1.4.2     glue_1.3.1       withr_2.1.2      modelr_0.1.5    
 ## [17] lifecycle_0.1.0  munsell_0.5.0    gtable_0.3.0     cellranger_1.1.0
 ## [21] rvest_0.3.4      evaluate_0.14    labeling_0.3     knitr_1.25      
 ## [25] fansi_0.4.0      broom_0.5.2      Rcpp_1.0.3       scales_1.1.0    
 ## [29] backports_1.1.5  jsonlite_1.6     farver_2.0.1     hms_0.5.2       
-## [33] digest_0.6.22    stringi_1.4.3    grid_3.6.1       cli_1.1.0       
+## [33] digest_0.6.23    stringi_1.4.3    grid_3.6.1       cli_1.1.0       
 ## [37] tools_3.6.1      magrittr_1.5     lazyeval_0.2.2   crayon_1.3.4    
 ## [41] pkgconfig_2.0.3  zeallot_0.1.0    ellipsis_0.3.0   xml2_1.2.2      
 ## [45] lubridate_1.7.4  assertthat_0.2.1 rmarkdown_1.16   httr_1.4.1      
 ## [49] rstudioapi_0.10  R6_2.4.1         nlme_3.1-141     compiler_3.6.1</code></pre>
 </div>
 <div id="references" class="section level1">
-<h1>References</h1>
+<h1><span class="header-section-number">15</span> References</h1>
 <p>Need to reference the tidyverse, there’s a new canonical way to do that, one reference for all tidyverse packages.</p>
 <p>Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, <a href="https://doi.org/10.21105/joss.01686" class="uri">https://doi.org/10.21105/joss.01686</a></p>
 <pre><code>@Article{Tidyverse:2019,
@@ -851,6 +920,8 @@ janitor::clean_names(raw_data)</code></pre>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -883,6 +954,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

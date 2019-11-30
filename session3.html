@@ -22,7 +22,11 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <script defer src="https://pro.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-d84LGg2pm9KhR4mCAs3N29GQ4OYNy+K+FBHX8WhimHpPm86c839++MDABegrZ3gn" crossorigin="anonymous"></script>
 
 <!-- clipboard.js -->
@@ -100,6 +104,15 @@ code span.va { color: #0057ae; } /* Variable */
 code span.vs { color: #bf0303; } /* VerbatimString */
 code span.wa { color: #bf0303; } /* Warning */
 
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -333,7 +346,67 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -343,6 +416,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -363,13 +446,13 @@ $(document).ready(function () {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="session1.html">Mon: session 1</a>
+  <a href="session1.html">Session 1</a>
 </li>
 <li>
-  <a href="session2.html">Tue: session 2</a>
+  <a href="session2.html">Session 2</a>
 </li>
 <li>
-  <a href="session3.html">Tue: session 3</a>
+  <a href="session3.html">Session 3</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -381,6 +464,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">session3</h1>
@@ -391,7 +482,7 @@ $(document).ready(function () {
 
 
 <div id="learning-outcomes-of-this-session" class="section level1">
-<h1>Learning outcomes of this session</h1>
+<h1><span class="header-section-number">1</span> Learning outcomes of this session</h1>
 <ul>
 <li>tibbles are better than data.frames</li>
 <li>More plotting with <code>ggplot2</code></li>
@@ -400,11 +491,11 @@ $(document).ready(function () {
 </ul>
 </div>
 <div id="loading-packages" class="section level1">
-<h1>Loading packages</h1>
+<h1><span class="header-section-number">2</span> Loading packages</h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
 </div>
 <div id="loading-cleaned-sample-data" class="section level1">
-<h1>Loading cleaned sample data</h1>
+<h1><span class="header-section-number">3</span> Loading cleaned sample data</h1>
 <p>This session3 data is almost identical to the <code>wide_sample_ge_data.csv</code> file that we just saved. Except that we actually used all the genes in the database.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>session3_data =<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;data/session3_data.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>time, <span class="op">-</span>dose)</span></code></pre></div>
@@ -444,7 +535,7 @@ $(document).ready(function () {
 ## #   Tiparp &lt;dbl&gt;, Tpm1 &lt;dbl&gt;, Ugt1a1 &lt;dbl&gt;, Zfp422 &lt;dbl&gt;</code></pre>
 </div>
 <div id="t-test" class="section level1">
-<h1>t-test</h1>
+<h1><span class="header-section-number">4</span> t-test</h1>
 <p>A typical task in bioinformatics is to perform differential gene expression analysis. That is, we want to identify genes that has a different expression patterns between two conditions. While there are many ways that this can be done, we will opt for the simplest approach of using a t-test.</p>
 <p>In <code>R</code>, t-test can be performed using the <code>t.test</code> function. Below, we will perform a t-test on the Ahrrr gene between the two strains of mice.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">t.test</span>(Ahrr <span class="op">~</span><span class="st"> </span>strain, <span class="dt">data =</span> clean_data)</span></code></pre></div>
@@ -479,7 +570,7 @@ $(document).ready(function () {
 ## #   alternative &lt;chr&gt;</code></pre>
 </div>
 <div id="for-loops" class="section level1">
-<h1><code>for</code> loops</h1>
+<h1><span class="header-section-number">5</span> <code>for</code> loops</h1>
 <p><code>for</code> loops are common in any programming language. It simply list out the instructions and the iterations are specified using an index. For example, the following code prints out 1 to 5.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>){</span>
 <span id="cb13-2"><a href="#cb13-2"></a>  <span class="kw">print</span>(i)</span>
@@ -500,7 +591,7 @@ $(document).ready(function () {
 <p>This is why we want to use a tidyverse framework to achive the same thing.</p>
 </div>
 <div id="nesting-data" class="section level1">
-<h1>Nesting data</h1>
+<h1><span class="header-section-number">6</span> Nesting data</h1>
 <p>Now, let’s think about the task of calculating a t-test for each gene. This may seem like a very difficult task, but we can identify some of its components to achieve simplifications and generalisations.</p>
 <p>First, we should run the <code>t.test</code> and the <code>broom::tidy</code> function on gene expression values for a selected gene. Then, we do exactly the same operation for another 53 genes. So the grand overall task is actually very repetitive and we are really just applying the following function to 54 datasets (each dataset only contains one selected gene).</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>tidy_test =<span class="st"> </span><span class="cf">function</span>(this_data){</span>
@@ -601,7 +692,7 @@ $(document).ready(function () {
 <span id="cb25-3"><a href="#cb25-3"></a>}</span></code></pre></div>
 </div>
 <div id="map-function-in-purrr" class="section level1">
-<h1><code>map</code> function in <code>purrr</code></h1>
+<h1><span class="header-section-number">7</span> <code>map</code> function in <code>purrr</code></h1>
 <p>We could use the <code>for</code> loop to compute the <code>tidy_test</code> output for all 54 genes.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">54</span>){</span>
 <span id="cb26-2"><a href="#cb26-2"></a>  <span class="kw">tidy_test</span>(gene_nest<span class="op">$</span>small_data[[i]])</span>
@@ -646,7 +737,7 @@ $(document).ready(function () {
 <p>This is a very powerful framework, because it allows us to create new statistics horizonally inside a <code>data.frame</code>, keep in track of the matching genes/observations. You may not realise this, but one of the most common mistake in data analysis is mis-matching of rows when combining datasets and statistics. The use of the <code>mutate</code> and <code>map</code> functions allows all intermediate steps to be stored as a column inside a data.frame, precenting any mis-matchings.</p>
 </div>
 <div id="plotting-t-test-results" class="section level1">
-<h1>Plotting t-test results</h1>
+<h1><span class="header-section-number">8</span> Plotting t-test results</h1>
 <p>The <code>tidy_result</code> column in <code>gene_test</code> is now a list of tibbles (think of them as data.frames). Each of these tibbles contains t-test statistic and p-value associated with each gene. We will now need to expand this column. The function we will use is <code>unnest</code> from the <code>tidyr</code> package. As you may already guess, this function undo the <code>nest</code> operation. In this case, we want to undo the <code>tidy_result</code> column only.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>gene_test<span class="op">$</span>tidy_result[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</span></code></pre></div>
 <pre><code>## [[1]]
@@ -688,10 +779,10 @@ $(document).ready(function () {
 <span id="cb34-2"><a href="#cb34-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> p.value)) <span class="op">+</span></span>
 <span id="cb34-3"><a href="#cb34-3"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="session3_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="session3_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
 <p>This histogram shows that we actually have about 1/3 of genes significantly differentially expressed (DE) between the two strains. This is usually a problem with gene expression analysis because if all t-test assumptions are met, the p-values should be uniformly distributed over the [0,1] interval. This inflation is could be attributed to normalisation issues with the data since we have only taken the most naive approach of taking the logarithm. Additionally, we should also note that this is a <em>targeted</em> gene expression data where genes are typically selected due to differential patterns they showed in pilot studies. We will not commenton the biological implication of this histogram further, but proceed with another common analysis, which is to create boxplots of the top differentially expressed genes.</p>
 <div id="boxplots-of-top-differentially-expressed-genes" class="section level2">
-<h2>Boxplots of top differentially expressed genes</h2>
+<h2><span class="header-section-number">8.1</span> Boxplots of top differentially expressed genes</h2>
 <p>In this section, we will first extract the top 6 DE genes and make a boxplot for each of them between the two strains.</p>
 <p>The following code allows us to subset the data.frame to the 6 genes with smallest p-values (i.e. most differentially expressed). However, we shouldn’t forget that all the gene expression values are still stored in the <code>small_data</code> column. We need to apply the <code>unnest</code> operation to extract these values.</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>gene_test_long <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -734,7 +825,7 @@ $(document).ready(function () {
 <span id="cb40-3"><a href="#cb40-3"></a>             <span class="dt">y =</span> gene_expression)) <span class="op">+</span></span>
 <span id="cb40-4"><a href="#cb40-4"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
 <span id="cb40-5"><a href="#cb40-5"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>gene_symbol, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
-<p><img src="session3_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="session3_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
 <p>We can also prettify the plots by creating a <code>label</code> column, which combines the gene symbols and p-values.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>boxplot_data <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb41-2"><a href="#cb41-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">label =</span> <span class="kw">paste0</span>(</span>
@@ -745,7 +836,7 @@ $(document).ready(function () {
 <span id="cb41-7"><a href="#cb41-7"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>label, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="op">+</span></span>
 <span id="cb41-8"><a href="#cb41-8"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Strains&quot;</span>, </span>
 <span id="cb41-9"><a href="#cb41-9"></a>       <span class="dt">y =</span> <span class="st">&quot;Gene expression values&quot;</span>)</span></code></pre></div>
-<p><img src="session3_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="session3_files/figure-html/unnamed-chunk-19-1.png" width="768" /></p>
 <!-- # Regression analysis (extension) -->
 <!-- ```{r} -->
 <!-- hw_data = clean_data %>%  -->
@@ -816,7 +907,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="session-info" class="section level1">
-<h1>Session Info</h1>
+<h1><span class="header-section-number">9</span> Session Info</h1>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 3.6.1 (2019-07-05)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
@@ -838,31 +929,25 @@ $(document).ready(function () {
 ##  [9] tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1   tidyverse_1.2.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.3        lubridate_1.7.4   lattice_0.20-38  
-##  [4] assertthat_0.2.1  zeallot_0.1.0     digest_0.6.22    
-##  [7] utf8_1.1.4        mime_0.7          R6_2.4.1         
-## [10] cellranger_1.1.0  backports_1.1.5   evaluate_0.14    
-## [13] httr_1.4.1        pillar_1.4.2      rlang_0.4.1      
-## [16] lazyeval_0.2.2    rstudioapi_0.10   DT_0.9           
-## [19] rmarkdown_1.16    labeling_0.3      htmlwidgets_1.5.1
-## [22] munsell_0.5.0     shiny_1.4.0       broom_0.5.2      
-## [25] compiler_3.6.1    httpuv_1.5.2      modelr_0.1.5     
-## [28] xfun_0.10         pkgconfig_2.0.3   htmltools_0.4.0  
-## [31] tidyselect_0.2.5  fansi_0.4.0       crayon_1.3.4     
-## [34] withr_2.1.2       later_1.0.0       grid_3.6.1       
-## [37] nlme_3.1-141      jsonlite_1.6      xtable_1.8-4     
-## [40] gtable_0.3.0      lifecycle_0.1.0   magrittr_1.5     
-## [43] scales_1.1.0      cli_1.1.0         stringi_1.4.3    
-## [46] farver_2.0.1      promises_1.1.0    snakecase_0.11.0 
-## [49] xml2_1.2.2        ellipsis_0.3.0    generics_0.0.2   
-## [52] vctrs_0.2.0       tools_3.6.1       glue_1.3.1       
-## [55] hms_0.5.2         crosstalk_1.0.0   fastmap_1.0.1    
-## [58] yaml_2.2.0        colorspace_1.4-1  rvest_0.3.4      
-## [61] knitr_1.25        haven_2.2.0</code></pre>
+##  [1] tidyselect_0.2.5 xfun_0.10        haven_2.2.0      lattice_0.20-38 
+##  [5] snakecase_0.11.0 colorspace_1.4-1 vctrs_0.2.0      generics_0.0.2  
+##  [9] htmltools_0.4.0  yaml_2.2.0       utf8_1.1.4       rlang_0.4.2     
+## [13] pillar_1.4.2     glue_1.3.1       withr_2.1.2      modelr_0.1.5    
+## [17] lifecycle_0.1.0  munsell_0.5.0    gtable_0.3.0     cellranger_1.1.0
+## [21] rvest_0.3.4      evaluate_0.14    labeling_0.3     knitr_1.25      
+## [25] fansi_0.4.0      broom_0.5.2      Rcpp_1.0.3       scales_1.1.0    
+## [29] backports_1.1.5  jsonlite_1.6     farver_2.0.1     hms_0.5.2       
+## [33] digest_0.6.23    stringi_1.4.3    grid_3.6.1       cli_1.1.0       
+## [37] tools_3.6.1      magrittr_1.5     lazyeval_0.2.2   crayon_1.3.4    
+## [41] pkgconfig_2.0.3  zeallot_0.1.0    ellipsis_0.3.0   xml2_1.2.2      
+## [45] lubridate_1.7.4  assertthat_0.2.1 rmarkdown_1.16   httr_1.4.1      
+## [49] rstudioapi_0.10  R6_2.4.1         nlme_3.1-141     compiler_3.6.1</code></pre>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -894,7 +979,38 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

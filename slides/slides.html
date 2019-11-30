@@ -45,14 +45,13 @@ Ask Garth about this.
 
 ---
 
-# Workshop outline
-
-+ We want you to make a boxplot similar to [this](https://www.nature.com/articles/cmi2014102.pdf)
-
+# Workshop outline: make a boxplot similar to [this](https://www.nature.com/articles/cmi2014102.pdf)
 
 &lt;center&gt;
-&lt;img src="../assets/publication_boxplot.png", width="40%"&gt;
+&lt;img src="../assets/publication_boxplot.png", width="50%"&gt;
 &lt;/center&gt;
+
+--
 
 1. Get gene expression data
 1. Get clinical data
@@ -60,6 +59,10 @@ Ask Garth about this.
 1. Figure out how to join the two data
 1. Reshape the data
 1. Visualisation
+
+
+
+
 
 ---
 
@@ -96,29 +99,40 @@ sample_n(tidy_data, size = 10)
 
 # Why tidy data?
 
-+ Because it will make our analyses and visualisation easier.
++ Because it will make our analyses and visualisation easier. 
++ An example of dirty data:
+
+&lt;center&gt;
+&lt;img src="../assets/UAC.png", width="90%"&gt;
+&lt;/center&gt;
 
 
 ---
 
 # Visualisation Gallery
 
-+ https://twitter.com/50_first_data/status/1189658282618699776
++ NYC squirrel sighting: https://twitter.com/i/status/1189658282618699776
++ Australian election result: https://srkobakian.github.io/sugarbag/index.html
 
-+ Some code that you can run to make a cool plot
+&lt;center&gt;
+&lt;img src="https://github.com/srkobakian/sugarbag/raw/master/man/figures/README-animated-1.gif", width="60%"&gt;
+&lt;/center&gt;
 
 ---
 
 # A simple bioinformatics data
 
-+ We will be working on a real gene expression data from [this article](https://rnajournal.cshlp.org/content/19/1/51.full). 
++ We will be working on a real gene expression data from [this article](https://rnajournal.cshlp.org/content/19/1/51.full): **Systematic evaluation of medium-throughput mRNA abundance platforms** by Prokopec et. al. 
 
-+ The original data was generated to answer a biological question of mice diet and also the reproducibility of three gene expression technologies.  
++ The original data was generated to understand reproducibility of three gene expression technologies by comparing gene expression of mice treated with different diet. 
 
 + There are two pieces of data: 
 
 1. **The sample data** was downloaded from the [journal's website](https://rnajournal.cshlp.org/content/19/1/51/suppl/DC1).
+
 1. **The gene expression data** was downloaded from the [Gene Expression Omnibus](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE43251&amp;format=file&amp;file=GSE43251%5FNanoString%5Fnon%2Dnormalized%2Etxt%2Egz), accession ID GSE43251.
+
+We will play with the sample data on Monday, combine the two data for visualisation on Tuesday morning and perform basic modelling on Tuesday afternoon. 
 
 ---
 
@@ -131,25 +145,118 @@ sample_n(tidy_data, size = 10)
 1. Reshaping the data for visualisation and modelling purpose.
 1. Perform basic modelling on the data and extract insights.
 
-
 ---
 
 # Session 1: reading data and basic manipulations
+
++ **Why can't I do this in Excel ?** Because to process raw data to meaningful scientific result is often complex and iterative. It is better and more rigorous to have a R-Markdown file documenting this process.
+
++ In this session, we will learn how to read in the data, identify some problems with the data file, remove problemative rows and columns of the data and finally produce a cleaned data. 
+
+---
+
+# Extension exercises of Session 1
+
+1. 
 
 ---
 
 # Session 2: visualisation with `ggplot2` 
 
-+ A rigorous framework for plotting
++ `ggplot2` is rigorous framework for plotting
++ The `gg` in `ggplot2` stands for "grammar of graphics".
++ in order to produce a plot, a strict set of coding structure must be followed. 
++ In particular, **every characteristic of your plot is produced using one variable**. This avoids the "double y-axes" plot:
+&lt;center&gt;
+&lt;img src="https://statmodeling.stat.columbia.edu/wp-content/uploads/2015/05/journal.pone_.0112042.g001.png", width="40%"&gt;
+&lt;/center&gt;
+
++ Other articles about bad visualisations can be found [here](https://venngage.com/blog/misleading-graphs/) and [here](https://www.businessinsider.com.au/the-27-worst-charts-of-all-time-2013-6?r=US&amp;IR=T#i-never-thought-it-was-possible-but-i-actually-understand-soccer-less-after-looking-at-this-chart-3).
 
 ---
 
-## Tidy is goal-dependent: treating each year as independent
+## A quick example of `ggplot2`
 
 
 
 
 
+
+
+.pull-left[
+
+```r
+divorce_margarine_scaled
+```
+
+```
+## # A tibble: 10 x 3
+##     year divorce margarine
+##    &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+##  1  2000   1.84     2.00  
+##  2  2001   1.00     1.15  
+##  3  2002   0.723    0.802 
+##  4  2003   0.167   -0.0422
+##  5  2004  -0.111   -0.113 
+##  6  2005  -0.667   -0.957 
+##  7  2006  -0.389   -0.535 
+##  8  2007  -0.389   -0.605 
+##  9  2008  -0.389   -0.816 
+## 10  2009  -1.78    -0.886
+```
+]
+
+
+.pull-right[
++ divorce should be mapped to the x-axis
++ margarine should be mapped to the y-axis
+]
+---
+
+## First taste of `ggplot2`
+
+
+```r
+divorce_margarine_scaled %&gt;% 
+* ggplot()
+```
+
+![](slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+
+## First taste of `ggplot2`
+
+
+```r
+divorce_margarine_scaled %&gt;% 
+  ggplot(aes(
+*   x = divorce,
+*   y = margarine
+  ))
+```
+
+![](slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+
+## First taste of `ggplot2`
+
+
+```r
+divorce_margarine_scaled %&gt;% 
+  ggplot(aes(
+    x = divorce,
+    y = margarine
+  )) +
+* geom_point()
+```
+
+![](slides_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+
+## First taste of `ggplot2`
 
 
 ```r
@@ -157,47 +264,91 @@ divorce_margarine_scaled %&gt;%
   ggplot(aes(
     x = divorce,
     y = margarine,
-    label = year)) +
+*   label = year
+  )) +
+  geom_point() +
+* geom_text()
+```
+
+![](slides_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+---
+
+## First taste of `ggplot2`
+
+
+```r
+divorce_margarine_scaled %&gt;% 
+  ggplot(aes(
+    x = divorce,
+    y = margarine,
+    label = year
+  )) +
+  geom_point() +
+  geom_text() +
+* labs(title = "Divorce rate and margarine consumption")
+```
+
+![](slides_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+
+## Tidy is goal-dependent: treating each year as independent
+
+
+```r
+divorce_margarine_scaled %&gt;% 
+  ggplot(aes(
+    x = divorce,
+    y = margarine,
+    label = year
+  )) +
   geom_point() +
   geom_text() +
   labs(title = "Divorce rate and margarine consumption")
 ```
 
-![](slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
-
-+ divorce is mapped to the x-axis
-+ margarine is mapped to the y-axis
-+ year is mapped to the labelling on scatter plot
-+ Put points on plot
-+ Put text on plot
+![](slides_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
 ---
 
-## Tidy is goal-dependent: treating each year as time
+## Can you make this plot using the data above?
+.pull-left[
 
 
 ```r
-divorce_margarine_scaled %&gt;%
-  tidyr::pivot_longer(
-    cols = -c("year"),
-    names_to = "type",
-    values_to = "values") %&gt;%
-  ggplot(aes(x = year,
-             y = values,
-             colour = type)) +
-  geom_point() +
-  geom_path() +
-  labs(title = "Divorce rate and margarine consumption")
+divorce_margarine_scaled
 ```
 
-![](slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+```
+## # A tibble: 10 x 3
+##     year divorce margarine
+##    &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+##  1  2000   1.84     2.00  
+##  2  2001   1.00     1.15  
+##  3  2002   0.723    0.802 
+##  4  2003   0.167   -0.0422
+##  5  2004  -0.111   -0.113 
+##  6  2005  -0.667   -0.957 
+##  7  2006  -0.389   -0.535 
+##  8  2007  -0.389   -0.605 
+##  9  2008  -0.389   -0.816 
+## 10  2009  -1.78    -0.886
+```
+]
+
+.pull-right[
+![](slides_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+]
+---
+## Pivot
 
 
-+ year is mapped to the x-axis
-+ values is mapped to the y-axis
-+ type is mapped to the colouring of plot
-+ Put points on plot
-+ Put path
+&lt;center&gt;
+&lt;img src="https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif", width="40%"&gt;
+&lt;/center&gt;
+
+
 ---
 
 # Session 3: modelling with `tidyverse`

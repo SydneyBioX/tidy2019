@@ -5,4 +5,10 @@ install.packages(c(
   "DT",
   "janitor",
   "readxl",
-  "visdat"))
+  "visdat",
+  "remotes",
+  "eechidna"))
+
+
+remotes::install_github("srkobakian/sugarbag")
+

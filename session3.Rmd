@@ -4,6 +4,13 @@ author: "Kevin Wang and Garth Tarr"
 date: "05/11/2019"
 output:
   html_document:
+    code_folding: hide
+    fig_height: 8
+    fig_width: 8
+    toc: yes
+    number_sections: true
+    toc_depth: 3
+    toc_float: yes
     css: style.css
 ---
 

@@ -1,9 +1,15 @@
 ---
-title: 'session1'
+title: 'Session1'
 author: "Kevin Wang and Garth Tarr"
-date: "05/11/2019"
+date: "2 Dec 2019"
 output:
   html_document:
+    fig_height: 8
+    fig_width: 8
+    toc: yes
+    number_sections: true
+    toc_depth: 3
+    toc_float: yes
     css: style.css
 ---
 

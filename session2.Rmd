@@ -1,21 +1,25 @@
 ---
-title: "session2"
+title: "Session 2"
 author: "Kevin Wang and Garth Tarr"
-date: "05/11/2019"
+date: "2 Dec 2019"
 output:
   html_document:
+    fig_height: 8
+    fig_width: 8
+    toc: yes
+    number_sections: true
+    toc_depth: 3
+    toc_float: yes
     css: style.css
 ---
 
 
 # Learning outcomes of this session
 
-+ `left_join` data
++ Join two data together using the `left_join` function
 + Making basic plots using `ggplot2`: boxplots, histograms and scatter plots
-+ Joining two datasets together (`left_join`)
-+ `pivot_longer` and `pivot_wider` to reshape data for visualisation purposes
-
-
++ Use `pivot_longer` and `pivot_wider` to reshape data for visualisation purposes
++ Saving cleaned data for next stage of analysis
 
 # Loading packages
 
@@ -26,19 +30,24 @@ library(tidyverse)
 
 # Loading cleaned sample data
 
-Let's begin today by loading the csv file that we created on Monday. 
+Let's begin today by reading in the csv file that we created in session 1. 
 
 ```{r}
 session1_data = read_csv(file = "data/clean_sample_data.csv")
 ```
 
-# Reading in gene expression data (top 10 rows)
+# Reading in gene expression data (top 6 rows)
 
-We will also read in another data which we haven't dealt with yesterday. This is a gene expression data that was saved as a `txt` file. The delimiter is a tab, or `\t`. We will only read in the first 6 rows for convenience. 
+Remember our aim for this workshop is to join the mice sample data with a mice gene expression data. `session1_data` is the sample data we have already cleaned yesterday, so we should now read in the gene expression data now. 
+
+This gene expression data was downloaded straight from the Gene Expression Omnibus and it was saved as a `txt` file. This `txt` file is more or less like a rectangular Excel sheet, with each row separated by a new line and each column is separated by a a single press of the "tab" button on the eyboard. Thus, we call this tab as the "delimiter" of this file. `R` understands this "tab" as `\t`. 
+
+The whole data has 54 rows, but for the sake of brevity, we will only read in the first 6 rows. We will also get rid of the first column of this raw data (the column of manufacturer's ID).
 
 ```{r}
 raw_ge_data = read_delim(file = "data/GSE43251_NanoString_non-normalized.txt", delim = "\t", n_max = 6)
-# raw_ge_data = read_tsv(file = "data/GSE43251_NanoString_non-normalized.txt", n_max = 5)
+## Alternatively:
+## raw_ge_data = read_tsv(file = "data/GSE43251_NanoString_non-normalized.txt", n_max = 6)
 
 clean_ge_data = raw_ge_data %>% 
   dplyr::select(-1)
@@ -47,15 +56,26 @@ clean_ge_data
 ```
 
 
+Let's try to understand this data before we proceed to the next section. The first column of this data contains the gene symbols that was measured by the gene expression machine. From the second column onwards, each column records the gene expression measurement for one mouse and the sample ID of the mouse is the column name (i.e. HW1, HW2, etc.). 
 
 
-# left_join sample data
+So how should we join these two data? If we just stack the two data together, there are no guarantees to say that we will have the right ordering of sample ID. In fact, if you try to just bind the two sample IDs together, `R` will complain about this. 
 
-We will now want to combine the sample data we have curated yesterday and the gene expression data. If you quickly check the number of samples in each of the datasets, you will realise that there isn't a one-to-one mapping between the samples. 
+```{r, error = TRUE}
+length(colnames(clean_ge_data)[-1]) ## Not counting the gene symbol column
+length(session1_data$sample)
 
-This means we need to combine two datasets using a common sample name. `left_join` can help us with this. 
+cbind(
+  colnames(clean_ge_data)[-1],
+  session1_data$sample)
+```
 
 
+This is where the `left_join` function from the `dplyr` package can help us. 
+
+# `left_join` sample data
+
+Let's begin by looking at the samples that have gene expression data available. We will make a `data.frame` documenting the sample IDs and another column that indicates the availability of the gene expression data (which always have a value of `"yes`, since we extracted the ID from the gene expression data itself). 
 
 ```{r}
 ge_sample_data = data.frame(
@@ -63,27 +83,37 @@ ge_sample_data = data.frame(
   ge_data_available = "yes"
 )
 
+head(ge_sample_data)
+```
+
+Now we will apply the `left_join` function between the `session1_data`, the full sample data, and the `ge_sample_data`, which only contains the samples with gene expression information available. The `sample` column in both data serves as an "identifier" to match each mice in the `session1_data` to each mice in `ge_sample_data`. See below.
+
+
+```{r}
 joined_sample_data = left_join(session1_data, ge_sample_data, by = "sample")
 
 joined_sample_data
 ```
 
+The resulted data has the same number of rows as `session1_data`, and this is no surprise because it is the first input into the function and hence the name. The `by` input specify which column should be used as the identifier. 
 
-# DT
+Looking at this data seems to suggest that nothing has gone wrong in the first 10 rows. But if we apply a small sampling on the number of rows, we can see that there are indeed sample mismatching between the sample and the gene expression data. This makes our task of combining data more difficult. Because we only know how to combine two datasets through a identifier column. This is not an issue with the `session1_data`, but the challenge here is the gene expression data, which has all identifiers as the column names. 
 
-We can use the datatable function from the DT package to quickly browse through which samples in the sample data did not have a matching gene expression data. 
+If only there is a way that we can grab the column names of the gene expression data into a column while preserving the gene expression values. That'd make things so much easier! Let's learn about the `pivot_longer` function first before returning to this problem.
 
-```{r}
-joined_sample_data %>% 
-  DT::datatable()
-```
-
-So we see indeed, there are sample mismatching between the sample and the gene expression data. How should we combine these data in this case? Let us learn about the pivot function first before returning to this problem.
+![](https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif)
 
 # `tidyr::pivot_longer` the gene expression data
 
-The pivot_longer function takes a wide data into a long data. 
+The `pivot_longer` function takes a "wide" data into a "long" data. We simply tell the function which column we want to preserve, in this case, it will be the gene symbols, because we still want to distinguish each genes for each of the samples after the pivot operation. 
 
+```{r}
+clean_ge_data %>% 
+  tidyr::pivot_longer(
+    cols = -GENE_SYMBOL)
+```
+
+Of course, it is be better to give the new columns some informative names. 
 
 ```{r}
 ge_data_long = clean_ge_data %>% 
@@ -96,7 +126,8 @@ ge_data_long
 ```
 
 
-We will now left_join this long data with the sample data and filter out the NA's in the data. 
+
+Pay attention to how this data still maintains its tidy structure but it is now in a better format to be `left_join` with the `session1_data`. This may look simple, but you should appreciate the thinking behind this process as it will be ever more important as your data gets more complex. 
 
 ```{r}
 long_sample_ge_data = session1_data %>% 
@@ -104,22 +135,20 @@ long_sample_ge_data = session1_data %>%
   dplyr::filter(!is.na(GENE_SYMBOL)) %>% 
   janitor::clean_names()
 
-
 long_sample_ge_data
 ```
 
 
-This will be the data we use for visualisation. 
+Now that we have a very nice and cleaned data, we are now in a good position to learn about visualisation. 
 
 
 # `ggplot2` visualisation
 
 There are many plotting systems and packages out there, so why should we use this `ggplot2` system?
 
-The `gg` in `ggplot2` stands for "grammar of graphics". That means in order to produce a ggplot, a very strict set of coding structure must be followed. These restrictions means that you can always look at a plot and know exactly which characteristic of the plot comes from which part of the data. This is extremely important for the purpose of reproducibility. 
+The `gg` in `ggplot2` stands for "grammar of graphics". That means in order to produce a ggplot, a very strict set of coding structure must be followed. These restrictions are designed in such a way that you can always look at a ggplot and know exactly which characteristic of the plot comes from which column of the data. This is extremely important for the purpose of reproducibility. 
 
 The `ggplot2` plotting system is based on a layered structure, which means the final plot can always be decompose into several layers. We will illustrate what this means now step-by-step. 
-
 
 Let's say we want to draw a scatter plot of the strains and the gene expression. We will first begin with a data and pipe that into the `ggplot()` function. This will give us a blank canvas for plotting. 
 
@@ -146,11 +175,10 @@ long_sample_ge_data %>%
 ```
 
 
-Now what we have is still a blank canvas, but notice how the x and y axes are now labelled with the variables/columns in the `data.frame`. So what are we missing for a scatter plot? 
+Even though we still have a blank canvas, but notice how the x and y axes are now labelled with the variables/columns in the `data.frame`. So what are we missing for a scatter plot? 
+Actually putting the points on the canvas!
 
-The points!
-
-In `ggplot2`, the final plot (whether it is a scatter plot or a boxplot or a mix of the two) is always a combination of layers. We now have a layer of blank canvas, we will want to draw on this canvas using `geom_point()` which places the actual points on the canvas based on the mapping we have already specified. 
+In `ggplot2`, a plot is always a combination of layers. We have now a layer of blank canvas with axes, we will want to draw on this canvas using `geom_point()` which places the actual points on the canvas based on the mappings we have already specified. 
 
 ```{r}
 long_sample_ge_data %>% 
@@ -171,9 +199,7 @@ long_sample_ge_data %>%
 ```
 
 
-
-We see that the scale of data points can be very different. This is due to some genes always tend to have a higher expression than others. So it will be a good idea to make a plot for each of the gene instead. This means that we need to make this plot according to the labelling in the `gene_symbol` column in our `data.frame`. 
-
+We see that the scale of data points can be very different. This is due to some genes always tend to have a higher expression than others (due to biology). So it will be a good idea to make a plot for each gene instead. This means that we need to make this plot for each value in the `gene_symbol` column in our data.
 
 ```{r}
 long_sample_ge_data %>% 
@@ -184,9 +210,9 @@ long_sample_ge_data %>%
 ```
 
 
-This plot shows that "Aldh3a1" is th main culprit that has a very different scale than all other five genes. One way to deal with this scaling is to use the logarithm scale. `ggplot2` has a very convenient way to doing this. 
+This plot shows that "Aldh3a1" is the main culprit for having a very different scale compared all other five genes. 
 
-
+One way to deal with this scaling is to use the logarithm scale. `ggplot2` has a very convenient way to doing this. 
 
 ```{r}
 long_sample_ge_data %>% 
@@ -198,11 +224,11 @@ long_sample_ge_data %>%
 ```
 
 
-Now that we have the scatter plot of the genes on a good scale, and we can see some interesting features from these plots. For example, the "Aldh3a1" gene seems to show off some differences between the two strains, and the "Bbs2" gene seems to have a different variance between the two strains. 
+We now have the scatter plots on a good scale, and we can already see some interesting features from these plots. For example, the "Aldh3a1" gene seems to show off some differences between the two strains, and the "Bbs2" gene seems to have a different variance between the two strains. 
 
 So, how can we improve on this plot further?
 
-We can layer other plots onto this! We will now add a boxplot to each of the plot.
+We can layer plots of other features onto this! For example, boxplots.
 
 ```{r}
 long_sample_ge_data %>% 
@@ -214,8 +240,9 @@ long_sample_ge_data %>%
   scale_y_log10()
 ```
 
-Now it is a good time to stop and think about what we did. We started off with a `data.frame` and a blank canvas with the aim to make a scatter plot. We added aesthetic mappings onto our ggplot and evaluated the quality of our plot as we go along. Every time we identify some deficiency in our plot, we simply add more layers to the plot. This almost detective-work is what makes `ggplot2` is so popular, because it is very flexible in handling new ideas and plotting aesthetics. But at the same time, every aesthetic of this plot can be traced back to a particular column in the `data.frame`. 
+Now it is a good time to stop and think about what we did. 
 
+We started off with a `data.frame` and a blank canvas with the aim to make a scatter plot. We added aesthetic mappings onto our ggplot and evaluated the quality of our plot as we go along. Every time we identify deficiencies in our plot, we simply add more layers to the plot. This detective-work is what makes `ggplot2` is so popular, because it is very flexible in handling new ideas and plotting aesthetics. But at the same time, every aesthetic of this plot can be traced back to a particular column in the `data.frame`. 
 
 There are so many functions and tricks that we can't really go through in details. Here is a very helpful [cheatsheet](https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf). And in general, the best way is to Google the plot that you want and copy the code that someone else already made. 
 
