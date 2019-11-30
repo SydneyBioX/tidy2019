@@ -5,5 +5,5 @@ install.packages(c(
   "DT",
   "janitor",
   "readxl",
-  "remotes",
-  "visdat"))
+  "visdat", 
+  "ggpubr"))
