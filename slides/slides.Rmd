@@ -23,24 +23,27 @@ output:
 
 # Your instructors
 
-+ Kevin: PhD candidate in statistics and bioinformatics. The minion of Garth. 
-+ Garth: Senior lecturer in statistics. 
++ Kevin: PhD candidate in statistics and bioinformatics.
++ Garth: Lecturer in statistics and data science. 
 
 ---
 
 # Ice breaker
 
-Ask Garth about this. 
 
 ---
 
 # Workshop outline: make a boxplot similar to [this](https://www.nature.com/articles/cmi2014102.pdf)
 
+.pull-left-2[
 <center>
-<img src="../assets/publication_boxplot.png", width="50%">
+<img src="../assets/publication_boxplot.png", width="100%">
 </center>
+]
 
 --
+
+.pull-right-1[
 
 1. Get gene expression data
 1. Get clinical data
@@ -50,9 +53,11 @@ Ask Garth about this.
 1. Visualisation
 1. Compute t-test p-values and add them to the plots
 
+]
 
-
-
+.footnote[
+Neve Polimeno, M., Ierano, C., D'Alterio, C., Simona Losito, N., Napolitano, M., Portella, L., ... Scala, S. (2015). CXCR4 expression affects overall survival of HCC patients whereas CXCR7 expression does not. _Cellular & molecular immunology_, 12(4), 474–482. [doi:10.1038/cmi.2014.102](https://www.nature.com/articles/cmi2014102.pdf)
+]
 
 ---
 
@@ -80,9 +85,8 @@ sample_n(tidy_data, size = 10)
 + An example of dirty data:
 
 <center>
-<img src="../assets/UAC.png", width="90%">
+<img src="../assets/UAC.png", width="100%">
 </center>
-
 
 ---
 
@@ -126,15 +130,34 @@ We will play with the sample data on Monday, combine the two data for visualisat
 
 # Session 1: reading data and basic manipulations
 
-+ **Why can't I do this in Excel ?** Because to process raw data to meaningful scientific result is often complex and iterative. It is better and more rigorous to have a R-Markdown file documenting this process.
+.pull-left[
 
-+ In this session, we will learn how to read in the data, identify some problems with the data file, remove problemative rows and columns of the data and finally produce a cleaned data. 
+> **Why can't I do everything in Excel?**
+
++ Processing raw data to meaningful scientific result is often complex and iterative. 
+
++ It is better and more rigorous to have a R-Markdown file documenting this process (reproducible).
+
++ In this session, we will learn how to read in the raw data, identify some problems with the data file, remove problemative rows and columns of the data and save a cleaned data file.
+
+]
+
+.pull-right[
+
+<img src="../assets/noexcel.png", width="100%">
+
+]
+
+.footnote[
+Ziemann, M., Eren, Y. & El-Osta, A. (2016). Gene name errors are widespread in the scientific literature. _Genome Biology_ 17, 177 [doi:10.1186/s13059-016-1044-7](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-1044-7)
+]
 
 ---
 
 # Extension exercises of Session 1
 
-1. 
+1. Return to the `diamonds` data frame from the start of the session.  Find the number of observations for each cut. 
+2. Calculate summary statistics of the price for each cut (e.g. mean, median, min, max, ...)
 
 ---
 
