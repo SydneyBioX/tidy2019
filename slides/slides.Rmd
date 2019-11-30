@@ -48,6 +48,7 @@ Ask Garth about this.
 1. Figure out how to join the two data
 1. Reshape the data
 1. Visualisation
+1. Compute t-test p-values and add them to the plots
 
 
 

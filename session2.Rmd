@@ -36,7 +36,7 @@ Let's begin today by reading in the csv file that we created in session 1.
 session1_data = read_csv(file = "data/clean_sample_data.csv")
 ```
 
-# Reading in gene expression data (top 6 rows)
+# Reading in gene expression data (top 6 rows) {#reading_ge}
 
 Remember our aim for this workshop is to join the mice sample data with a mice gene expression data. `session1_data` is the sample data we have already cleaned yesterday, so we should now read in the gene expression data now. 
 
@@ -178,7 +178,7 @@ long_sample_ge_data %>%
 Even though we still have a blank canvas, but notice how the x and y axes are now labelled with the variables/columns in the `data.frame`. So what are we missing for a scatter plot? 
 Actually putting the points on the canvas!
 
-In `ggplot2`, a plot is always a combination of layers. We have now a layer of blank canvas with axes, we will want to draw on this canvas using `geom_point()` which places the actual points on the canvas based on the mappings we have already specified. 
+In `ggplot2`, a plot is always a combination of layers. We have now a layer of blank canvas with axes, we will want to draw on this canvas using `geom_point()` which places the actual points on the canvas based on the mappings we have already specified. In `ggplot2`, geometries are functions that actually draws on the canvas based on the aesthetic mappings given. These are referred to as "geometries". 
 
 ```{r}
 long_sample_ge_data %>% 
@@ -199,20 +199,7 @@ long_sample_ge_data %>%
 ```
 
 
-We see that the scale of data points can be very different. This is due to some genes always tend to have a higher expression than others (due to biology). So it will be a good idea to make a plot for each gene instead. This means that we need to make this plot for each value in the `gene_symbol` column in our data.
-
-```{r}
-long_sample_ge_data %>% 
-  ggplot(aes(x = strain, 
-             y = gene_expression)) + 
-  geom_point() +
-  facet_wrap(~gene_symbol)
-```
-
-
-This plot shows that "Aldh3a1" is the main culprit for having a very different scale compared all other five genes. 
-
-One way to deal with this scaling is to use the logarithm scale. `ggplot2` has a very convenient way to doing this. 
+We see that the scale of data points can be very different. This is due to some genes always tend to have a higher expression than others (due to biology). So it will be a good idea to make a plot for each gene instead. This means that we need to make this plot for each value in the `gene_symbol` column in our data. This can be done using the `facet_wrap` function, which will produce a plot that we have already made, but split by all unique values in the given variable, in this case `gene_symbol`. 
 
 ```{r}
 long_sample_ge_data %>% 
@@ -220,7 +207,22 @@ long_sample_ge_data %>%
              y = gene_expression)) + 
   geom_point() +
   facet_wrap(~gene_symbol) +
-  scale_y_log10()
+  labs(title = "My first ggplot!")
+```
+
+
+This plot shows that "Aldh3a1" is the main culprit for having a very different scale compared all other five genes. 
+
+One way to deal with this scaling is to use the logarithm scale. `ggplot2` has a very convenient way to doing this. The `scale_y_log10` function will scale the y-axis to log10 scale and this is a very convenient function because it retains the labelling of the original data but the points are on a log10-scale.
+
+```{r}
+long_sample_ge_data %>% 
+  ggplot(aes(x = strain, 
+             y = gene_expression)) + 
+  geom_point() +
+  facet_wrap(~gene_symbol) +
+  scale_y_log10() +
+  labs(title = "My first ggplot!")
 ```
 
 
@@ -237,7 +239,8 @@ long_sample_ge_data %>%
   geom_point() +
   geom_boxplot() +
   facet_wrap(~gene_symbol) +
-  scale_y_log10()
+  scale_y_log10() +
+  labs(title = "My first ggplot!")
 ```
 
 Now it is a good time to stop and think about what we did. 
@@ -246,19 +249,7 @@ We started off with a `data.frame` and a blank canvas with the aim to make a sca
 
 There are so many functions and tricks that we can't really go through in details. Here is a very helpful [cheatsheet](https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf). And in general, the best way is to Google the plot that you want and copy the code that someone else already made. 
 
-```{r}
-long_sample_ge_data %>% 
-  ggplot(aes(x = strain, 
-             y = gene_expression)) + 
-  geom_point() +
-  geom_boxplot() +
-  facet_wrap(~gene_symbol) +
-  scale_y_log10(labels = scales::comma)
-```
-
-
 Have a play with the following code. Try deleting components of the code to understand which aspect of the plot it was controlling
-
 
 ```{r}
 long_sample_ge_data %>% 
@@ -267,11 +258,14 @@ long_sample_ge_data %>%
              colour = strain)) + 
   geom_point() +
   geom_boxplot() +
-  facet_wrap(~gene_symbol, scales = "free_y") +
+  facet_wrap(~ gene_symbol, scales = "free_y") +
   scale_y_log10(labels = scales::comma) +
+  scale_color_manual(values = c("red", "blue")) +
   labs(x = "Strain", 
        y = "Gene Expression", 
-       title = "Boxplot of genes across strains")
+       title = "Boxplot of genes across strains") +
+  theme_bw() +
+  theme(legend.position = "bottom")
 ```
 
 
@@ -282,7 +276,6 @@ We will now try to make a histogram of each gene.
 Let's begin with the question: what are the aesthetic mappings of a histogram? 
 
 + x-axis should be numerical values of gene expression 
-+ y-axis should be either counts or density values of gene expression
 
 Let's try this out. For making a histogram, we need to use the `geom_histogram()` geometry. 
 
@@ -293,7 +286,9 @@ long_sample_ge_data %>%
   geom_histogram()
 ```
 
-Here, we see the same scaling issue we saw with the boxplots above. Hence, we will try to apply the same functions to manipulate the plots, namely: 
+You might be wondering, how is it possible that we didn't specify what should be on the y-axis but still got a plot out? This is because by the very definition of a histogram, only counts or density of the give x-variable should be plotted. Here, the default of `ggplot2` is to use counts. 
+
+Again, we see the same scaling issue as the above boxplots. Hence, we will try to apply the same functions to manipulate the plots, namely: 
 
 + `facet_wrap` which creates a plot for each gene in small panels,
 + `scale_x_log10` which plots the x-axis on the log10 scale
@@ -307,7 +302,7 @@ long_sample_ge_data %>%
 ```
 
 
-This plot looks pretty good! We can see that some genes are unimodal while others are bimodal. This is an new characteristic of the data that we couldn't observe from the boxplots above. 
+This plot looks pretty good! We can see that some genes are unimodal while others are bimodal. This is an new characteristic of the data that we didn't observe from the boxplots above. 
 
 We can make the modality more obvious by imposing the density of each gene onto the histogram. Let's try out the `geom_density` function then!
 
@@ -323,11 +318,11 @@ long_sample_ge_data %>%
 
 This doesn't look quite right, so what happened?
 
-If we pay attention to the y-axis of our ggplot so far, we see that it is `count`, which means that each of bin in the histograms is showing the number of observations in that interval. However, when we talk abotu density, that is on a very different scale to the number of counts. 
+If we pay attention to the y-axis of our ggplot so far, we see that it is `count`, which means that each of bin in the histograms is showing the number of observations in that interval. However, when we talk about density, it is on a very different scale to the number of counts. 
 
 So how can we make a density-based histogram? 
 
-Let's think this logically: right now, the count of observation is being mapped to the y-axis (default of `geom_histogram`), and we need to overwrite this by making density to be mapped to the y-axis. So the answer would be adding an extra input of `y = ..density..` into the `aes()` function. The reason that we can't use `y = density` is because in that case ggplot will interpret this line of code as mapping a column named `density` from the `data.frame` to the plot - but such column does not exist. The `..` is just a technical way that `ggplot` handles such problem which you don't have to worry too much on the details about. 
+Let's think this logically: right now, the count of observation is being mapped to the y-axis (default of `geom_histogram`), and we need to overwrite this by making density to be mapped to the y-axis. So the answer would be adding an extra input of `y = ..density..` into the `aes()` function. The `..` is just a technical way that `ggplot` handles such problem which you don't have to worry too much on the details about. (The reason that we can't use `y = density` is because in that case ggplot will interpret this line of code as mapping a column named `density` from the `data.frame` to the plot - but such column does not exist.) 
 
 
 ```{r}
@@ -338,6 +333,7 @@ long_sample_ge_data %>%
   facet_wrap(~gene_symbol, scales = "free") +
   scale_x_log10(labels = scales::comma)
 ```
+
 
 
 # Plotting two genes against each other
@@ -383,36 +379,32 @@ wide_sample_ge_data %>%
 
 # Saving data
 
-```{r}
+```{r, eval = FALSE}
 write_csv(long_sample_ge_data, path = "data/long_sample_ge_data.csv")
 write_csv(wide_sample_ge_data, path = "data/wide_sample_ge_data.csv")
 ```
-
-
-# Extension
-
-```{r}
-read_csv(file = "data/session3_data.csv") %>% 
-  dplyr::filter(strain == "HW", 
-                time == 1.5, 
-                dose == 0) %>% 
-  tidyr::pivot_longer(
-    cols = -c("strain", "sample", "time", "dose"),
-    names_to = "gene_symbol",
-    values_to = "gene_expression") %>% 
-  # dplyr::mutate(gene_expression = log10(gene_expression)) %>% 
-  tidyr::pivot_wider(
-    names_from = "sample",
-    values_from = "gene_expression") %>% 
-  ggplot(aes(x = HW1, y = HW2)) +
-  geom_point() +
-  scale_x_log10() +
-  scale_y_log10() 
-```
-
 
 # Session Info
 ```{r}
 sessionInfo()
 ```
 
+
+# References
+
+Need to reference the tidyverse, there's a new canonical way to do that, one reference for all tidyverse packages.
+
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
+```
+@Article{Tidyverse:2019,
+    title = {Welcome to the {tidyverse}},
+    author = {Hadley Wickham and Mara Averick and Jennifer Bryan and Winston Chang and Lucy D'Agostino McGowan and Romain François and Garrett Grolemund and Alex Hayes and Lionel Henry and Jim Hester and Max Kuhn and Thomas Lin Pedersen and Evan Miller and Stephan Milton Bache and Kirill Müller and Jeroen Ooms and David Robinson and Dana Paige Seidel and Vitalie Spinu and Kohske Takahashi and Davis Vaughan and Claus Wilke and Kara Woo and Hiroaki Yutani},
+    year = {2019},
+    journal = {Journal of Open Source Software},
+    volume = {4},
+    number = {43},
+    pages = {1686},
+    doi = {10.21105/joss.01686},
+  }
+```

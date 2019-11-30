@@ -4,7 +4,6 @@ author: "Kevin Wang and Garth Tarr"
 date: "05/11/2019"
 output:
   html_document:
-    code_folding: hide
     fig_height: 8
     fig_width: 8
     toc: yes
@@ -14,16 +13,10 @@ output:
     css: style.css
 ---
 
-
-
 # Learning outcomes of this session
 
-+ tibbles are better than data.frames
-+ More plotting with `ggplot2`
-+ `for` loops and `purrr::map` functions
-+ Modelling with `broom`
-
-
++ Compute differential expression p-values using the `broom` and `purrr` packages
++ Make a boxplot of gene expression values with `ggplot2`
 
 # Loading packages
 
@@ -31,18 +24,26 @@ output:
 library(tidyverse)
 ```
 
+# A quick word about `tibble`
+
+Most of the time, you can think of a `tibble` as being identical to a `data.frame`. In fact, in Session 1 and 2, even though we keep referring to the data as `data.frame`, but they are actually `tiblle`s. `tibble` is the default alternative to `data.frame` in the `tidyverse`. 
+
+The reason that `tibble` is so useful is that it allows for `list` objects as columns. This will come in very handy when performing modelling tasks. Have a look at the picture below: 
+
+![](https://rstudio-education.github.io/tidyverse-cookbook/images/tidyr-nest.png)
+
+Suppose that we want to perform modelling within each `Species` of three different iris flowers, it would be much better to utilise this new structure of representation of data in the middle and apply the modelling for each element of the `Measurements` column. This is indeed what we will try to achieve in this session. 
 
 # Loading cleaned sample data
 
-
-This session3 data is almost identical to the `wide_sample_ge_data.csv` file that we just saved. Except that we actually used all the genes in the database. 
+The `session3_data.csv` data is almost identical to the `wide_sample_ge_data.csv` file that we just saved in Session 2. Except that we actually used all 54 genes [when reading in the downloaded data](./session2.html#reading_ge). We will take the logarithm of all the gene expression values for convenience. 
 
 ```{r}
 session3_data = read_csv(file = "data/session3_data.csv") %>% 
   dplyr::select(-time, -dose)
 
 clean_data = session3_data %>% 
-  dplyr::mutate_if(is.numeric, .funs = log)
+  dplyr::mutate_if(.predicate = is.numeric, .funs = log) 
 
 clean_data
 ```
@@ -50,15 +51,15 @@ clean_data
 
 # t-test
 
-A typical task in bioinformatics is to perform differential gene expression analysis. That is, we want to identify genes that has a different expression patterns between two conditions. While there are many ways that this can be done, we will opt for the simplest approach of using a t-test. 
+A typical task in bioinformatics is to perform differential gene expression analysis. That is, we want to identify genes that has a different expression levels between two conditions. While there are many ways that this can be done, we will opt for the simplest approach of using a t-test. 
 
-In `R`, t-test can be performed using the `t.test` function. Below, we will perform a t-test on the Ahrrr gene between the two strains of mice. 
+In `R`, t-test can be performed using the `t.test` function. Below, we will perform a t-test on the Ahrrr gene between the two strains of mice. (Note: statistically speaking, this test is a bad idea due to the existence of different `dose` and `time` could creating confounding. However, since statistics is not the focus of this workshop so we will ignore this fact for now.)
 
 ```{r}
 t.test(Ahrr ~ strain, data = clean_data)
 ```
 
-However, the output of the `t.test` function can be a bit hard to read or manipulate into a data.frame. This is where the `tidy()` function from the `broom` package can help.
+The output of the `t.test` function can be a bit hard to read or manipulate into a data.frame. This is where the `tidy()` function from the `broom` package can help.
 
 ```{r}
 t.test(Ahrr ~ strain, data = clean_data) %>% 
@@ -74,6 +75,7 @@ t.test(Cxcr7 ~ strain, data = clean_data) %>%
 ```
 
 
+In the `clean_data`, we have 54 genes in total. If we want to perform t-test on each gene, should we type out 54 lines of code? The answer is no! This is not the most efficient way to utilise your time and there are fast ways to achieve the same outcome. However, we may need to take a quite diversion to understand loops and iterations. 
 
 # `for` loops
 
@@ -85,14 +87,10 @@ for (i in 1:5){
 }
 ```
 
-In the `clean_data`, we have 54 genes in total. If we want to perform t-test on each gene, should we type out 54 lines of code? 
-
-The answer is obviously no. Because such practice is very time inefficient and not generalisable if we receive another dataset in the future. 
-
-
-We can use the `for` loop to go through each column in `clean_data`, calculate the t-test statistics and print them out. However, this output is often not plotting-friendly because it is to merge this output with the original gene expression values. 
+We can use the `for` loop to go through each column in `clean_data`, calculate the t-test statistics and print them out. However, this output is often not plotting-friendly because we need to merge this output with the original gene expression values before any plotting can be done. We can use a `tidyverse` framework to achieve the same thing. 
 
 ```{r, eval = FALSE}
+## This code was not executed
 for(i in 3:56){
   t.test(clean_data %>% pull(i) ~ clean_data$strain) %>%
     broom::tidy() %>% 
@@ -100,15 +98,13 @@ for(i in 3:56){
 }
 ```
 
-This is why we want to use a tidyverse framework to achive the same thing. 
 
 
 # Nesting data
 
-Now, let's think about the task of calculating a t-test for each gene. This may seem like a very difficult task, but we can identify some of its components to achieve simplifications and generalisations. 
+Now, let's think about the task of calculating a t-test for each gene. This may seem like a very difficult task, but we can identify its components to achieve simplifications and generalisations. 
 
-First, we should run the `t.test` and the `broom::tidy` function on gene expression values for a selected gene. Then, we do exactly the same operation for another 53 genes. So the grand overall task is actually very repetitive and we are really just applying the following function to 54 datasets (each dataset only contains one selected gene). 
-
+First, we should run the `t.test` and the `broom::tidy` function on gene expression values for a selected gene. Then, we do exactly the same operation for another 53 genes. So the grand overall task is actually very repetitive and we are really just applying the following function to 54 datasets, where each dataset only contains one selected gene. 
 
 ```{r}
 tidy_test = function(this_data){
@@ -116,7 +112,6 @@ tidy_test = function(this_data){
     broom::tidy()
 }
 ```
-
 
 
 So now, our very difficult task of performing 54 t-tests is simplified to spliting `clean_data` into 54 datasets, one for each gene. 
@@ -135,6 +130,9 @@ gene_long = clean_data %>%
 gene_long
 ```
 
+A simplification of `gene_long` is this diagram: 
+
+![](assets/nest1.png)
 
 Then we will use the `group_by` function and then apply the `nest` function from the `tidyr` package. 
 
@@ -152,16 +150,21 @@ gene_nest$small_data[1:2]
 
 So, a lot of things happened here. Let's explain. 
 
-You might remember the `group_by` function when we were trying to use the `summarise` function to calculate summary statistics. This is exactly what we want to achieve with `gene_nest`. 
+You might remember the `group_by` function when we were trying to use the `summarise` function to calculate summary statistics in Session 1. This is exactly what we achieved with `gene_nest`, since the `gene_long` data with 8,316 rows is summarised into a smaller data.frame with 54 rows. The idea is that any reduction of number of rows can considered to be a summary of the long data.
 
-Each gene had 154 observations (number rows of `clean_data`), but in `gene_nest`, each gene only has "one observation", which corresponds to a row in the `small_data` column. **Each row of the `small_data` column is a `data.frame` of size 154 rows and 3 columns** (indicated by the `[154 x 3]`). In each of the `[154 x 3]` data.frame, you will see three columns (all the columns that we didn't put into `group_by`). 
+In `gene_nest`, each gene only has "one row", but in the `small_data` column, each row of elment in the `small_data` column is a `data.frame` of size 154 rows and 3 columns (indicated by the `[154 x 3]`). The reason that we have 154 observations is because we have 154 samples (number rows of `clean_data`) to begin with. The reason that we have 3 columns is because these are all the columns that we didn't put into `group_by`. 
 
-Remember, our original aim is to split the `gene_long` data into 54 smaller data, and we have achived that here with the `small_data` column. 
+So why are we doing this complicated structure? This is because our original aim is to split the `gene_long` data into 54 smaller data, and we have in fact achived that here with the `small_data` column. 
 
 
-Now, we simply need to apply the `tidy_test` function onto the `small_data` column in this `gene_nest` data.frame. 
+A simplification of `small_data` is this diagram: 
+
+![](assets/nest2.png)
+
+Now, we simply need to apply the `tidy_test` function onto the `small_data` column in this `gene_nest` data.frame. Again, we could do that with a for loop, but the same difficult issue of visualisation still applies. 
 
 ```{r, eval = FALSE}
+## This code is not executed.
 for(i in 1:54){
   tidy_test(gene_nest$small_data[[i]])
 }
@@ -170,19 +173,10 @@ for(i in 1:54){
 
 # `map` function in `purrr`
 
-We could use the `for` loop to compute the `tidy_test` output for all 54 genes. 
+The `map` function from the `purrr` package is a tremendously powerful function. In simply terms, it allows us to write a `for` loop is a very simple and readable way. 
 
 ```{r, eval = FALSE}
-for (i in 1:54){
-  tidy_test(gene_nest$small_data[[i]])
-}
-```
-
-However, the output of this loop is a `list` object requiring further manipulations to make it suitable for visualisation purposes. Hence, we will learn a new way for plotting. 
-
-The `map` function from the `purrr` package is a tremendously powerful function. In simply terms, it allows us to write a `for` loop is a very simply and readable way. 
-
-```{r, eval = FALSE}
+## This code is not executed
 purrr::map(.x = gene_nest$small_data,
            .f = tidy_test)
 ```
@@ -195,7 +189,7 @@ Why is this code better than the `for` loop even though they achieved the same o
 
 Then the function `.f` will be applied onto every element of the `.x` input. 
 
-Another reason why `map` function is superior to a `for` loop is how easy it can work with the `mutate` function in `dplyr`. The following code can be read as: 
+Another reason why the `map` function is superior to a `for` loop is how easy it can work with the `mutate` function in `dplyr`. The following code can be read as: 
 
 + In the `gene_nest` data, we want to `mutate` (create) a new column
 + This new column will be called `tidy_result` and it is defined as mapping the `tidy_test` function to every element if the `small_data` column. 
@@ -212,11 +206,18 @@ gene_test
 ```
 
 
-This is a very powerful framework, because it allows us to create new statistics horizonally inside a `data.frame`, keep in track of the matching genes/observations. You may not realise this, but one of the most common mistake in data analysis is mis-matching of rows when combining datasets and statistics. The use of the `mutate` and `map` functions allows all intermediate steps to be stored as a column inside a data.frame, precenting any mis-matchings. 
+
+A simplification of `gene_test` is this diagram: 
+
+![](assets/nest3.png)
+
+This is a very powerful framework, because it allows us to create new statistics horizonally inside a `data.frame`, keeping track of the matching genes/observations. You may not experience this yourself, but one of the most common mistake in data analysis is the mis-matching of rows when combining datasets and statistics. The use of the `mutate` and `map` functions allows all intermediate steps to be stored as a column inside a data.frame, preventing any mis-matchings. 
 
 # Plotting t-test results
 
-The `tidy_result` column in `gene_test` is now a list of tibbles (think of them as data.frames). Each of these tibbles contains t-test statistic and p-value associated with each gene. We will now need to expand this column. The function we will use is `unnest` from the `tidyr` package. As you may already guess, this function undo the `nest` operation. In this case, we want to undo the `tidy_result` column only. 
+The `tidy_result` column in `gene_test` is now a list of tibbles (think of them as data.frames). Each of these tibbles contains t-test statistic and p-value associated with each gene. 
+
+We will now need to expand this column. The function we will use is `unnest` from the `tidyr` package. As you may already guessed, this function undoes the `nest` operation. In this case, we want to undo the `tidy_result` column only. 
 
 ```{r}
 gene_test$tidy_result[1:2]
@@ -255,8 +256,6 @@ boxplot_data = gene_test_long %>%
 boxplot_data
 ```
 
-
-
 And now, let's perform the final plotting! 
 
 ```{r}
@@ -268,7 +267,7 @@ boxplot_data %>%
 ```
 
 
-We can also prettify the plots by creating a `label` column, which combines the gene symbols and p-values. 
+We can also prettify the plots by creating a `label` column in the data, which combines the gene symbols and p-values. 
 
 ```{r}
 boxplot_data %>% 
@@ -284,107 +283,22 @@ boxplot_data %>%
 
 
 
-<!-- # Regression analysis (extension) -->
 
-<!-- ```{r} -->
+Alternatively, the `ggpubr` package also offers some default graphics that are similar to `ggplot2`, though with a different syntax.
 
+```{r, message=FALSE}
+library(ggpubr)
+```
 
-<!-- hw_data = clean_data %>%  -->
-<!--   dplyr::filter(strain == "HW") -->
-
-<!-- le_data = clean_data %>%  -->
-<!--   dplyr::filter(strain == "LE") -->
-
-
-<!-- clean_data %>%  -->
-<!--   ggplot(aes(x = Ahrr, -->
-<!--              y = Cxcr7, -->
-<!--              colour = strain)) + -->
-<!--   geom_point() + -->
-<!--   geom_smooth(method = "lm") -->
-
-
-<!-- lm(Cxcr7 ~ Ahrr, data = clean_data) -->
-<!-- lm(Cxcr7 ~ Ahrr, data = hw_data) -->
-<!-- lm(Cxcr7 ~ Ahrr, data = le_data) -->
-
-<!-- lm_Cxcr7_Ahrr = function(this_data){ -->
-<!--   lm(Cxcr7 ~ Ahrr, data = this_data) -->
-<!-- } -->
-
-<!-- list_data = list( -->
-<!--   clean_data = clean_data,  -->
-<!--   hw_data = hw_data, -->
-<!--   le_data = le_data) -->
-
-<!-- purrr::map(.x = list_data,  -->
-<!--            .f = lm_Cxcr7_Ahrr) -->
-
-<!-- purrr::map(.x = list_data,  -->
-<!--            .f = lm_Cxcr7_Ahrr) %>%  -->
-<!--   purrr::map(.f = broom::tidy) -->
-<!-- ``` -->
-
-
-
-
-<!-- ```{r} -->
-<!-- gene_long = clean_data %>% -->
-<!--   tidyr::pivot_longer( -->
-<!--     cols = -c("strain", "Cxcr7", "sample"), -->
-<!--     names_to = "gene_symbol", -->
-<!--     values_to = "gene_expression") -->
-
-<!-- gene_long -->
-
-<!-- gene_nest = gene_long %>%  -->
-<!--   group_by(strain, gene_symbol) %>%  -->
-<!--   tidyr::nest() -->
-
-<!-- gene_nest$data[1:2] -->
-
-<!-- lm_Cxcr7_ge = function(this_data){ -->
-<!--   lm(Cxcr7 ~ gene_expression, data = this_data) -->
-<!-- } -->
-
-<!-- gene_model = gene_nest %>%  -->
-<!--   dplyr::mutate(lm_obj = purrr::map(.x = data,  -->
-<!--                                     .f = lm_Cxcr7_ge), -->
-<!--                 lm_tidy = purrr::map(.x = lm_obj, -->
-<!--                                      .f = broom::tidy)) -->
-
-
-
-<!-- gene_model_long = gene_model %>%  -->
-<!--   dplyr::select(-data, -lm_obj) %>%  -->
-<!--   tidyr::unnest(lm_tidy) %>%  -->
-<!--   dplyr::select(strain, gene_symbol, term, estimate) %>%  -->
-<!--   dplyr::filter(term == "gene_expression") -->
-
-
-<!-- gene_model_long -->
-
-
-<!-- gene_model_wide = gene_model_long %>%  -->
-<!--   dplyr::ungroup() %>%  -->
-<!--   tidyr::pivot_wider(names_from = "strain", -->
-<!--                      values_from = "estimate") -->
-
-
-<!-- gene_model_wide %>%  -->
-<!--   ggplot(aes(x = HW, y = LE)) + -->
-<!--   geom_point() + -->
-<!--   geom_abline(slope = 1, intercept = 0, colour = "red") -->
-
-<!-- gene_model_wide %>%  -->
-<!--   ggplot(aes(x = HW, y = LE, -->
-<!--              label = gene_symbols)) + -->
-<!--   geom_text() + -->
-<!--   geom_abline(slope = 1, intercept = 0, colour = "red") -->
-<!-- ``` -->
-
-
-
+```{r}
+ggboxplot(
+  data = boxplot_data,
+  x = "strain", 
+  y = "gene_expression",
+  facet.by = "gene_symbol",
+  scales = "free") +
+  ggpubr::stat_compare_means()
+```
 
 
 # Session Info
@@ -392,3 +306,22 @@ boxplot_data %>%
 sessionInfo()
 ```
 
+
+# References
+
+Need to reference the tidyverse, there's a new canonical way to do that, one reference for all tidyverse packages.
+
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
+```
+@Article{Tidyverse:2019,
+title = {Welcome to the {tidyverse}},
+author = {Hadley Wickham and Mara Averick and Jennifer Bryan and Winston Chang and Lucy D'Agostino McGowan and Romain François and Garrett Grolemund and Alex Hayes and Lionel Henry and Jim Hester and Max Kuhn and Thomas Lin Pedersen and Evan Miller and Stephan Milton Bache and Kirill Müller and Jeroen Ooms and David Robinson and Dana Paige Seidel and Vitalie Spinu and Kohske Takahashi and Davis Vaughan and Claus Wilke and Kara Woo and Hiroaki Yutani},
+year = {2019},
+journal = {Journal of Open Source Software},
+volume = {4},
+number = {43},
+pages = {1686},
+doi = {10.21105/joss.01686},
+}
+```
