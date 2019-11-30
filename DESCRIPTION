@@ -9,5 +9,4 @@ Imports:
   knitr,
   DT,
   janitor,
-  readxl,
-  visdat
+  readxl
