@@ -236,7 +236,7 @@ If we have a quick look at the original `xls` file, we see that someone must hav
 
 We can visualise `NA` in our data using the `vis_miss()` function from the **visdat** package. 
 
-```{r}
+```{r, fig.show = "hide"}
 mutate_data %>% 
   visdat::vis_miss()
 ```
