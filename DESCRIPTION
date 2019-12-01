@@ -9,4 +9,5 @@ Imports:
   knitr,
   DT,
   janitor,
-  readxl
+  readxl,
+  ggpubr
