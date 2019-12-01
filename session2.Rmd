@@ -10,7 +10,6 @@ output:
     number_sections: true
     toc_depth: 3
     toc_float: yes
-    css: style.css
 ---
 
 ```{r setup, include=FALSE}

@@ -24,6 +24,7 @@ output:
     theme: cosmo
     highlight: kate # kind of required for copy to clipboard
     includes:
-      in_header: header.html
+      in_header: assets/header.html
     css:
     - assets/kbd.css
+    - assets/style.css

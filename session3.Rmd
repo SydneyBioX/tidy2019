@@ -10,8 +10,11 @@ output:
     number_sections: true
     toc_depth: 3
     toc_float: yes
-    css: style.css
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(results = "hide", warning = FALSE, message = FALSE)
+```
 
 # Learning outcomes of this session
 
@@ -300,28 +303,15 @@ ggboxplot(
   ggpubr::stat_compare_means()
 ```
 
+# References
+
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
 
 # Session Info
-```{r}
+
+```{r, results = "show"}
 sessionInfo()
 ```
 
 
-# References
-
-Need to reference the tidyverse, there's a new canonical way to do that, one reference for all tidyverse packages.
-
-Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
-
-```
-@Article{Tidyverse:2019,
-title = {Welcome to the {tidyverse}},
-author = {Hadley Wickham and Mara Averick and Jennifer Bryan and Winston Chang and Lucy D'Agostino McGowan and Romain François and Garrett Grolemund and Alex Hayes and Lionel Henry and Jim Hester and Max Kuhn and Thomas Lin Pedersen and Evan Miller and Stephan Milton Bache and Kirill Müller and Jeroen Ooms and David Robinson and Dana Paige Seidel and Vitalie Spinu and Kohske Takahashi and Davis Vaughan and Claus Wilke and Kara Woo and Hiroaki Yutani},
-year = {2019},
-journal = {Journal of Open Source Software},
-volume = {4},
-number = {43},
-pages = {1686},
-doi = {10.21105/joss.01686},
-}
-```
