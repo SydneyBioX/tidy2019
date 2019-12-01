@@ -1,0 +1,22 @@
+language: R
+R: bioc-devel
+dist: trusty
+latex: false
+
+branches:
+  only:
+    - master
+    
+cache:
+  packages: yes
+
+script:
+  - R -e 'rmarkdown::render_site()'
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
+  local_dir: "."

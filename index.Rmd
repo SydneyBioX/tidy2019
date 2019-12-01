@@ -1,0 +1,55 @@
+---
+title: "Enter the Tidyverse"
+author: "Kevin Wang and Garth Tarr"
+date: "2-3 December 2019"
+output:
+  html_document:
+    css: style.css
+---
+
+# Aim of this workshop
+
+In this workshop, we will teach you some necessary data wrangling skills to turn a piece of real clinical data into a nicely written report. We will be operating under the `tidyverse` framework in `R`, which is very powerful for data manipulations, visualisation and modelling. 
+
+# What is the `tidyverse`? 
+
+The `tidyverse` is a collection of `R` packages that aims to streamline the following workflow.
+
+![](https://rstudio-education.github.io/tidyverse-cookbook/images/data-science-workflow.png)
+
+While we will not cover every package in the `tidyverse`, we will cover the most important packages across three sessions. 
+
+
+# Plan of the workshop {.tabset}
+
+## 1. Monday (15:20-16:30)
+
+In this session, we will first familiarise ourselves of the basics of `R`, e.g. loading in an Excel dataset, recognising variable types.  We will be using the `R Markdown` documentation system, which allows us to execute codes, visualise output and writing a report. We will also start to learn the basics of data manipulations such as filtering of observations and selection of columns. 
+
+Some of the packages to be covered: `rmarkdown`, `readr`, `readxl`, `voom`, `janitor` and `dplyr`. 
+
+## 2. Tuesday (13:30-15:00)
+
+In this session, we will focus on the basics of data cleaning and data visualisation. This type of tasks is where the `tidyverse` framework becomes one of the most powerful tools in data science. We will learn how to summarise data, converting between "wide" and "tall" data frames for the purpose of visualisation and also how to integrate different datasets. At the end of this session, we will massage the data into a suitable format that we can start to think about modelling in the next session. 
+
+Some of the packages to be covered: `dplyr`, `tidyr` and `ggplot2`.
+
+## 3. Tuesday (15:30-17:00)
+
+In this session, we will focus on the modelling of our cleaned data from the previous session. We will first introduce lists and use `for` loops to perform some basic modelling tasks to understand the basics of `R` programming. Then, we will introduce some powerful wrapper functions that can help us to write better and cleaner codes. 
+
+Some of the packages to be covered: `tibble`, `broom` and `purrr`.
+
+# Prerequisites
+
+Ideally, you should at least know what `R` is, since this is not a programming workshop, you can still pick up important practical skills by running the codes we provided. 
+
+## Running workshop on the cloud
+
+We will use RStudio Cloud to run this workshop. The link will be posted at the start of the workshop. 
+
+Please let your instructors know of any problems. 
+
+# Clipboard
+
+In some circumstances, we might need to share codes beyond the existing materials. Please click [here](https://docs.google.com/document/d/136YffzxjkUM8RIGsnjD_yOkCTWw4Ijdwjy4_58nC-zc/edit?usp=sharing) to access these codes.

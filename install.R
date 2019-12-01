@@ -1,0 +1,9 @@
+install.packages(c(
+  "rmarkdown",
+  "tidyverse",
+  "knitr",
+  "DT",
+  "janitor",
+  "readxl",
+  "visdat", 
+  "ggpubr"))

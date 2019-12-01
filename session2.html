@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Kevin Wang and Garth Tarr" />
+
+
+<title>Session 2</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script defer src="https://pro.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-d84LGg2pm9KhR4mCAs3N29GQ4OYNy+K+FBHX8WhimHpPm86c839++MDABegrZ3gn" crossorigin="anonymous"></script>
+
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+
+<script src="clipboard.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BioinfoSummer - Tidyverse</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="session1.html">Session 1</a>
+</li>
+<li>
+  <a href="session2.html">Session 2</a>
+</li>
+<li>
+  <a href="session3.html">Session 3</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Session 2</h1>
+<h4 class="author">Kevin Wang and Garth Tarr</h4>
+<h4 class="date">2 Dec 2019</h4>
+
+</div>
+
+
+<div id="learning-outcomes-of-this-session" class="section level1">
+<h1><span class="header-section-number">1</span> Learning outcomes of this session</h1>
+<ul>
+<li>Join two data together using the <code>left_join</code> function</li>
+<li>Making basic plots using <code>ggplot2</code>: boxplots, histograms and scatter plots</li>
+<li>Use <code>pivot_longer</code> and <code>pivot_wider</code> to reshape data for visualisation purposes</li>
+<li>Saving cleaned data for next stage of analysis</li>
+</ul>
+</div>
+<div id="loading-packages" class="section level1">
+<h1><span class="header-section-number">2</span> Loading packages</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+</div>
+<div id="loading-cleaned-sample-data" class="section level1">
+<h1><span class="header-section-number">3</span> Loading cleaned sample data</h1>
+<p>Let’s begin today by reading in the csv file that we created in session 1.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">session1_data =<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;data/clean_sample_data.csv&quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   strain = col_character(),
+##   sample = col_character(),
+##   time = col_double(),
+##   dose = col_double()
+## )</code></pre>
+</div>
+<div id="reading_ge" class="section level1">
+<h1><span class="header-section-number">4</span> Reading in gene expression data (top 6 rows)</h1>
+<p>Remember our aim for this workshop is to join the mice sample data with a mice gene expression data. <code>session1_data</code> is the sample data we have already cleaned yesterday, so we should now read in the gene expression data now.</p>
+<p>This gene expression data was downloaded straight from the Gene Expression Omnibus and it was saved as a <code>txt</code> file. This <code>txt</code> file is more or less like a rectangular Excel sheet, with each row separated by a new line and each column is separated by a a single press of the “tab” button on the eyboard. Thus, we call this tab as the “delimiter” of this file. <code>R</code> understands this “tab” as <code>\t</code>.</p>
+<p>The whole data has 54 rows, but for the sake of brevity, we will only read in the first 6 rows. We will also get rid of the first column of this raw data (the column of manufacturer’s ID).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">raw_ge_data =<span class="st"> </span><span class="kw">read_delim</span>(<span class="dt">file =</span> <span class="st">&quot;data/GSE43251_NanoString_non-normalized.txt&quot;</span>, <span class="dt">delim =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">n_max =</span> <span class="dv">6</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   GB_ACC = col_character(),
+##   GENE_SYMBOL = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">## Alternatively:</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">## raw_ge_data = read_tsv(file = &quot;data/GSE43251_NanoString_non-normalized.txt&quot;, n_max = 6)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">clean_ge_data =<span class="st"> </span>raw_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">clean_ge_data</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 155
+##   GENE_SYMBOL    HW1    HW2    HW3    HW4    HW5    HW6   WW41   WW42   WW45
+##   &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Ahrr        1.30e1 1.42e0   1.29 9.96e0 7.55e0 5.45e0   29.7   30.2   18.1
+## 2 Aldh3a1     5.22e0 8.53e0   7.74 3.07e2 6.55e1 8.18e1 4194.  6712.  2929. 
+## 3 Bbs2        3.39e1 4.55e1  32.2  6.97e1 5.29e1 4.80e1   90.6   73.4   62.1
+## 4 Ccbl1       2.37e2 2.43e2 175.   2.76e2 3.18e2 2.44e2  842.   704.   565. 
+## 5 Cxcr7       2.35e1 2.70e1  15.5  6.83e1 3.40e1 4.03e1   42.0   34.3   37.5
+## 6 Col18a1     1.69e3 1.92e3 918.   2.37e3 1.68e3 2.40e3 2149.  1551.  1326. 
+## # … with 145 more variables: WW46 &lt;dbl&gt;, WW47 &lt;dbl&gt;, WW48 &lt;dbl&gt;, LE100 &lt;dbl&gt;,
+## #   LE101 &lt;dbl&gt;, LE102 &lt;dbl&gt;, LE4D51 &lt;dbl&gt;, LE4D53 &lt;dbl&gt;, LE4D56 &lt;dbl&gt;,
+## #   WW37 &lt;dbl&gt;, WW38 &lt;dbl&gt;, WW39 &lt;dbl&gt;, WW40 &lt;dbl&gt;, WW43 &lt;dbl&gt;, WW44 &lt;dbl&gt;,
+## #   HW4D12 &lt;dbl&gt;, HW4D2 &lt;dbl&gt;, HW4D6 &lt;dbl&gt;, LE4D57 &lt;dbl&gt;, LE52 &lt;dbl&gt;,
+## #   LE53 &lt;dbl&gt;, LE54 &lt;dbl&gt;, LE55 &lt;dbl&gt;, WW1 &lt;dbl&gt;, WW2 &lt;dbl&gt;, WW3 &lt;dbl&gt;,
+## #   WW4 &lt;dbl&gt;, HW4D16 &lt;dbl&gt;, HW4D20 &lt;dbl&gt;, LE10D32 &lt;dbl&gt;, LE10D27 &lt;dbl&gt;,
+## #   LE10D28 &lt;dbl&gt;, LE10D35 &lt;dbl&gt;, LE10D37 &lt;dbl&gt;, LE80 &lt;dbl&gt;, LE81 &lt;dbl&gt;,
+## #   WW49 &lt;dbl&gt;, WW50 &lt;dbl&gt;, WW51 &lt;dbl&gt;, HW4D3 &lt;dbl&gt;, HW4D4 &lt;dbl&gt;, LE82 &lt;dbl&gt;,
+## #   LE83 &lt;dbl&gt;, LE88 &lt;dbl&gt;, LE89 &lt;dbl&gt;, LE90 &lt;dbl&gt;, LE91 &lt;dbl&gt;, WW25 &lt;dbl&gt;,
+## #   WW26 &lt;dbl&gt;, WW27 &lt;dbl&gt;, WW28 &lt;dbl&gt;, HW10D10 &lt;dbl&gt;, HW10D11 &lt;dbl&gt;,
+## #   HW10D14 &lt;dbl&gt;, HW10D17 &lt;dbl&gt;, HW10D5 &lt;dbl&gt;, HW10 &lt;dbl&gt;, HW4D15 &lt;dbl&gt;,
+## #   HW4D19 &lt;dbl&gt;, HW4D7 &lt;dbl&gt;, HW7 &lt;dbl&gt;, HW8 &lt;dbl&gt;, HW9 &lt;dbl&gt;, HW10D13 &lt;dbl&gt;,
+## #   HW10D18 &lt;dbl&gt;, HW10D1 &lt;dbl&gt;, HW10D8 &lt;dbl&gt;, HW10D9 &lt;dbl&gt;, LE64 &lt;dbl&gt;,
+## #   LE65 &lt;dbl&gt;, LE66 &lt;dbl&gt;, LE67 &lt;dbl&gt;, LE68 &lt;dbl&gt;, LE69 &lt;dbl&gt;, LE70 &lt;dbl&gt;,
+## #   LE71 &lt;dbl&gt;, LE72 &lt;dbl&gt;, LE73 &lt;dbl&gt;, LE74 &lt;dbl&gt;, LE75 &lt;dbl&gt;, LE76 &lt;dbl&gt;,
+## #   LE77 &lt;dbl&gt;, LE78 &lt;dbl&gt;, LE79 &lt;dbl&gt;, LE84 &lt;dbl&gt;, LE85 &lt;dbl&gt;, LE86 &lt;dbl&gt;,
+## #   WW10 &lt;dbl&gt;, WW11 &lt;dbl&gt;, WW12 &lt;dbl&gt;, WW13 &lt;dbl&gt;, WW14 &lt;dbl&gt;, WW15 &lt;dbl&gt;,
+## #   WW16 &lt;dbl&gt;, WW17 &lt;dbl&gt;, WW18 &lt;dbl&gt;, WW19 &lt;dbl&gt;, WW8 &lt;dbl&gt;, WW9 &lt;dbl&gt;,
+## #   WW20 &lt;dbl&gt;, …</code></pre>
+<p>Let’s try to understand this data before we proceed to the next section. The first column of this data contains the gene symbols that was measured by the gene expression machine. From the second column onwards, each column records the gene expression measurement for one mouse and the sample ID of the mouse is the column name (i.e. HW1, HW2, etc.).</p>
+<p>So how should we join these two data? If we just stack the two data together, there are no guarantees to say that we will have the right ordering of sample ID. In fact, if you try to just bind the two sample IDs together, <code>R</code> will complain about this.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">length</span>(<span class="kw">colnames</span>(clean_ge_data)[<span class="op">-</span><span class="dv">1</span>]) ## Not counting the gene symbol column</a></code></pre></div>
+<pre><code>## [1] 154</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">length</span>(session1_data<span class="op">$</span>sample)</a></code></pre></div>
+<pre><code>## [1] 165</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">cbind</span>(</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">  <span class="kw">colnames</span>(clean_ge_data)[<span class="op">-</span><span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">  session1_data<span class="op">$</span>sample)</a></code></pre></div>
+<pre><code>## Warning in cbind(colnames(clean_ge_data)[-1], session1_data$sample): number of
+## rows of result is not a multiple of vector length (arg 1)</code></pre>
+<pre><code>##        [,1]      [,2]     
+##   [1,] &quot;HW1&quot;     &quot;HW1&quot;    
+##   [2,] &quot;HW2&quot;     &quot;HW2&quot;    
+##   [3,] &quot;HW3&quot;     &quot;HW3&quot;    
+##   [4,] &quot;HW4&quot;     &quot;HW4&quot;    
+##   [5,] &quot;HW5&quot;     &quot;HW5&quot;    
+##   [6,] &quot;HW6&quot;     &quot;HW6&quot;    
+##   [7,] &quot;WW41&quot;    &quot;WW45&quot;   
+##   [8,] &quot;WW42&quot;    &quot;WW46&quot;   
+##   [9,] &quot;WW45&quot;    &quot;WW47&quot;   
+##  [10,] &quot;WW46&quot;    &quot;WW48&quot;   
+##  [11,] &quot;WW47&quot;    &quot;WW41&quot;   
+##  [12,] &quot;WW48&quot;    &quot;WW42&quot;   
+##  [13,] &quot;LE100&quot;   &quot;WW43&quot;   
+##  [14,] &quot;LE101&quot;   &quot;WW44&quot;   
+##  [15,] &quot;LE102&quot;   &quot;WW37&quot;   
+##  [16,] &quot;LE4D51&quot;  &quot;WW38&quot;   
+##  [17,] &quot;LE4D53&quot;  &quot;WW39&quot;   
+##  [18,] &quot;LE4D56&quot;  &quot;WW40&quot;   
+##  [19,] &quot;WW37&quot;    &quot;WW1&quot;    
+##  [20,] &quot;WW38&quot;    &quot;WW2&quot;    
+##  [21,] &quot;WW39&quot;    &quot;WW3&quot;    
+##  [22,] &quot;WW40&quot;    &quot;WW4&quot;    
+##  [23,] &quot;WW43&quot;    &quot;WW49&quot;   
+##  [24,] &quot;WW44&quot;    &quot;WW50&quot;   
+##  [25,] &quot;HW4D12&quot;  &quot;WW51&quot;   
+##  [26,] &quot;HW4D2&quot;   &quot;WW5&quot;    
+##  [27,] &quot;HW4D6&quot;   &quot;WW6&quot;    
+##  [28,] &quot;LE4D57&quot;  &quot;WW7&quot;    
+##  [29,] &quot;LE52&quot;    &quot;WW8&quot;    
+##  [30,] &quot;LE53&quot;    &quot;WW10&quot;   
+##  [31,] &quot;LE54&quot;    &quot;WW11&quot;   
+##  [32,] &quot;LE55&quot;    &quot;WW12&quot;   
+##  [33,] &quot;WW1&quot;     &quot;WW9&quot;    
+##  [34,] &quot;WW2&quot;     &quot;WW13&quot;   
+##  [35,] &quot;WW3&quot;     &quot;WW14&quot;   
+##  [36,] &quot;WW4&quot;     &quot;WW15&quot;   
+##  [37,] &quot;HW4D16&quot;  &quot;WW16&quot;   
+##  [38,] &quot;HW4D20&quot;  &quot;WW17&quot;   
+##  [39,] &quot;LE10D32&quot; &quot;WW18&quot;   
+##  [40,] &quot;LE10D27&quot; &quot;WW19&quot;   
+##  [41,] &quot;LE10D28&quot; &quot;WW20&quot;   
+##  [42,] &quot;LE10D35&quot; &quot;WW21&quot;   
+##  [43,] &quot;LE10D37&quot; &quot;WW22&quot;   
+##  [44,] &quot;LE80&quot;    &quot;WW23&quot;   
+##  [45,] &quot;LE81&quot;    &quot;WW24&quot;   
+##  [46,] &quot;WW49&quot;    &quot;WW25&quot;   
+##  [47,] &quot;WW50&quot;    &quot;WW26&quot;   
+##  [48,] &quot;WW51&quot;    &quot;WW27&quot;   
+##  [49,] &quot;HW4D3&quot;   &quot;WW28&quot;   
+##  [50,] &quot;HW4D4&quot;   &quot;WW29&quot;   
+##  [51,] &quot;LE82&quot;    &quot;WW30&quot;   
+##  [52,] &quot;LE83&quot;    &quot;WW31&quot;   
+##  [53,] &quot;LE88&quot;    &quot;WW32&quot;   
+##  [54,] &quot;LE89&quot;    &quot;WW33&quot;   
+##  [55,] &quot;LE90&quot;    &quot;WW34&quot;   
+##  [56,] &quot;LE91&quot;    &quot;WW35&quot;   
+##  [57,] &quot;WW25&quot;    &quot;WW36&quot;   
+##  [58,] &quot;WW26&quot;    &quot;HW4D12&quot; 
+##  [59,] &quot;WW27&quot;    &quot;HW4D16&quot; 
+##  [60,] &quot;WW28&quot;    &quot;HW4D2&quot;  
+##  [61,] &quot;HW10D10&quot; &quot;HW4D20&quot; 
+##  [62,] &quot;HW10D11&quot; &quot;HW4D6&quot;  
+##  [63,] &quot;HW10D14&quot; &quot;HW4D15&quot; 
+##  [64,] &quot;HW10D17&quot; &quot;HW4D19&quot; 
+##  [65,] &quot;HW10D5&quot;  &quot;HW4D3&quot;  
+##  [66,] &quot;HW10&quot;    &quot;HW4D4&quot;  
+##  [67,] &quot;HW4D15&quot;  &quot;HW4D7&quot;  
+##  [68,] &quot;HW4D19&quot;  &quot;HW10D10&quot;
+##  [69,] &quot;HW4D7&quot;   &quot;HW10D11&quot;
+##  [70,] &quot;HW7&quot;     &quot;HW10D14&quot;
+##  [71,] &quot;HW8&quot;     &quot;HW10D17&quot;
+##  [72,] &quot;HW9&quot;     &quot;HW10D5&quot; 
+##  [73,] &quot;HW10D13&quot; &quot;HW10D1&quot; 
+##  [74,] &quot;HW10D18&quot; &quot;HW10D13&quot;
+##  [75,] &quot;HW10D1&quot;  &quot;HW10D18&quot;
+##  [76,] &quot;HW10D8&quot;  &quot;HW10D8&quot; 
+##  [77,] &quot;HW10D9&quot;  &quot;HW10D9&quot; 
+##  [78,] &quot;LE64&quot;    &quot;HW10&quot;   
+##  [79,] &quot;LE65&quot;    &quot;HW7&quot;    
+##  [80,] &quot;LE66&quot;    &quot;HW8&quot;    
+##  [81,] &quot;LE67&quot;    &quot;HW9&quot;    
+##  [82,] &quot;LE68&quot;    &quot;HW11&quot;   
+##  [83,] &quot;LE69&quot;    &quot;HW12&quot;   
+##  [84,] &quot;LE70&quot;    &quot;HW13&quot;   
+##  [85,] &quot;LE71&quot;    &quot;HW14&quot;   
+##  [86,] &quot;LE72&quot;    &quot;LE96&quot;   
+##  [87,] &quot;LE73&quot;    &quot;LE97&quot;   
+##  [88,] &quot;LE74&quot;    &quot;LE98&quot;   
+##  [89,] &quot;LE75&quot;    &quot;LE99&quot;   
+##  [90,] &quot;LE76&quot;    &quot;LE92&quot;   
+##  [91,] &quot;LE77&quot;    &quot;LE93&quot;   
+##  [92,] &quot;LE78&quot;    &quot;LE94&quot;   
+##  [93,] &quot;LE79&quot;    &quot;LE95&quot;   
+##  [94,] &quot;LE84&quot;    &quot;LE88&quot;   
+##  [95,] &quot;LE85&quot;    &quot;LE89&quot;   
+##  [96,] &quot;LE86&quot;    &quot;LE90&quot;   
+##  [97,] &quot;WW10&quot;    &quot;LE91&quot;   
+##  [98,] &quot;WW11&quot;    &quot;LE100&quot;  
+##  [99,] &quot;WW12&quot;    &quot;LE101&quot;  
+## [100,] &quot;WW13&quot;    &quot;LE102&quot;  
+## [101,] &quot;WW14&quot;    &quot;LE52&quot;   
+## [102,] &quot;WW15&quot;    &quot;LE53&quot;   
+## [103,] &quot;WW16&quot;    &quot;LE54&quot;   
+## [104,] &quot;WW17&quot;    &quot;LE55&quot;   
+## [105,] &quot;WW18&quot;    &quot;LE56&quot;   
+## [106,] &quot;WW19&quot;    &quot;LE57&quot;   
+## [107,] &quot;WW8&quot;     &quot;LE58&quot;   
+## [108,] &quot;WW9&quot;     &quot;LE59&quot;   
+## [109,] &quot;WW20&quot;    &quot;LE60&quot;   
+## [110,] &quot;WW21&quot;    &quot;LE61&quot;   
+## [111,] &quot;WW22&quot;    &quot;LE62&quot;   
+## [112,] &quot;WW23&quot;    &quot;LE63&quot;   
+## [113,] &quot;WW24&quot;    &quot;LE64&quot;   
+## [114,] &quot;WW29&quot;    &quot;LE65&quot;   
+## [115,] &quot;WW30&quot;    &quot;LE66&quot;   
+## [116,] &quot;WW31&quot;    &quot;LE67&quot;   
+## [117,] &quot;WW32&quot;    &quot;LE68&quot;   
+## [118,] &quot;WW33&quot;    &quot;LE69&quot;   
+## [119,] &quot;WW34&quot;    &quot;LE70&quot;   
+## [120,] &quot;WW35&quot;    &quot;LE71&quot;   
+## [121,] &quot;HW11&quot;    &quot;LE72&quot;   
+## [122,] &quot;HW12&quot;    &quot;LE73&quot;   
+## [123,] &quot;HW13&quot;    &quot;LE74&quot;   
+## [124,] &quot;LE56&quot;    &quot;LE75&quot;   
+## [125,] &quot;LE57&quot;    &quot;LE76&quot;   
+## [126,] &quot;LE58&quot;    &quot;LE77&quot;   
+## [127,] &quot;LE59&quot;    &quot;LE78&quot;   
+## [128,] &quot;LE60&quot;    &quot;LE79&quot;   
+## [129,] &quot;LE61&quot;    &quot;LE80&quot;   
+## [130,] &quot;LE62&quot;    &quot;LE81&quot;   
+## [131,] &quot;LE63&quot;    &quot;LE82&quot;   
+## [132,] &quot;WW36&quot;    &quot;LE83&quot;   
+## [133,] &quot;LE87&quot;    &quot;LE84&quot;   
+## [134,] &quot;LE92&quot;    &quot;LE85&quot;   
+## [135,] &quot;LE93&quot;    &quot;LE86&quot;   
+## [136,] &quot;LE94&quot;    &quot;LE87&quot;   
+## [137,] &quot;LE95&quot;    &quot;LE4D39&quot; 
+## [138,] &quot;LE96&quot;    &quot;LE4D41&quot; 
+## [139,] &quot;LE97&quot;    &quot;LE4D42&quot; 
+## [140,] &quot;LE98&quot;    &quot;LE4D44&quot; 
+## [141,] &quot;LE99&quot;    &quot;LE4D51&quot; 
+## [142,] &quot;WW5&quot;     &quot;LE4D53&quot; 
+## [143,] &quot;WW6&quot;     &quot;LE4D54&quot; 
+## [144,] &quot;WW7&quot;     &quot;LE4D56&quot; 
+## [145,] &quot;HW14&quot;    &quot;LE4D57&quot; 
+## [146,] &quot;LE10D29&quot; &quot;LE4D50&quot; 
+## [147,] &quot;LE10D30&quot; &quot;LE4D52&quot; 
+## [148,] &quot;LE10D33&quot; &quot;LE4D55&quot; 
+## [149,] &quot;LE10D34&quot; &quot;LE4D58&quot; 
+## [150,] &quot;LE10D38&quot; &quot;LE10D21&quot;
+## [151,] &quot;LE4D50&quot;  &quot;LE10D22&quot;
+## [152,] &quot;LE4D52&quot;  &quot;LE10D23&quot;
+## [153,] &quot;LE4D55&quot;  &quot;LE10D24&quot;
+## [154,] &quot;LE4D58&quot;  &quot;LE10D25&quot;
+## [155,] &quot;HW1&quot;     &quot;LE10D26&quot;
+## [156,] &quot;HW2&quot;     &quot;LE10D27&quot;
+## [157,] &quot;HW3&quot;     &quot;LE10D28&quot;
+## [158,] &quot;HW4&quot;     &quot;LE10D32&quot;
+## [159,] &quot;HW5&quot;     &quot;LE10D35&quot;
+## [160,] &quot;HW6&quot;     &quot;LE10D37&quot;
+## [161,] &quot;WW41&quot;    &quot;LE10D29&quot;
+## [162,] &quot;WW42&quot;    &quot;LE10D30&quot;
+## [163,] &quot;WW45&quot;    &quot;LE10D33&quot;
+## [164,] &quot;WW46&quot;    &quot;LE10D34&quot;
+## [165,] &quot;WW47&quot;    &quot;LE10D38&quot;</code></pre>
+<p>This is where the <code>left_join</code> function from the <code>dplyr</code> package can help us.</p>
+</div>
+<div id="left_join-sample-data" class="section level1">
+<h1><span class="header-section-number">5</span> <code>left_join</code> sample data</h1>
+<p>Let’s begin by looking at the samples that have gene expression data available. We will make a <code>data.frame</code> documenting the sample IDs and another column that indicates the availability of the gene expression data (which always have a value of <code>&quot;yes</code>, since we extracted the ID from the gene expression data itself).</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">ge_sample_data =<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">  <span class="dt">sample =</span> <span class="kw">colnames</span>(clean_ge_data)[<span class="op">-</span><span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">  <span class="dt">ge_data_available =</span> <span class="st">&quot;yes&quot;</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">)</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="kw">head</span>(ge_sample_data)</a></code></pre></div>
+<pre><code>##   sample ge_data_available
+## 1    HW1               yes
+## 2    HW2               yes
+## 3    HW3               yes
+## 4    HW4               yes
+## 5    HW5               yes
+## 6    HW6               yes</code></pre>
+<p>Now we will apply the <code>left_join</code> function between the <code>session1_data</code>, the full sample data, and the <code>ge_sample_data</code>, which only contains the samples with gene expression information available. The <code>sample</code> column in both data serves as an “identifier” to match each mice in the <code>session1_data</code> to each mice in <code>ge_sample_data</code>. See below.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">joined_sample_data =<span class="st"> </span><span class="kw">left_join</span>(session1_data, ge_sample_data, <span class="dt">by =</span> <span class="st">&quot;sample&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: Column `sample` joining character vector and factor, coercing into
+## character vector</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">joined_sample_data</a></code></pre></div>
+<pre><code>## # A tibble: 165 x 5
+##    strain sample  time  dose ge_data_available
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;            
+##  1 HW     HW1      1.5     0 yes              
+##  2 HW     HW2      1.5     0 yes              
+##  3 HW     HW3      1.5     0 yes              
+##  4 HW     HW4      1.5   100 yes              
+##  5 HW     HW5      1.5   100 yes              
+##  6 HW     HW6      1.5   100 yes              
+##  7 HW     WW45     3     100 yes              
+##  8 HW     WW46     3     100 yes              
+##  9 HW     WW47     3     100 yes              
+## 10 HW     WW48     3     100 yes              
+## # … with 155 more rows</code></pre>
+<p>The resulted data has the same number of rows as <code>session1_data</code>, and this is no surprise because it is the first input into the function and hence the name. The <code>by</code> input specify which column should be used as the identifier.</p>
+<p>Looking at this data seems to suggest that nothing has gone wrong in the first 10 rows. But if we apply a small sampling on the number of rows, we can see that there are indeed sample mismatching between the sample and the gene expression data. This makes our task of combining data more difficult. Because we only know how to combine two datasets through a identifier column. This is not an issue with the <code>session1_data</code>, but the challenge here is the gene expression data, which has all identifiers as the column names.</p>
+<p>If only there is a way that we can grab the column names of the gene expression data into a column while preserving the gene expression values. That’d make things so much easier! Let’s learn about the <code>pivot_longer</code> function first before returning to this problem.</p>
+<p><img src="https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif" /></p>
+</div>
+<div id="tidyrpivot_longer-the-gene-expression-data" class="section level1">
+<h1><span class="header-section-number">6</span> <code>tidyr::pivot_longer</code> the gene expression data</h1>
+<p>The <code>pivot_longer</code> function takes a “wide” data into a “long” data. We simply tell the function which column we want to preserve, in this case, it will be the gene symbols, because we still want to distinguish each genes for each of the samples after the pivot operation.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">clean_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">    <span class="dt">cols =</span> <span class="op">-</span>GENE_SYMBOL)</a></code></pre></div>
+<pre><code>## # A tibble: 924 x 3
+##    GENE_SYMBOL name  value
+##    &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt;
+##  1 Ahrr        HW1   13.0 
+##  2 Ahrr        HW2    1.42
+##  3 Ahrr        HW3    1.29
+##  4 Ahrr        HW4    9.96
+##  5 Ahrr        HW5    7.55
+##  6 Ahrr        HW6    5.45
+##  7 Ahrr        WW41  29.7 
+##  8 Ahrr        WW42  30.2 
+##  9 Ahrr        WW45  18.1 
+## 10 Ahrr        WW46  22.4 
+## # … with 914 more rows</code></pre>
+<p>Of course, it is be better to give the new columns some informative names.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">ge_data_long =<span class="st"> </span>clean_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3">    <span class="dt">cols =</span> <span class="op">-</span>GENE_SYMBOL,</a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">    <span class="dt">names_to =</span> <span class="st">&quot;sample&quot;</span>, </a>
+<a class="sourceLine" id="cb24-5" data-line-number="5">    <span class="dt">values_to =</span> <span class="st">&quot;gene_expression&quot;</span>)</a>
+<a class="sourceLine" id="cb24-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb24-7" data-line-number="7">ge_data_long</a></code></pre></div>
+<pre><code>## # A tibble: 924 x 3
+##    GENE_SYMBOL sample gene_expression
+##    &lt;chr&gt;       &lt;chr&gt;            &lt;dbl&gt;
+##  1 Ahrr        HW1              13.0 
+##  2 Ahrr        HW2               1.42
+##  3 Ahrr        HW3               1.29
+##  4 Ahrr        HW4               9.96
+##  5 Ahrr        HW5               7.55
+##  6 Ahrr        HW6               5.45
+##  7 Ahrr        WW41             29.7 
+##  8 Ahrr        WW42             30.2 
+##  9 Ahrr        WW45             18.1 
+## 10 Ahrr        WW46             22.4 
+## # … with 914 more rows</code></pre>
+<p>Pay attention to how this data still maintains its tidy structure but it is now in a better format to be <code>left_join</code> with the <code>session1_data</code>. This may look simple, but you should appreciate the thinking behind this process as it will be ever more important as your data gets more complex.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">long_sample_ge_data =<span class="st"> </span>session1_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="st">  </span><span class="kw">left_join</span>(ge_data_long, <span class="dt">by =</span> <span class="st">&quot;sample&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(GENE_SYMBOL)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>()</a>
+<a class="sourceLine" id="cb26-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb26-6" data-line-number="6">long_sample_ge_data</a></code></pre></div>
+<pre><code>## # A tibble: 924 x 6
+##    strain sample  time  dose gene_symbol gene_expression
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;
+##  1 HW     HW1      1.5     0 Ahrr                  13.0 
+##  2 HW     HW1      1.5     0 Aldh3a1                5.22
+##  3 HW     HW1      1.5     0 Bbs2                  33.9 
+##  4 HW     HW1      1.5     0 Ccbl1                237.  
+##  5 HW     HW1      1.5     0 Cxcr7                 23.5 
+##  6 HW     HW1      1.5     0 Col18a1             1694.  
+##  7 HW     HW2      1.5     0 Ahrr                   1.42
+##  8 HW     HW2      1.5     0 Aldh3a1                8.53
+##  9 HW     HW2      1.5     0 Bbs2                  45.5 
+## 10 HW     HW2      1.5     0 Ccbl1                243.  
+## # … with 914 more rows</code></pre>
+<p>Now that we have a very nice and cleaned data, we are now in a good position to learn about visualisation.</p>
+</div>
+<div id="ggplot2-visualisation" class="section level1">
+<h1><span class="header-section-number">7</span> <code>ggplot2</code> visualisation</h1>
+<p>There are many plotting systems and packages out there, so why should we use this <code>ggplot2</code> system?</p>
+<p>The <code>gg</code> in <code>ggplot2</code> stands for “grammar of graphics”. That means in order to produce a ggplot, a very strict set of coding structure must be followed. These restrictions are designed in such a way that you can always look at a ggplot and know exactly which characteristic of the plot comes from which column of the data. This is extremely important for the purpose of reproducibility.</p>
+<p>The <code>ggplot2</code> plotting system is based on a layered structure, which means the final plot can always be decompose into several layers. We will illustrate what this means now step-by-step.</p>
+<p>Let’s say we want to draw a scatter plot of the strains and the gene expression. We will first begin with a data and pipe that into the <code>ggplot()</code> function. This will give us a blank canvas for plotting.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">long_sample_ge_data</a></code></pre></div>
+<pre><code>## # A tibble: 924 x 6
+##    strain sample  time  dose gene_symbol gene_expression
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;
+##  1 HW     HW1      1.5     0 Ahrr                  13.0 
+##  2 HW     HW1      1.5     0 Aldh3a1                5.22
+##  3 HW     HW1      1.5     0 Bbs2                  33.9 
+##  4 HW     HW1      1.5     0 Ccbl1                237.  
+##  5 HW     HW1      1.5     0 Cxcr7                 23.5 
+##  6 HW     HW1      1.5     0 Col18a1             1694.  
+##  7 HW     HW2      1.5     0 Ahrr                   1.42
+##  8 HW     HW2      1.5     0 Aldh3a1                8.53
+##  9 HW     HW2      1.5     0 Bbs2                  45.5 
+## 10 HW     HW2      1.5     0 Ccbl1                243.  
+## # … with 914 more rows</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>()</a></code></pre></div>
+<p><img src="session2_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+<p>Now is a good time to think about what are the components of a scatter plot?</p>
+<ul>
+<li>x-coordinates of points</li>
+<li>y-coordinates of points</li>
+<li>Actually placement of points</li>
+</ul>
+<p>The first two components are referred to as “mapping” in ggplot. Because the x-coordinates should be stored as a column in the <code>data.frame</code>, so we will “map” this column to be a characteristic on our ggplot. Similary, the y-coordinates should also be a mapping. This is why we write our code in the following manner. Note, we are using the <code>aes()</code> function to wrap everything.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> strain, <span class="dt">y =</span> gene_expression))</a></code></pre></div>
+<p><img src="session2_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
+<p>Even though we still have a blank canvas, but notice how the x and y axes are now labelled with the variables/columns in the <code>data.frame</code>. So what are we missing for a scatter plot? Actually putting the points on the canvas!</p>
+<p>In <code>ggplot2</code>, a plot is always a combination of layers. We have now a layer of blank canvas with axes, we will want to draw on this canvas using <code>geom_point()</code> which places the actual points on the canvas based on the mappings we have already specified. In <code>ggplot2</code>, geometries are functions that actually draws on the canvas based on the aesthetic mappings given. These are referred to as “geometries”.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> strain, </a>
+<a class="sourceLine" id="cb32-3" data-line-number="3">             <span class="dt">y =</span> gene_expression)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb32-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="session2_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<p>This is your first ggplot! Let’s give it a title!</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> strain, </a>
+<a class="sourceLine" id="cb33-3" data-line-number="3">             <span class="dt">y =</span> gene_expression)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb33-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;My first ggplot!&quot;</span>)</a></code></pre></div>
+<p><img src="session2_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
+<p>We see that the scale of data points can be very different. This is due to some genes always tend to have a higher expression than others (due to biology). So it will be a good idea to make a plot for each gene instead. This means that we need to make this plot for each value in the <code>gene_symbol</code> column in our data. This can be done using the <code>facet_wrap</code> function, which will produce a plot that we have already made, but split by all unique values in the given variable, in this case <code>gene_symbol</code>.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> strain, </a>
+<a class="sourceLine" id="cb34-3" data-line-number="3">             <span class="dt">y =</span> gene_expression)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb34-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb34-5" data-line-number="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gene_symbol) <span class="op">+</span></a>
+<a class="sourceLine" id="cb34-6" data-line-number="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;My first ggplot!&quot;</span>)</a></code></pre></div>
+<p><img src="session2_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
+<p>This plot shows that “Aldh3a1” is the main culprit for having a very different scale compared all other five genes.</p>
+<p>One way to deal with this scaling is to use the logarithm scale. <code>ggplot2</code> has a very convenient way to doing this. The <code>scale_y_log10</code> function will scale the y-axis to log10 scale and this is a very convenient function because it retains the labelling of the original data but the points are on a log10-scale.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> strain, </a>
+<a class="sourceLine" id="cb35-3" data-line-number="3">             <span class="dt">y =</span> gene_expression)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gene_symbol) <span class="op">+</span></a>
+<a class="sourceLine" id="cb35-6" data-line-number="6"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;My first ggplot!&quot;</span>)</a></code></pre></div>
+<p><img src="session2_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
+<p>We now have the scatter plots on a good scale, and we can already see some interesting features from these plots. For example, the “Aldh3a1” gene seems to show off some differences between the two strains, and the “Bbs2” gene seems to have a different variance between the two strains.</p>
+<p>So, how can we improve on this plot further?</p>
+<p>We can layer plots of other features onto this! For example, boxplots.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> strain, </a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">             <span class="dt">y =</span> gene_expression)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb36-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb36-6" data-line-number="6"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gene_symbol) <span class="op">+</span></a>
+<a class="sourceLine" id="cb36-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb36-8" data-line-number="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;My first ggplot!&quot;</span>)</a></code></pre></div>
+<p><img src="session2_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
+<p>Now it is a good time to stop and think about what we did.</p>
+<p>We started off with a <code>data.frame</code> and a blank canvas with the aim to make a scatter plot. We added aesthetic mappings onto our ggplot and evaluated the quality of our plot as we go along. Every time we identify deficiencies in our plot, we simply add more layers to the plot. This detective-work is what makes <code>ggplot2</code> is so popular, because it is very flexible in handling new ideas and plotting aesthetics. But at the same time, every aesthetic of this plot can be traced back to a particular column in the <code>data.frame</code>.</p>
+<p>There are so many functions and tricks that we can’t really go through in details. Here is a very helpful <a href="https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf">cheatsheet</a>. And in general, the best way is to Google the plot that you want and copy the code that someone else already made.</p>
+<p>Have a play with the following code. Try deleting components of the code to understand which aspect of the plot it was controlling</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> strain, </a>
+<a class="sourceLine" id="cb37-3" data-line-number="3">             <span class="dt">y =</span> gene_expression, </a>
+<a class="sourceLine" id="cb37-4" data-line-number="4">             <span class="dt">colour =</span> strain)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-7" data-line-number="7"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>gene_symbol, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-8" data-line-number="8"><span class="st">  </span><span class="kw">scale_y_log10</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-9" data-line-number="9"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-10" data-line-number="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Strain&quot;</span>, </a>
+<a class="sourceLine" id="cb37-11" data-line-number="11">       <span class="dt">y =</span> <span class="st">&quot;Gene Expression&quot;</span>, </a>
+<a class="sourceLine" id="cb37-12" data-line-number="12">       <span class="dt">title =</span> <span class="st">&quot;Boxplot of genes across strains&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-13" data-line-number="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-14" data-line-number="14"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</a></code></pre></div>
+<p><img src="session2_files/figure-html/unnamed-chunk-17-1.png" width="768" /></p>
+<div id="histogram" class="section level2">
+<h2><span class="header-section-number">7.1</span> Histogram</h2>
+<p>We will now try to make a histogram of each gene.</p>
+<p>Let’s begin with the question: what are the aesthetic mappings of a histogram?</p>
+<ul>
+<li>x-axis should be numerical values of gene expression</li>
+</ul>
+<p>Let’s try this out. For making a histogram, we need to use the <code>geom_histogram()</code> geometry.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> gene_expression)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="session2_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
+<p>You might be wondering, how is it possible that we didn’t specify what should be on the y-axis but still got a plot out? This is because by the very definition of a histogram, only counts or density of the give x-variable should be plotted. Here, the default of <code>ggplot2</code> is to use counts.</p>
+<p>Again, we see the same scaling issue as the above boxplots. Hence, we will try to apply the same functions to manipulate the plots, namely:</p>
+<ul>
+<li><code>facet_wrap</code> which creates a plot for each gene in small panels,</li>
+<li><code>scale_x_log10</code> which plots the x-axis on the log10 scale</li>
+</ul>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> gene_expression)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_histogram</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-4" data-line-number="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gene_symbol) <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-5" data-line-number="5"><span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)</a></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="session2_files/figure-html/unnamed-chunk-19-1.png" width="768" /></p>
+<p>This plot looks pretty good! We can see that some genes are unimodal while others are bimodal. This is an new characteristic of the data that we didn’t observe from the boxplots above.</p>
+<p>We can make the modality more obvious by imposing the density of each gene onto the histogram. Let’s try out the <code>geom_density</code> function then!</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb42-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> gene_expression)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb42-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_histogram</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb42-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_density</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb42-5" data-line-number="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gene_symbol) <span class="op">+</span></a>
+<a class="sourceLine" id="cb42-6" data-line-number="6"><span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)</a></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="session2_files/figure-html/unnamed-chunk-20-1.png" width="768" /></p>
+<p>This doesn’t look quite right, so what happened?</p>
+<p>If we pay attention to the y-axis of our ggplot so far, we see that it is <code>count</code>, which means that each of bin in the histograms is showing the number of observations in that interval. However, when we talk about density, it is on a very different scale to the number of counts.</p>
+<p>So how can we make a density-based histogram?</p>
+<p>Let’s think this logically: right now, the count of observation is being mapped to the y-axis (default of <code>geom_histogram</code>), and we need to overwrite this by making density to be mapped to the y-axis. So the answer would be adding an extra input of <code>y = ..density..</code> into the <code>aes()</code> function. The <code>..</code> is just a technical way that <code>ggplot</code> handles such problem which you don’t have to worry too much on the details about. (The reason that we can’t use <code>y = density</code> is because in that case ggplot will interpret this line of code as mapping a column named <code>density</code> from the <code>data.frame</code> to the plot - but such column does not exist.)</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> gene_expression, <span class="dt">y =</span> ..density..)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb44-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_histogram</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_density</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-5" data-line-number="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gene_symbol, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-6" data-line-number="6"><span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)</a></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="session2_files/figure-html/unnamed-chunk-21-1.png" width="768" /></p>
+</div>
+</div>
+<div id="plotting-two-genes-against-each-other" class="section level1">
+<h1><span class="header-section-number">8</span> Plotting two genes against each other</h1>
+<p>Now, let’s consider how we could make a scatter plot of two genes, say the “Ahrrr” and the “Cxcr7” gene. So, let’s answer the question, what are the components of a scatter plot in this case?</p>
+<ul>
+<li>Ahrrr gene expression values on the x-axis</li>
+<li>Cxcr7 gene expression values on the y-axis</li>
+</ul>
+<p>But if we look at the <code>data.frame</code> we are using for plotting, <code>long_sample_ge_data</code>, it has all the gene expression values mixed in that <code>gene_symbol</code> column. So we can’t effectively map the expression of only “Ahrrr” and “Cxcr7” to the x and y axes respectively.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">long_sample_ge_data </a></code></pre></div>
+<pre><code>## # A tibble: 924 x 6
+##    strain sample  time  dose gene_symbol gene_expression
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;
+##  1 HW     HW1      1.5     0 Ahrr                  13.0 
+##  2 HW     HW1      1.5     0 Aldh3a1                5.22
+##  3 HW     HW1      1.5     0 Bbs2                  33.9 
+##  4 HW     HW1      1.5     0 Ccbl1                237.  
+##  5 HW     HW1      1.5     0 Cxcr7                 23.5 
+##  6 HW     HW1      1.5     0 Col18a1             1694.  
+##  7 HW     HW2      1.5     0 Ahrr                   1.42
+##  8 HW     HW2      1.5     0 Aldh3a1                8.53
+##  9 HW     HW2      1.5     0 Bbs2                  45.5 
+## 10 HW     HW2      1.5     0 Ccbl1                243.  
+## # … with 914 more rows</code></pre>
+<p>So we need to think about how to separate out the gene expression values into distinct columns. You may realise this as to be exactly the opposite of the operation of <code>pivot_longer</code>. In the <code>tidyr</code> package, the <code>tidyr::pivot_wider</code> allows for this operation.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">wide_sample_ge_data =<span class="st"> </span>long_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> <span class="st">&quot;gene_symbol&quot;</span>,</a>
+<a class="sourceLine" id="cb48-3" data-line-number="3">                     <span class="dt">values_from =</span> <span class="st">&quot;gene_expression&quot;</span>)</a>
+<a class="sourceLine" id="cb48-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb48-5" data-line-number="5">wide_sample_ge_data</a></code></pre></div>
+<pre><code>## # A tibble: 154 x 10
+##    strain sample  time  dose  Ahrr Aldh3a1  Bbs2 Ccbl1 Cxcr7 Col18a1
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+##  1 HW     HW1      1.5     0 13.0     5.22  33.9  237.  23.5   1694.
+##  2 HW     HW2      1.5     0  1.42    8.53  45.5  243.  27.0   1918.
+##  3 HW     HW3      1.5     0  1.29    7.74  32.2  175.  15.5    918.
+##  4 HW     HW4      1.5   100  9.96  307.    69.7  276.  68.3   2369.
+##  5 HW     HW5      1.5   100  7.55   65.5   52.9  318.  34.0   1679.
+##  6 HW     HW6      1.5   100  5.45   81.8   48.0  244.  40.3   2397.
+##  7 HW     WW45     3     100 18.1  2929.    62.1  565.  37.5   1326.
+##  8 HW     WW46     3     100 22.4  1112.    74.1  524.  41.5   1151.
+##  9 HW     WW47     3     100 28.9  2282.    52.8  654.  74.7   1785.
+## 10 HW     WW48     3     100  7.69 2878.    42.3  525.  47.1    994.
+## # … with 144 more rows</code></pre>
+<p>Now that we have each gene as a column, we can perform our familiar ggplot operations. Have a play with each of the layers below. Notice that we also added the colour of the strain as well as a new geometry, <code>geom_smooth</code> that allows for adding linear regression lines.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">wide_sample_ge_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Ahrr,</a>
+<a class="sourceLine" id="cb50-3" data-line-number="3">             <span class="dt">y =</span> Cxcr7,</a>
+<a class="sourceLine" id="cb50-4" data-line-number="4">             <span class="dt">colour =</span> strain)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb50-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb50-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb50-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
+<a class="sourceLine" id="cb50-8" data-line-number="8"><span class="st">  </span><span class="kw">scale_y_log10</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)</a></code></pre></div>
+<p><img src="session2_files/figure-html/unnamed-chunk-24-1.png" width="768" /></p>
+</div>
+<div id="saving-data" class="section level1">
+<h1><span class="header-section-number">9</span> Saving data</h1>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">write_csv</span>(long_sample_ge_data, <span class="dt">path =</span> <span class="st">&quot;data/long_sample_ge_data.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb51-2" data-line-number="2"><span class="kw">write_csv</span>(wide_sample_ge_data, <span class="dt">path =</span> <span class="st">&quot;data/wide_sample_ge_data.csv&quot;</span>)</a></code></pre></div>
+</div>
+<div id="session-info" class="section level1">
+<h1><span class="header-section-number">10</span> Session Info</h1>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw">sessionInfo</span>()</a></code></pre></div>
+<pre><code>## R version 3.6.1 (2017-01-27)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 14.04.5 LTS
+## 
+## Matrix products: default
+## BLAS:   /home/travis/R-bin/lib/R/lib/libRblas.so
+## LAPACK: /home/travis/R-bin/lib/R/lib/libRlapack.so
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] visdat_0.5.3    readxl_1.3.1    janitor_1.2.0   forcats_0.4.0  
+##  [5] stringr_1.4.0   dplyr_0.8.3     purrr_0.3.3     readr_1.3.1    
+##  [9] tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1   tidyverse_1.3.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] tidyselect_0.2.5 xfun_0.11        haven_2.2.0      lattice_0.20-38 
+##  [5] snakecase_0.11.0 colorspace_1.4-1 vctrs_0.2.0      generics_0.0.2  
+##  [9] htmltools_0.4.0  yaml_2.2.0       utf8_1.1.4       rlang_0.4.2     
+## [13] pillar_1.4.2     glue_1.3.1       withr_2.1.2      DBI_1.0.0       
+## [17] dbplyr_1.4.2     modelr_0.1.5     lifecycle_0.1.0  munsell_0.5.0   
+## [21] gtable_0.3.0     cellranger_1.1.0 rvest_0.3.5      evaluate_0.14   
+## [25] labeling_0.3     knitr_1.26       fansi_0.4.0      broom_0.5.2     
+## [29] Rcpp_1.0.3       scales_1.1.0     backports_1.1.5  jsonlite_1.6    
+## [33] farver_2.0.1     fs_1.3.1         hms_0.5.2        digest_0.6.23   
+## [37] stringi_1.4.3    grid_3.6.1       cli_1.1.0        tools_3.6.1     
+## [41] magrittr_1.5     lazyeval_0.2.2   crayon_1.3.4     pkgconfig_2.0.3 
+## [45] zeallot_0.1.0    ellipsis_0.3.0   xml2_1.2.2       reprex_0.3.0    
+## [49] lubridate_1.7.4  assertthat_0.2.1 rmarkdown_1.18   httr_1.4.1      
+## [53] rstudioapi_0.10  R6_2.4.1         nlme_3.1-140     compiler_3.6.1</code></pre>
+</div>
+<div id="references" class="section level1">
+<h1><span class="header-section-number">11</span> References</h1>
+<p>Need to reference the tidyverse, there’s a new canonical way to do that, one reference for all tidyverse packages.</p>
+<p>Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, <a href="https://doi.org/10.21105/joss.01686" class="uri">https://doi.org/10.21105/joss.01686</a></p>
+<pre><code>@Article{Tidyverse:2019,
+    title = {Welcome to the {tidyverse}},
+    author = {Hadley Wickham and Mara Averick and Jennifer Bryan and Winston Chang and Lucy D&#39;Agostino McGowan and Romain François and Garrett Grolemund and Alex Hayes and Lionel Henry and Jim Hester and Max Kuhn and Thomas Lin Pedersen and Evan Miller and Stephan Milton Bache and Kirill Müller and Jeroen Ooms and David Robinson and Dana Paige Seidel and Vitalie Spinu and Kohske Takahashi and Davis Vaughan and Claus Wilke and Kara Woo and Hiroaki Yutani},
+    year = {2019},
+    journal = {Journal of Open Source Software},
+    volume = {4},
+    number = {43},
+    pages = {1686},
+    doi = {10.21105/joss.01686},
+  }</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

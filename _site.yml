@@ -1,0 +1,20 @@
+# This file controls the layout of the website. 
+name: "BioinfoSummer - Tidyverse"
+navbar:
+  title: "BioinfoSummer - Tidyverse"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Session 1"
+      href: session1.html
+    - text: "Session 2"
+      href: session2.html
+    - text: "Session 3"
+      href: session3.html
+output_dir: "."
+output:
+  html_document:
+    theme: cosmo
+    highlight: kate # kind of required for copy to clipboard
+    includes:
+      in_header: header.html

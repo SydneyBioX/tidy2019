@@ -1,0 +1,26 @@
+/* Whole document: */
+body{
+  font-family: Helvetica;
+  font-size: 15pt;
+}
+
+/* Clipboard --------------------------*/
+
+.hasCopyButton {
+  position: relative;
+}
+
+.btn-copy-ex {
+  font-size: 10pt;
+  position: absolute;
+  right: 0;
+  /* use top: 0 without code folding */
+  top: 0;
+  /* use bottom: 0 with code folding */
+  /* bottom: 0;  */
+  visibility: hidden;
+}
+
+.hasCopyButton:hover button.btn-copy-ex {
+  visibility: visible;
+}
