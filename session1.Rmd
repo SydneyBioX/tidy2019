@@ -297,12 +297,12 @@ filter_data %>%
 write_csv(filter_data, path = "data/clean_sample_data.csv")
 ```
 
-# Session Info 
-
-```{r}
-sessionInfo()
-```
-
 # References
 
 Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
+# Session Info 
+
+```{r, results = "show"}
+sessionInfo()
+```
