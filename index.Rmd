@@ -46,9 +46,11 @@ Ideally, you should at least know what `R` is, since this is not a programming w
 
 ## Running workshop on the cloud
 
-We will use RStudio Cloud to run this workshop. The link will be posted at the start of the workshop. 
+We will use RStudio Cloud to run this workshop. 
 
-Please let your instructors know of any problems. 
+1. Go to https://rstudio.cloud/, create an account and log in. 
+2. Click the little arrow next to the "New Project" and select "New Project from Git Repo".
+3. Enter "https://github.com/SydneyBioX/tidy2019" and you are all set up. 
 
 # Clipboard
 
