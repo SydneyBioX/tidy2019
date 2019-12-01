@@ -11,6 +11,13 @@ navbar:
       href: session2.html
     - text: "Session 3"
       href: session3.html
+  right:
+    - icon: fa-users
+      text: Community
+      href: community.html
+    - icon: fa-star
+      text: Tips
+      href: tips.html
 output_dir: "."
 output:
   html_document:
@@ -18,3 +25,5 @@ output:
     highlight: kate # kind of required for copy to clipboard
     includes:
       in_header: header.html
+    css:
+    - assets/kbd.css

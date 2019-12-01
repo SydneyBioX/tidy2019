@@ -1,0 +1,64 @@
+---
+title: "Tips and tricks"
+---
+
+## Slides as PDF
+
+You can save the slides as pdf by going to _Print_ in a browser (Google Chrome works best) and then selecting _save as pdf_.
+
+## RStudio
+
+1. The command to clear all variables from the environment (workspace)
+
+    ```
+    rm(list=ls())
+    ```
+
+1. In RStudio the keyboard shortcut for the pipe operator `%>%` is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> (Mac).
+1. In RStudio the keyboard shortcut for the assignment operator `<-` is <kbd>Alt</kbd> + <kbd>-</kbd> (Windows) or <kbd>Option</kbd> + <kbd>-</kbd> (Mac).
+1. In RStudio use <kbd>Ctrl</kbd>+<kbd>L</kbd> to clear all the code from your console.
+1. If you're typing in a script in the source editor pane but you want to move the curser to the console use <kbd>Ctrl</kbd>+<kbd>2</kbd>.  You can also use <kbd>Ctrl</kbd>+<kbd>1</kbd> to move the curser back to the source editor.
+1. To run a line of code from the source editor use <kbd>Ctrl</kbd>+<kbd>Enter</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>Enter</kbd> (Mac).
+1. You can "tear" code panes or data view panes out of the RStudio window which can be particularly useful on big screens or when using multiple monitors.
+1. You can scroll through your command history by clicking <kbd>Ctrl</kbd> + <kbd>↑</kbd> (Windows) or <kbd>Cmd</kbd> + <kbd>↑</kbd> (Mac).  If you know what the line of code you're looking for started with, type the first few characters and then press <kbd>Ctrl/Cmd</kbd> + <kbd>↑</kbd> and it will only search a matching subset of the history.
+1. You can rename all instances of a variable name by highlighting one instance of the variable name and then using `Code > Rename in Scope`.  This is better than using `Edit > Replace and Find` because it only looks for whole word matches.
+
+
+## R Markdown
+
+```{r MdTips, echo=FALSE}
+library("knitr")
+#opts_chunk$set(tidy = TRUE, results = 'hide', eval=FALSE) 
+options(width = 65)
+```
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.  A useful guide to help you get started can be found [here](http://shiny.rstudio.com/articles/rmarkdown.html).
+
+Rmarkdown is a great way to perform reproducible research and generate reports.
+
+### Super brief overview
+
+1. Create a new Rmd file.  In RStudio `File -> New File -> R Markdown...`
+2. When you have a Rmd file open in RStudio there's a `Knit HTML` button up the top of the source window.  You click that button to turn the markdown into HTML (or PDF or Word).
+3. Text and R code can be combined in the Rmd file.  Code chunks begin with three back ticks followed by `r`, the (optional) chunk name and any arugments: ` ```{r}` or ` ```{r chunk_name, tidy=TRUE}`.  The chunk also ends with three back ticks ` ``` `.  Examples can be seen in the template that opens along as a new file in RStudio.
+
+The keyboard shortcut for inserting a chunk is <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd> (Mac).
+
+### Including Plots
+
+You can embed static plots in an rmarkdown document without doing anything special.  Important chunk options are `fig.width` and `fig.height` to set the figure width and height for example ` ```{r, fig.width=4, fig.height=6}`.
+
+### Chunk options
+
+Some useful chunk options:
+
+- `tidy = TRUE` makes the R code more readable (proper spacing)
+- `results = 'hide'` hide the results of the chunk output (i.e. don't show them)
+- `results = 'hold'` hold the results of the chunk output until all commands in the chunk have been run
+- `warning = FALSE` don't show any warning messages (e.g. when **ggplot2** drops observations)
+- `message = FALSE` don't show any messages (e.g. when packages load)
+- `{r chunkname}` you can name your chunks with text immediately after the `r`.  This can be particularly useful when errors pop up as it makes it easier to identify which chunk the error occurs in.
+
+
+
+

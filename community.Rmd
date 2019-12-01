@@ -1,0 +1,30 @@
+---
+title: "Data science community"
+---
+
+## Twitter `r icon::fa("twitter")`
+
+Get an account and start following some data scientists to keep up with the latest developments in the R space. 
+
+- [dataandme](https://twitter.com/dataandme) (Mara Averick, tidyverse dev advocate)
+- [rlbarter](https://twitter.com/rlbarter) (Rebecca Barter, USYD grad, PhD student at UC Berkeley)
+- [sarah_romanes](https://twitter.com/sarah_romanes) (Sarah Romanes, PhD student at USYD)
+- [JenRichmondPhD](https://twitter.com/JenRichmondPhD) (Jenny Richmond, co-founder R Ladies Sydney)
+- [statsgen](https://twitter.com/statsgen) (Emi Tanaka)
+- [hadleywickham](https://twitter.com/hadleywickham) (Hadley Wickham, chief scientist at RStudio)
+
+## Jobs for statisticians and data scientists
+
+You should be starting to think about where you would eventually like to work and what kind of job you might like to end up doing in the future. 
+Here are some resources to get you thinking about the diverse range of opportunities open to people with data skills.
+
+- Internship opportunities [au.gradconnection.com](https://au.gradconnection.com/)
+- Statistics Society of Australia Careers Centre [careers.statsoc.org.au](https://careers.statsoc.org.au/)
+- A range of historical job advertisements calling for data scientists and statisticians [garthtarr.com/jobs-for-statisticians](http://garthtarr.com/jobs-for-statisticians/)
+- DataScientistJobs [datascientistjobs.co.uk](https://www.datascientistjobs.co.uk/)
+- StatsJobs [statsjobs.com](https://www.statsjobs.com/)
+- MathAdds Careers Guide [careers.amsi.org.au](https://careers.amsi.org.au/)
+- AustMS Job Opportunities page [austms.org.au/Job+opportunities](http://www.austms.org.au/Job+opportunities)
+
+
+

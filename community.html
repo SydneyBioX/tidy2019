@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Kevin Wang and Garth Tarr" />
 
 
-<title>Enter the Tidyverse</title>
+<title>Data science community</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,8 +20,7 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.3.1/css/fontawesome-all.min.css" rel="stylesheet" />
 <script defer src="https://pro.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-d84LGg2pm9KhR4mCAs3N29GQ4OYNy+K+FBHX8WhimHpPm86c839++MDABegrZ3gn" crossorigin="anonymous"></script>
 
 <!-- clipboard.js -->
@@ -60,7 +58,7 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="assets/kbd.css" type="text/css" />
 
 
 
@@ -301,53 +299,35 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Enter the Tidyverse</h1>
-<h4 class="author">Kevin Wang and Garth Tarr</h4>
-<h4 class="date">2-3 December 2019</h4>
+<h1 class="title toc-ignore">Data science community</h1>
 
 </div>
 
 
-<div id="aim-of-this-workshop" class="section level1">
-<h1>Aim of this workshop</h1>
-<p>In this workshop, we will teach you some necessary data wrangling skills to turn a piece of real clinical data into a nicely written report. We will be operating under the <code>tidyverse</code> framework in <code>R</code>, which is very powerful for data manipulations, visualisation and modelling.</p>
+<div class="section level2">
+<h2>Twitter <i class="fab  fa-twitter "></i></h2>
+<p>Get an account and start following some data scientists to keep up with the latest developments in the R space.</p>
+<ul>
+<li><a href="https://twitter.com/dataandme">dataandme</a> (Mara Averick, tidyverse dev advocate)</li>
+<li><a href="https://twitter.com/rlbarter">rlbarter</a> (Rebecca Barter, USYD grad, PhD student at UC Berkeley)</li>
+<li><a href="https://twitter.com/sarah_romanes">sarah_romanes</a> (Sarah Romanes, PhD student at USYD)</li>
+<li><a href="https://twitter.com/JenRichmondPhD">JenRichmondPhD</a> (Jenny Richmond, co-founder R Ladies Sydney)</li>
+<li><a href="https://twitter.com/statsgen">statsgen</a> (Emi Tanaka)</li>
+<li><a href="https://twitter.com/hadleywickham">hadleywickham</a> (Hadley Wickham, chief scientist at RStudio)</li>
+</ul>
 </div>
-<div id="what-is-the-tidyverse" class="section level1">
-<h1>What is the <code>tidyverse</code>?</h1>
-<p>The <code>tidyverse</code> is a collection of <code>R</code> packages that aims to streamline the following workflow.</p>
-<p><img src="https://rstudio-education.github.io/tidyverse-cookbook/images/data-science-workflow.png" /></p>
-<p>While we will not cover every package in the <code>tidyverse</code>, we will cover the most important packages across three sessions.</p>
-</div>
-<div id="plan-of-the-workshop" class="section level1 tabset">
-<h1>Plan of the workshop</h1>
-<div id="monday-1520-1630" class="section level2">
-<h2>1. Monday (15:20-16:30)</h2>
-<p>In this session, we will first familiarise ourselves of the basics of <code>R</code>, e.g. loading in an Excel dataset, recognising variable types. We will be using the <code>R Markdown</code> documentation system, which allows us to execute codes, visualise output and writing a report. We will also start to learn the basics of data manipulations such as filtering of observations and selection of columns.</p>
-<p>Some of the packages to be covered: <code>rmarkdown</code>, <code>readr</code>, <code>readxl</code>, <code>voom</code>, <code>janitor</code> and <code>dplyr</code>.</p>
-</div>
-<div id="tuesday-1330-1500" class="section level2">
-<h2>2. Tuesday (13:30-15:00)</h2>
-<p>In this session, we will focus on the basics of data cleaning and data visualisation. This type of tasks is where the <code>tidyverse</code> framework becomes one of the most powerful tools in data science. We will learn how to summarise data, converting between “wide” and “tall” data frames for the purpose of visualisation and also how to integrate different datasets. At the end of this session, we will massage the data into a suitable format that we can start to think about modelling in the next session.</p>
-<p>Some of the packages to be covered: <code>dplyr</code>, <code>tidyr</code> and <code>ggplot2</code>.</p>
-</div>
-<div id="tuesday-1530-1700" class="section level2">
-<h2>3. Tuesday (15:30-17:00)</h2>
-<p>In this session, we will focus on the modelling of our cleaned data from the previous session. We will first introduce lists and use <code>for</code> loops to perform some basic modelling tasks to understand the basics of <code>R</code> programming. Then, we will introduce some powerful wrapper functions that can help us to write better and cleaner codes.</p>
-<p>Some of the packages to be covered: <code>tibble</code>, <code>broom</code> and <code>purrr</code>.</p>
-</div>
-</div>
-<div id="prerequisites" class="section level1">
-<h1>Prerequisites</h1>
-<p>Ideally, you should at least know what <code>R</code> is, since this is not a programming workshop, you can still pick up important practical skills by running the codes we provided.</p>
-<div id="running-workshop-on-the-cloud" class="section level2">
-<h2>Running workshop on the cloud</h2>
-<p>We will use RStudio Cloud to run this workshop. The link will be posted at the start of the workshop.</p>
-<p>Please let your instructors know of any problems.</p>
-</div>
-</div>
-<div id="clipboard" class="section level1">
-<h1>Clipboard</h1>
-<p>In some circumstances, we might need to share codes beyond the existing materials. Please click <a href="https://docs.google.com/document/d/136YffzxjkUM8RIGsnjD_yOkCTWw4Ijdwjy4_58nC-zc/edit?usp=sharing">here</a> to access these codes.</p>
+<div id="jobs-for-statisticians-and-data-scientists" class="section level2">
+<h2>Jobs for statisticians and data scientists</h2>
+<p>You should be starting to think about where you would eventually like to work and what kind of job you might like to end up doing in the future. Here are some resources to get you thinking about the diverse range of opportunities open to people with data skills.</p>
+<ul>
+<li>Internship opportunities <a href="https://au.gradconnection.com/">au.gradconnection.com</a></li>
+<li>Statistics Society of Australia Careers Centre <a href="https://careers.statsoc.org.au/">careers.statsoc.org.au</a></li>
+<li>A range of historical job advertisements calling for data scientists and statisticians <a href="http://garthtarr.com/jobs-for-statisticians/">garthtarr.com/jobs-for-statisticians</a></li>
+<li>DataScientistJobs <a href="https://www.datascientistjobs.co.uk/">datascientistjobs.co.uk</a></li>
+<li>StatsJobs <a href="https://www.statsjobs.com/">statsjobs.com</a></li>
+<li>MathAdds Careers Guide <a href="https://careers.amsi.org.au/">careers.amsi.org.au</a></li>
+<li>AustMS Job Opportunities page <a href="http://www.austms.org.au/Job+opportunities">austms.org.au/Job+opportunities</a></li>
+</ul>
 </div>
 
 

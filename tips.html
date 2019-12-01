@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Kevin Wang and Garth Tarr" />
 
 
-<title>Enter the Tidyverse</title>
+<title>Tips and tricks</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -60,7 +59,7 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="assets/kbd.css" type="text/css" />
 
 
 
@@ -301,53 +300,59 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Enter the Tidyverse</h1>
-<h4 class="author">Kevin Wang and Garth Tarr</h4>
-<h4 class="date">2-3 December 2019</h4>
+<h1 class="title toc-ignore">Tips and tricks</h1>
 
 </div>
 
 
-<div id="aim-of-this-workshop" class="section level1">
-<h1>Aim of this workshop</h1>
-<p>In this workshop, we will teach you some necessary data wrangling skills to turn a piece of real clinical data into a nicely written report. We will be operating under the <code>tidyverse</code> framework in <code>R</code>, which is very powerful for data manipulations, visualisation and modelling.</p>
+<div id="slides-as-pdf" class="section level2">
+<h2>Slides as PDF</h2>
+<p>You can save the slides as pdf by going to <em>Print</em> in a browser (Google Chrome works best) and then selecting <em>save as pdf</em>.</p>
 </div>
-<div id="what-is-the-tidyverse" class="section level1">
-<h1>What is the <code>tidyverse</code>?</h1>
-<p>The <code>tidyverse</code> is a collection of <code>R</code> packages that aims to streamline the following workflow.</p>
-<p><img src="https://rstudio-education.github.io/tidyverse-cookbook/images/data-science-workflow.png" /></p>
-<p>While we will not cover every package in the <code>tidyverse</code>, we will cover the most important packages across three sessions.</p>
+<div id="rstudio" class="section level2">
+<h2>RStudio</h2>
+<ol style="list-style-type: decimal">
+<li><p>The command to clear all variables from the environment (workspace)</p>
+<pre><code>rm(list=ls())</code></pre></li>
+<li>In RStudio the keyboard shortcut for the pipe operator <code>%&gt;%</code> is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> (Mac).</li>
+<li>In RStudio the keyboard shortcut for the assignment operator <code>&lt;-</code> is <kbd>Alt</kbd> + <kbd>-</kbd> (Windows) or <kbd>Option</kbd> + <kbd>-</kbd> (Mac).</li>
+<li>In RStudio use <kbd>Ctrl</kbd>+<kbd>L</kbd> to clear all the code from your console.</li>
+<li>If you’re typing in a script in the source editor pane but you want to move the curser to the console use <kbd>Ctrl</kbd>+<kbd>2</kbd>. You can also use <kbd>Ctrl</kbd>+<kbd>1</kbd> to move the curser back to the source editor.</li>
+<li>To run a line of code from the source editor use <kbd>Ctrl</kbd>+<kbd>Enter</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>Enter</kbd> (Mac).</li>
+<li>You can “tear” code panes or data view panes out of the RStudio window which can be particularly useful on big screens or when using multiple monitors.</li>
+<li>You can scroll through your command history by clicking <kbd>Ctrl</kbd> + <kbd>↑</kbd> (Windows) or <kbd>Cmd</kbd> + <kbd>↑</kbd> (Mac). If you know what the line of code you’re looking for started with, type the first few characters and then press <kbd>Ctrl/Cmd</kbd> + <kbd>↑</kbd> and it will only search a matching subset of the history.</li>
+<li><p>You can rename all instances of a variable name by highlighting one instance of the variable name and then using <code>Code &gt; Rename in Scope</code>. This is better than using <code>Edit &gt; Replace and Find</code> because it only looks for whole word matches.</p></li>
+</ol>
 </div>
-<div id="plan-of-the-workshop" class="section level1 tabset">
-<h1>Plan of the workshop</h1>
-<div id="monday-1520-1630" class="section level2">
-<h2>1. Monday (15:20-16:30)</h2>
-<p>In this session, we will first familiarise ourselves of the basics of <code>R</code>, e.g. loading in an Excel dataset, recognising variable types. We will be using the <code>R Markdown</code> documentation system, which allows us to execute codes, visualise output and writing a report. We will also start to learn the basics of data manipulations such as filtering of observations and selection of columns.</p>
-<p>Some of the packages to be covered: <code>rmarkdown</code>, <code>readr</code>, <code>readxl</code>, <code>voom</code>, <code>janitor</code> and <code>dplyr</code>.</p>
+<div id="r-markdown" class="section level2">
+<h2>R Markdown</h2>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>. A useful guide to help you get started can be found <a href="http://shiny.rstudio.com/articles/rmarkdown.html">here</a>.</p>
+<p>Rmarkdown is a great way to perform reproducible research and generate reports.</p>
+<div id="super-brief-overview" class="section level3">
+<h3>Super brief overview</h3>
+<ol style="list-style-type: decimal">
+<li>Create a new Rmd file. In RStudio <code>File -&gt; New File -&gt; R Markdown...</code></li>
+<li>When you have a Rmd file open in RStudio there’s a <code>Knit HTML</code> button up the top of the source window. You click that button to turn the markdown into HTML (or PDF or Word).</li>
+<li>Text and R code can be combined in the Rmd file. Code chunks begin with three back ticks followed by <code>r</code>, the (optional) chunk name and any arugments: <code>```{r}</code> or <code>```{r chunk_name, tidy=TRUE}</code>. The chunk also ends with three back ticks <code>```</code>. Examples can be seen in the template that opens along as a new file in RStudio.</li>
+</ol>
+<p>The keyboard shortcut for inserting a chunk is <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd> (Mac).</p>
 </div>
-<div id="tuesday-1330-1500" class="section level2">
-<h2>2. Tuesday (13:30-15:00)</h2>
-<p>In this session, we will focus on the basics of data cleaning and data visualisation. This type of tasks is where the <code>tidyverse</code> framework becomes one of the most powerful tools in data science. We will learn how to summarise data, converting between “wide” and “tall” data frames for the purpose of visualisation and also how to integrate different datasets. At the end of this session, we will massage the data into a suitable format that we can start to think about modelling in the next session.</p>
-<p>Some of the packages to be covered: <code>dplyr</code>, <code>tidyr</code> and <code>ggplot2</code>.</p>
+<div id="including-plots" class="section level3">
+<h3>Including Plots</h3>
+<p>You can embed static plots in an rmarkdown document without doing anything special. Important chunk options are <code>fig.width</code> and <code>fig.height</code> to set the figure width and height for example <code>```{r, fig.width=4, fig.height=6}</code>.</p>
 </div>
-<div id="tuesday-1530-1700" class="section level2">
-<h2>3. Tuesday (15:30-17:00)</h2>
-<p>In this session, we will focus on the modelling of our cleaned data from the previous session. We will first introduce lists and use <code>for</code> loops to perform some basic modelling tasks to understand the basics of <code>R</code> programming. Then, we will introduce some powerful wrapper functions that can help us to write better and cleaner codes.</p>
-<p>Some of the packages to be covered: <code>tibble</code>, <code>broom</code> and <code>purrr</code>.</p>
+<div id="chunk-options" class="section level3">
+<h3>Chunk options</h3>
+<p>Some useful chunk options:</p>
+<ul>
+<li><code>tidy = TRUE</code> makes the R code more readable (proper spacing)</li>
+<li><code>results = 'hide'</code> hide the results of the chunk output (i.e. don’t show them)</li>
+<li><code>results = 'hold'</code> hold the results of the chunk output until all commands in the chunk have been run</li>
+<li><code>warning = FALSE</code> don’t show any warning messages (e.g. when <strong>ggplot2</strong> drops observations)</li>
+<li><code>message = FALSE</code> don’t show any messages (e.g. when packages load)</li>
+<li><code>{r chunkname}</code> you can name your chunks with text immediately after the <code>r</code>. This can be particularly useful when errors pop up as it makes it easier to identify which chunk the error occurs in.</li>
+</ul>
 </div>
-</div>
-<div id="prerequisites" class="section level1">
-<h1>Prerequisites</h1>
-<p>Ideally, you should at least know what <code>R</code> is, since this is not a programming workshop, you can still pick up important practical skills by running the codes we provided.</p>
-<div id="running-workshop-on-the-cloud" class="section level2">
-<h2>Running workshop on the cloud</h2>
-<p>We will use RStudio Cloud to run this workshop. The link will be posted at the start of the workshop.</p>
-<p>Please let your instructors know of any problems.</p>
-</div>
-</div>
-<div id="clipboard" class="section level1">
-<h1>Clipboard</h1>
-<p>In some circumstances, we might need to share codes beyond the existing materials. Please click <a href="https://docs.google.com/document/d/136YffzxjkUM8RIGsnjD_yOkCTWw4Ijdwjy4_58nC-zc/edit?usp=sharing">here</a> to access these codes.</p>
 </div>
 
 
