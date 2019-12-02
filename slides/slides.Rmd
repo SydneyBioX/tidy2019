@@ -21,10 +21,23 @@ output:
 ---
 
 
-# Your instructors
+## Your instructors
 
 + Kevin: PhD candidate in statistics and bioinformatics. `r icon::fa("twitter")` `@KevinWang009`
 + Garth: Lecturer in statistics and data science. `r icon::fa("twitter")` `@garthtarr`
+
+<br>
+
+
+<br>
+
+.blockquote[
+
+<h1>
+bit.ly/bis2019_tidy
+</h1>
+
+]
 
 ---
 
