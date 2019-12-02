@@ -23,8 +23,8 @@ output:
 
 # Your instructors
 
-+ Kevin: PhD candidate in statistics and bioinformatics.
-+ Garth: Lecturer in statistics and data science. 
++ Kevin: PhD candidate in statistics and bioinformatics. `r icon::fa("twitter")` `@KevinWang009`
++ Garth: Lecturer in statistics and data science. `r icon::fa("twitter")` `@garthtarr`
 
 ---
 
@@ -215,7 +215,7 @@ Read more: https://r4ds.had.co.nz/pipes.html
 
 # Extension exercises of Session 1
 
-1. Return to the `diamonds` data frame from the start of the session.  Find the number of observations for each cut. 
+1. Load the `diamonds` data from `ggplot2`.  Find the number of observations for each cut. 
 2. Calculate summary statistics of the price for each cut (e.g. mean, median, min, max, ...)
 
 ---
