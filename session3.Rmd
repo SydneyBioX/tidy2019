@@ -29,7 +29,7 @@ library(tidyverse)
 
 # A quick word about `tibble`
 
-Most of the time, you can think of a `tibble` as being identical to a `data.frame`. In fact, in Session 1 and 2, even though we keep referring to the data as `data.frame`, but they are actually `tiblle`s. `tibble` is the default alternative to `data.frame` in the `tidyverse`. 
+Most of the time, you can think of a `tibble` as being identical to a `data.frame`. In fact, in Session 1 and 2, even though we keep referring to the data as `data.frame`, but they are actually `tibble`s. A `tibble` is the default alternative to `data.frame` in the `tidyverse`. 
 
 The reason that `tibble` is so useful is that it allows for `list` objects as columns. This will come in very handy when performing modelling tasks. Have a look at the picture below: 
 
@@ -52,7 +52,7 @@ clean_data
 ```
 
 
-# t-test
+# Performing a t-tests
 
 A typical task in bioinformatics is to perform differential gene expression analysis. That is, we want to identify genes that has a different expression levels between two conditions. While there are many ways that this can be done, we will opt for the simplest approach of using a t-test. 
 
@@ -101,8 +101,6 @@ for(i in 3:56){
 }
 ```
 
-
-
 # Nesting data
 
 Now, let's think about the task of calculating a t-test for each gene. This may seem like a very difficult task, but we can identify its components to achieve simplifications and generalisations. 
@@ -115,7 +113,6 @@ tidy_test = function(this_data){
     broom::tidy()
 }
 ```
-
 
 So now, our very difficult task of performing 54 t-tests is simplified to spliting `clean_data` into 54 datasets, one for each gene. 
 
@@ -159,7 +156,6 @@ In `gene_nest`, each gene only has "one row", but in the `small_data` column, ea
 
 So why are we doing this complicated structure? This is because our original aim is to split the `gene_long` data into 54 smaller data, and we have in fact achived that here with the `small_data` column. 
 
-
 A simplification of `small_data` is this diagram: 
 
 ![](assets/nest2.png)
@@ -173,7 +169,6 @@ for(i in 1:54){
 }
 ```
 
-
 # `map` function in `purrr`
 
 The `map` function from the `purrr` package is a tremendously powerful function. In simply terms, it allows us to write a `for` loop is a very simple and readable way. 
@@ -183,7 +178,6 @@ The `map` function from the `purrr` package is a tremendously powerful function.
 purrr::map(.x = gene_nest$small_data,
            .f = tidy_test)
 ```
-
 
 Why is this code better than the `for` loop even though they achieved the same output? The biggest reason is that **we don't have to read and understand individual lines** inside the `for` loop. We simply need to know: 
 
@@ -207,8 +201,6 @@ gene_test = gene_nest %>%
 
 gene_test
 ```
-
-
 
 A simplification of `gene_test` is this diagram: 
 
@@ -269,7 +261,6 @@ boxplot_data %>%
   facet_wrap(~ gene_symbol, scales = "free")
 ```
 
-
 We can also prettify the plots by creating a `label` column in the data, which combines the gene symbols and p-values. 
 
 ```{r}
@@ -283,9 +274,6 @@ boxplot_data %>%
   labs(x = "Strains", 
        y = "Gene expression values")
 ```
-
-
-
 
 Alternatively, the `ggpubr` package also offers some default graphics that are similar to `ggplot2`, though with a different syntax.
 

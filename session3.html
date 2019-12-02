@@ -489,7 +489,7 @@ div.tocify {
 </div>
 <div id="a-quick-word-about-tibble" class="section level1">
 <h1><span class="header-section-number">3</span> A quick word about <code>tibble</code></h1>
-<p>Most of the time, you can think of a <code>tibble</code> as being identical to a <code>data.frame</code>. In fact, in Session 1 and 2, even though we keep referring to the data as <code>data.frame</code>, but they are actually <code>tiblle</code>s. <code>tibble</code> is the default alternative to <code>data.frame</code> in the <code>tidyverse</code>.</p>
+<p>Most of the time, you can think of a <code>tibble</code> as being identical to a <code>data.frame</code>. In fact, in Session 1 and 2, even though we keep referring to the data as <code>data.frame</code>, but they are actually <code>tibble</code>s. A <code>tibble</code> is the default alternative to <code>data.frame</code> in the <code>tidyverse</code>.</p>
 <p>The reason that <code>tibble</code> is so useful is that it allows for <code>list</code> objects as columns. This will come in very handy when performing modelling tasks. Have a look at the picture below:</p>
 <p><img src="https://rstudio-education.github.io/tidyverse-cookbook/images/tidyr-nest.png" /></p>
 <p>Suppose that we want to perform modelling within each <code>Species</code> of three different iris flowers, it would be much better to utilise this new structure of representation of data in the middle and apply the modelling for each element of the <code>Measurements</code> column. This is indeed what we will try to achieve in this session.</p>
@@ -505,8 +505,8 @@ div.tocify {
 <span id="cb2-6"><a href="#cb2-6"></a></span>
 <span id="cb2-7"><a href="#cb2-7"></a>clean_data</span></code></pre></div>
 </div>
-<div id="t-test" class="section level1">
-<h1><span class="header-section-number">5</span> t-test</h1>
+<div id="performing-a-t-tests" class="section level1">
+<h1><span class="header-section-number">5</span> Performing a t-tests</h1>
 <p>A typical task in bioinformatics is to perform differential gene expression analysis. That is, we want to identify genes that has a different expression levels between two conditions. While there are many ways that this can be done, we will opt for the simplest approach of using a t-test.</p>
 <p>In <code>R</code>, t-test can be performed using the <code>t.test</code> function. Below, we will perform a t-test on the Ahrrr gene between the two strains of mice. (Note: statistically speaking, this test is a bad idea due to the existence of different <code>dose</code> and <code>time</code> could creating confounding. However, since statistics is not the focus of this workshop so we will ignore this fact for now.)</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">t.test</span>(Ahrr <span class="op">~</span><span class="st"> </span>strain, <span class="dt">data =</span> clean_data)</span></code></pre></div>
