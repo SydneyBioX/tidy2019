@@ -43,8 +43,6 @@ library(visdat)
 
 Before we take a dive into the **tidyverse**, let's take a minute to learn a bit variable types in R. The reason that we want to do this is because everything in R is stored as an object which ultimately determines its behaviour. 
 
-<!-- GT: NOT SURE ABOUT THIS SECTION, THINK ALL WE REALLY NEED IS TO CONSIDER THE VARIABLE TYPE GIVEN IN dplyr::glimpse() -->
-
 ```{r}
 obj1 = c(TRUE, FALSE)
 obj1
@@ -246,8 +244,6 @@ We will now filtering out the three rows of column headings, which we have conve
 
 We will use the `filter()` function from the **dplyr** package. The function takes in `logical` vectors of the same length as the `nrow(data)` as the input. 
 
-<!-- consider using `drop_na()` -->
-
 ```{r}
 ## These are the rows we want to filter out
 mutate_data %>% 
@@ -256,6 +252,8 @@ mutate_data %>%
 ## The reverse of the above is written with a `!`. 
 filter_data = mutate_data %>% 
   dplyr::filter(!is.na(time))
+
+# could also use: mutate_data %>% drop_na(time)
 
 filter_data
 ```

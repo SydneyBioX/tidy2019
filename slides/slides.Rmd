@@ -34,8 +34,10 @@ We will use RStudio Cloud to run this workshop.
 
 1. Go to https://rstudio.cloud/, create an account and log in. 
 2. Click the little arrow next to the "New Project" and select "New Project from Git Repo".
-3. Enter "https://github.com/SydneyBioX/tidy2019" and you are all set up.
-4. Run this line of code `source("install.R")`
+3. Enter "https://github.com/SydneyBioX/tidy2019" (it will download some things)
+4. Give your project a name (a better name than Untitled Project).
+5. Run this line of code `source("install.R")`  (this may take a few minutes to run, set it running then get involved in the icebreaker activity!)
+6. If things seem to be running slowly after installing all the packages, just refresh the webpage.
 
 _If you would prefer to run R and RStudio locally on your own machine:_
 
@@ -56,8 +58,6 @@ Directions:
 - You will have 5 minutes to try and fill in as many squares as you can with different names.
 - You can have more than one name in each square and you can have the same name in many different squares.
 - The "winner" is the first person who fills in (at least) one name in each box.
-
-
 
 ---
 
@@ -219,6 +219,11 @@ Read more: https://r4ds.had.co.nz/pipes.html
 2. Calculate summary statistics of the price for each cut (e.g. mean, median, min, max, ...)
 
 ---
+class: segue
+
+# Session 2: `dplyr`, `tidyr` and `ggplot2`
+
+---
 
 # Session 2: visualisation with `ggplot2` 
 
@@ -235,8 +240,6 @@ Read more: https://r4ds.had.co.nz/pipes.html
 ---
 
 ## A quick example of `ggplot2`
-
-
 
 ```{r, eval = FALSE, echo = FALSE}
 library(dslabs)
@@ -384,9 +387,17 @@ long_data %>%
 </center>
 
 ---
+class: segue
 
 # Session 3: modelling with `tidyverse`
 
 ---
 
+# t-tests
+
+---
+
 # Final remarks
+
+## Where to go for further help
+
