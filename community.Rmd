@@ -6,12 +6,15 @@ title: "Data science community"
 
 Get an account and start following some data scientists to keep up with the latest developments in the R space. 
 
+- [garthtarr](https://twitter.com/garthtarr) (Garth Tarr, lecturer at USYD, instructor of this workshop)
+- [kevinwang009](https://twitter.com/kevinwang009) (Kevin Wang, PhD student at USYD, instructor of this workshop)
+- [hadleywickham](https://twitter.com/hadleywickham) (Hadley Wickham, chief scientist at RStudio)
 - [dataandme](https://twitter.com/dataandme) (Mara Averick, tidyverse dev advocate)
+- [statsgen](https://twitter.com/statsgen) (Emi Tanaka)
 - [rlbarter](https://twitter.com/rlbarter) (Rebecca Barter, USYD grad, PhD student at UC Berkeley)
 - [sarah_romanes](https://twitter.com/sarah_romanes) (Sarah Romanes, PhD student at USYD)
 - [JenRichmondPhD](https://twitter.com/JenRichmondPhD) (Jenny Richmond, co-founder R Ladies Sydney)
-- [statsgen](https://twitter.com/statsgen) (Emi Tanaka)
-- [hadleywickham](https://twitter.com/hadleywickham) (Hadley Wickham, chief scientist at RStudio)
+
 
 ## Jobs for statisticians and data scientists
 
