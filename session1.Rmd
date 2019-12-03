@@ -200,7 +200,7 @@ sub_data = sub_data %>%
   dplyr::rename(time = time_hours,
                 dose = dose_µg_kg)
 glimpse(sub_data)
-# a more avvanced method is to use rename_at()
+# a more advanced method is to use rename_at()
 # rename_columns = c("strain", "sample", "time", "dose")
 # sub_data = sub_data %>% 
 #   dplyr::rename_at(vars(select_columns), ~ rename_columns)
@@ -269,11 +269,11 @@ If we want to create summary statistics of our data.frame, we need to think abou
 ```{r}
 filter_data %>% 
   group_by(strain) %>% 
-  count()
+  summarise(num_samples = n())
 
 filter_data %>% 
   group_by(strain) %>% 
-  summarise(n = n())
+  count()
 ```
 
 ## Counting with more variables

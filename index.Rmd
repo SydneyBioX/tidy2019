@@ -53,7 +53,7 @@ We will use RStudio Cloud to run this workshop.
 3. Enter "https://github.com/SydneyBioX/tidy2019" (it will download some things)
 4. Run this line of code `source("install.R")` (this may take a few minutes to run, set it running then get involved in the icebreaker activity!)
 
-## Running workshop locally {.local}
+## Running workshop locally {#local}
 
 1. Download https://github.com/SydneyBioX/tidy2019/archive/master.zip
 2. Unzip the file and open up `tidy2019.RProj`. 

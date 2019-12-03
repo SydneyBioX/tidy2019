@@ -33,6 +33,15 @@ class: center, middle, inverse, title-slide
 
 
 
+class: segue
+
+# Session 1: Monday 15:20 - 16:30
+
+---
+
+
+
+
 ## Your instructors
 
 + Kevin: PhD candidate in statistics and bioinformatics. <i class="fab  fa-twitter "></i> `@KevinWang009`
@@ -64,7 +73,7 @@ We will use RStudio Cloud to run this workshop.
 5. Run this line of code `source("install.R")`  (this may take a few minutes to run, set it running then get involved in the icebreaker activity!)
 6. If things seem to be running slowly after installing all the packages, just refresh the webpage.
 
-If you want to run this workshop at home, see [here](https://sydneybiox.github.io/tidy2019#local)
+If you want to run this workshop at home, see [here](https://sydneybiox.github.io/tidy2019#local).
 ---
 
 # Ice breaker: find someone who...
@@ -177,17 +186,6 @@ We will play with the sample data on Monday, combine the two data for visualisat
 
 ---
 
-# Challenges of this data
-
-1. Understanding the data structure and read the two data into `R`.
-1. Basic manipulation of the two data. 
-1. Merging the two data. 
-1. Visualising the data.
-1. Reshaping the data for visualisation and modelling purpose.
-1. Perform basic modelling on the data and extract insights.
-
----
-
 # Session 1: reading data and basic manipulations
 
 .pull-left[
@@ -213,6 +211,7 @@ Ziemann, M., Eren, Y. &amp; El-Osta, A. (2016). Gene name errors are widespread 
 ]
 
 ---
+
 
 # Pipe operator `%&gt;%`
 
@@ -245,7 +244,25 @@ Read more: https://r4ds.had.co.nz/pipes.html
 
 ---
 
-# Extension exercises of Session 1
+# Functions we covered in this session
+
+Reading and saving data:
++ `read_excel` from the `readxl` package
++ `write_csv` from the `readr` package
+
+Cleaning data
++ `clean_names` from the `janitor` package
+
+Column manipulations
++ `select`, `rename`, `mutate` from the `dplyr` package
+
+Row operations
++ `filter`, `group_by`, `summarise` from the `dplyr` package
+
+
+---
+
+# Extension exercises 
 
 1. Load the `diamonds` data from `ggplot2`.  Find the number of observations for each cut. 
 2. Calculate summary statistics of the price for each cut (e.g. mean, median, min, max, ...)
@@ -277,6 +294,14 @@ class: segue
 
 
 
+
+
+
+
+```r
+divorce_margarine_scaled = read_csv("data/divorce_margarine_scaled.csv")
+```
+
 .pull-left[
 
 ```r
@@ -300,7 +325,11 @@ divorce_margarine_scaled
 ```
 ]
 
+&lt;br&gt;
 
+&lt;br&gt;
+
+&lt;br&gt;
 .pull-right[
 + divorce should be mapped to the x-axis
 + margarine should be mapped to the y-axis
@@ -315,7 +344,7 @@ divorce_margarine_scaled %&gt;%
 * ggplot()
 ```
 
-![](slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -330,7 +359,7 @@ divorce_margarine_scaled %&gt;%
   ))
 ```
 
-![](slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](slides_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -346,7 +375,7 @@ divorce_margarine_scaled %&gt;%
 * geom_point()
 ```
 
-![](slides_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](slides_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -364,7 +393,7 @@ divorce_margarine_scaled %&gt;%
 * geom_text()
 ```
 
-![](slides_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](slides_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -383,30 +412,11 @@ divorce_margarine_scaled %&gt;%
 * labs(title = "Divorce rate and margarine consumption")
 ```
 
-![](slides_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
-
----
-
-## Tidy is goal-dependent: treating each year as independent
-
-
-```r
-divorce_margarine_scaled %&gt;% 
-  ggplot(aes(
-    x = divorce,
-    y = margarine,
-    label = year
-  )) +
-  geom_point() +
-  geom_text() +
-  labs(title = "Divorce rate and margarine consumption")
-```
-
 ![](slides_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
 ---
 
-## Can you make this plot using the data above?
+## (Discuss with your neighbours) can you make this plot using this data?
 .pull-left[
 
 
@@ -436,26 +446,127 @@ divorce_margarine_scaled
 ]
 
 ---
-## Pivot
+## Pivot operation
 
 &lt;center&gt;
 &lt;img src="https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif", width="40%"&gt;
 &lt;/center&gt;
 
 ---
-class: segue
 
-# Session 3: modelling with `tidyverse`
+## `pivot_longer`
+
+
+.pull-left[
+
+```r
+divorce_margarine_scaled
+```
+
+```
+## # A tibble: 10 x 3
+##     year divorce margarine
+##    &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+##  1  2000   1.84     2.00  
+##  2  2001   1.00     1.15  
+##  3  2002   0.723    0.802 
+##  4  2003   0.167   -0.0422
+##  5  2004  -0.111   -0.113 
+##  6  2005  -0.667   -0.957 
+##  7  2006  -0.389   -0.535 
+##  8  2007  -0.389   -0.605 
+##  9  2008  -0.389   -0.816 
+## 10  2009  -1.78    -0.886
+```
+]
+
+
+.pull-right[
+
+```r
+long_data = divorce_margarine_scaled %&gt;%
+  tidyr::pivot_longer(
+    cols = -c("year"),
+    names_to = "type",
+    values_to = "values")
+
+long_data
+```
+
+```
+## # A tibble: 20 x 3
+##     year type       values
+##    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+##  1  2000 divorce    1.84  
+##  2  2000 margarine  2.00  
+##  3  2001 divorce    1.00  
+##  4  2001 margarine  1.15  
+##  5  2002 divorce    0.723 
+##  6  2002 margarine  0.802 
+##  7  2003 divorce    0.167 
+##  8  2003 margarine -0.0422
+##  9  2004 divorce   -0.111 
+## 10  2004 margarine -0.113 
+## 11  2005 divorce   -0.667 
+## 12  2005 margarine -0.957 
+## 13  2006 divorce   -0.389 
+## 14  2006 margarine -0.535 
+## 15  2007 divorce   -0.389 
+## 16  2007 margarine -0.605 
+## 17  2008 divorce   -0.389 
+## 18  2008 margarine -0.816 
+## 19  2009 divorce   -1.78  
+## 20  2009 margarine -0.886
+```
+]
 
 ---
 
-# t-tests
+
+
+```r
+long_data %&gt;% 
+  ggplot(aes(x = year,
+             y = values,
+             colour = type)) +
+  geom_point() +
+  geom_path() +
+  labs(title = "Tidy data is dependent on the plot you are making")
+```
+
+![](slides_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+
+# Functions we covered in this session
+
+Reading and saving data:
++ `read_csv` and `read_delim` from the `readr` package
+
+Combining data:
+
++ `left_join` from the `dplyr` package
+
+Pivoting operations:
+
++ `pivot_longer` and `pivot_wider` from the `tidyr` package
+
+Visualisation
+
++ `geom_point` and `geom_histogram` from the `ggplot2` package
++ `ggboxplot` and `stat_compare_means` from the `ggpubr` package
+---
+
+
+class: segue
+
+# Session 3: modelling with `tidyverse` (advanced exercise)
 
 ---
 
 # Final remarks
 
-## Where to go for further help
++ If you can't get through the entire workshop, don't worry! The website will be up indefinitely.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

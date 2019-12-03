@@ -21,6 +21,15 @@ output:
 ---
 
 
+class: segue
+
+# Session 1: Monday 15:20 - 16:30
+
+---
+
+
+
+
 ## Your instructors
 
 + Kevin: PhD candidate in statistics and bioinformatics. `r icon::fa("twitter")` `@KevinWang009`
@@ -152,17 +161,6 @@ We will play with the sample data on Monday, combine the two data for visualisat
 
 ---
 
-# Challenges of this data
-
-1. Understanding the data structure and read the two data into `R`.
-1. Basic manipulation of the two data. 
-1. Merging the two data. 
-1. Visualising the data.
-1. Reshaping the data for visualisation and modelling purpose.
-1. Perform basic modelling on the data and extract insights.
-
----
-
 # Session 1: reading data and basic manipulations
 
 .pull-left[
@@ -188,6 +186,7 @@ Ziemann, M., Eren, Y. & El-Osta, A. (2016). Gene name errors are widespread in t
 ]
 
 ---
+
 
 # Pipe operator `%>%`
 
@@ -220,7 +219,25 @@ Read more: https://r4ds.had.co.nz/pipes.html
 
 ---
 
-# Extension exercises of Session 1
+# Functions we covered in this session
+
+Reading and saving data:
++ `read_excel` from the `readxl` package
++ `write_csv` from the `readr` package
+
+Cleaning data
++ `clean_names` from the `janitor` package
+
+Column manipulations
++ `select`, `rename`, `mutate` from the `dplyr` package
+
+Row operations
++ `filter`, `group_by`, `summarise` from the `dplyr` package
+
+
+---
+
+# Extension exercises 
 
 1. Load the `diamonds` data from `ggplot2`.  Find the number of observations for each cut. 
 2. Calculate summary statistics of the price for each cut (e.g. mean, median, min, max, ...)
@@ -266,13 +283,24 @@ readr::write_csv(divorce_margarine_scaled, path = "../data/divorce_margarine_sca
 divorce_margarine_scaled = read_csv("../data/divorce_margarine_scaled.csv")
 ```
 
+
+
+
+```{r, eval = FALSE}
+divorce_margarine_scaled = read_csv("data/divorce_margarine_scaled.csv")
+```
+
 .pull-left[
 ```{r}
 divorce_margarine_scaled
 ```
 ]
 
+<br>
 
+<br>
+
+<br>
 .pull-right[
 + divorce should be mapped to the x-axis
 + margarine should be mapped to the y-axis
@@ -344,23 +372,7 @@ divorce_margarine_scaled %>%
 
 ---
 
-## Tidy is goal-dependent: treating each year as independent
-
-```{r, fig.height=4}
-divorce_margarine_scaled %>% 
-  ggplot(aes(
-    x = divorce,
-    y = margarine,
-    label = year
-  )) +
-  geom_point() +
-  geom_text() +
-  labs(title = "Divorce rate and margarine consumption")
-```
-
----
-
-## Can you make this plot using the data above?
+## (Discuss with your neighbours) can you make this plot using this data?
 .pull-left[
 
 ```{r}
@@ -387,24 +399,77 @@ long_data %>%
 ]
 
 ---
-## Pivot
+## Pivot operation
 
 <center>
 <img src="https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif", width="40%">
 </center>
 
 ---
-class: segue
 
-# Session 3: modelling with `tidyverse`
+## `pivot_longer`
+
+
+.pull-left[
+```{r}
+divorce_margarine_scaled
+```
+]
+
+
+.pull-right[
+```{r}
+long_data = divorce_margarine_scaled %>%
+  tidyr::pivot_longer(
+    cols = -c("year"),
+    names_to = "type",
+    values_to = "values")
+
+long_data
+```
+]
 
 ---
 
-# t-tests
+
+```{r, fig.width=12, fig.height=5}
+long_data %>% 
+  ggplot(aes(x = year,
+             y = values,
+             colour = type)) +
+  geom_point() +
+  geom_path() +
+  labs(title = "Tidy data is dependent on the plot you are making")
+```
+
+---
+
+# Functions we covered in this session
+
+Reading and saving data:
++ `read_csv` and `read_delim` from the `readr` package
+
+Combining data:
+
++ `left_join` from the `dplyr` package
+
+Pivoting operations:
+
++ `pivot_longer` and `pivot_wider` from the `tidyr` package
+
+Visualisation
+
++ `geom_point` and `geom_histogram` from the `ggplot2` package
++ `ggboxplot` and `stat_compare_means` from the `ggpubr` package
+---
+
+
+class: segue
+
+# Session 3: modelling with `tidyverse` (advanced exercise)
 
 ---
 
 # Final remarks
 
-## Where to go for further help
-
++ If you can't get through the entire workshop, don't worry! The website will be up indefinitely. 

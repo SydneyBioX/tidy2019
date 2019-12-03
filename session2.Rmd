@@ -385,6 +385,23 @@ write_csv(long_sample_ge_data, path = "data/long_sample_ge_data.csv")
 write_csv(wide_sample_ge_data, path = "data/wide_sample_ge_data.csv")
 ```
 
+# Making gene expression boxplots with p-values
+
+```{r, results="show", fig.show = "show"}
+library(ggpubr)
+
+ggpubr::ggboxplot(
+  data = long_sample_ge_data,
+  x = "strain", 
+  y = "gene_expression",
+  facet.by = "gene_symbol",
+  scales = "free") +
+  ggpubr::stat_compare_means()
+```
+
+
+
+
 # References
 
 Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
