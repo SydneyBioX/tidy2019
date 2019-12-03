@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -226,6 +225,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -319,11 +319,14 @@ $(document).ready(function () {
 <p><img src="https://rstudio-education.github.io/tidyverse-cookbook/images/data-science-workflow.png" /></p>
 <p>While we will not cover every package in the <code>tidyverse</code>, we will cover the most important packages across three sessions.</p>
 </div>
-<div id="plan-of-the-workshop" class="section level1 tabset">
-<h1>Plan of the workshop</h1>
+<div id="slides" class="section level1">
+<h1>Slides</h1>
 <ul>
 <li><a href="slides/slides.html">Slides</a></li>
 </ul>
+</div>
+<div id="plan-of-the-workshop" class="section level1 tabset">
+<h1>Plan of the workshop</h1>
 <div id="monday-1520-1630" class="section level2">
 <h2>1. Monday (15:20-16:30)</h2>
 <p>In this session, we will first familiarise ourselves of the basics of <code>R</code>, e.g. loading in an Excel dataset, recognising variable types. We will be using the <code>R Markdown</code> documentation system, which allows us to execute codes, visualise output and writing a report. We will also start to learn the basics of data manipulations such as filtering of observations and selection of columns.</p>
@@ -352,11 +355,12 @@ $(document).ready(function () {
 <li>Enter “<a href="https://github.com/SydneyBioX/tidy2019" class="uri">https://github.com/SydneyBioX/tidy2019</a>” (it will download some things)</li>
 <li>Run this line of code <code>source("install.R")</code> (this may take a few minutes to run, set it running then get involved in the icebreaker activity!)</li>
 </ol>
-<p><em>If you would prefer to run R and RStudio locally on your own machine:</em></p>
+</div>
+<div id="running-workshop-locally" class="section level2 local">
+<h2>Running workshop locally</h2>
 <ol style="list-style-type: decimal">
-<li>Open RStudio, File &gt; New Project &gt; Version Control &gt; Git</li>
-<li>In the repository URL field enter “<a href="https://github.com/SydneyBioX/tidy2019" class="uri">https://github.com/SydneyBioX/tidy2019</a>”</li>
-<li>Click “Create Project”</li>
+<li>Download <a href="https://github.com/SydneyBioX/tidy2019/archive/master.zip" class="uri">https://github.com/SydneyBioX/tidy2019/archive/master.zip</a></li>
+<li>Unzip the file and open up <code>tidy2019.RProj</code>.</li>
 <li>Run this line of code <code>source("install.R")</code></li>
 </ol>
 </div>
