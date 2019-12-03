@@ -338,81 +338,118 @@ divorce_margarine_scaled
 
 ## First taste of `ggplot2`
 
+.pull-left[
 
 ```r
 divorce_margarine_scaled %&gt;% 
 * ggplot()
 ```
+]
 
-![](slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+.pull-right[
+&lt;img src="slides_files/figure-html/unnamed-chunk-7-1.png" width="504" /&gt;
+
+]
 
 ---
 
 ## First taste of `ggplot2`
 
+.pull-left[
 
 ```r
 divorce_margarine_scaled %&gt;% 
-  ggplot(aes(
+  ggplot() + 
+* aes(
 *   x = divorce,
 *   y = margarine
-  ))
+* )
 ```
 
-![](slides_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+&lt;img src="slides_files/figure-html/unnamed-chunk-8-1.png" width="504" /&gt;
+
+]
 
 ---
 
 ## First taste of `ggplot2`
 
+.pull-left[
 
 ```r
 divorce_margarine_scaled %&gt;% 
-  ggplot(aes(
+  ggplot() +
+  aes(
     x = divorce,
     y = margarine
-  )) +
+  ) + 
 * geom_point()
 ```
 
-![](slides_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+&lt;img src="slides_files/figure-html/unnamed-chunk-9-1.png" width="504" /&gt;
+
+]
 
 ---
 
 ## First taste of `ggplot2`
 
+.pull-left[
 
 ```r
 divorce_margarine_scaled %&gt;% 
-  ggplot(aes(
+  ggplot() +
+  aes(
     x = divorce,
     y = margarine,
 *   label = year
-  )) +
+  ) + 
   geom_point() +
 * geom_text()
 ```
 
-![](slides_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+&lt;img src="slides_files/figure-html/unnamed-chunk-10-1.png" width="504" /&gt;
+
+]
 
 ---
 
 ## First taste of `ggplot2`
 
+.pull-left[
 
 ```r
 divorce_margarine_scaled %&gt;% 
-  ggplot(aes(
+  ggplot() +
+  aes(
     x = divorce,
     y = margarine,
     label = year
-  )) +
+  ) + 
   geom_point() +
   geom_text() +
-* labs(title = "Divorce rate and margarine consumption")
+  labs(title = "Divorce rate and margarine consumption",
+       x = "Divorce rate",
+*      y = "Margarine consumption") +
+* theme_bw(base_size = 20)
 ```
 
-![](slides_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+&lt;img src="slides_files/figure-html/unnamed-chunk-11-1.png" width="504" /&gt;
+
+]
 
 ---
 
@@ -446,6 +483,7 @@ divorce_margarine_scaled
 ]
 
 ---
+
 ## Pivot operation
 
 &lt;center&gt;
@@ -534,7 +572,7 @@ long_data %&gt;%
   labs(title = "Tidy data is dependent on the plot you are making")
 ```
 
-![](slides_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+&lt;img src="slides_files/figure-html/unnamed-chunk-16-1.png" width="864" /&gt;
 
 ---
 
@@ -566,7 +604,19 @@ class: segue
 
 # Final remarks
 
-+ If you can't get through the entire workshop, don't worry! The website will be up indefinitely.
++ If you can't get through the entire workshop, don't worry! The website will be up indefinitely. 
+
++ If you're looking to learn more:
+
+  - [R for Data Science](https://r4ds.had.co.nz/)
+  - [Resources for a 5 day workshop](https://tidy-ds.wjakethompson.com/) built aroung the R for Data Science book
+  - [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday)
+  - [Data Wrangling &amp; Exploration with the Tidyverse in R](https://github.com/jobreu/tidyverse-workshop-gesis-2019) workshop
+  
++ Follow some people on twitter:
+
+  - [hadleywickham](https://twitter.com/hadleywickham) (Hadley Wickham, chief scientist at RStudio)
+- [dataandme](https://twitter.com/dataandme) (Mara Averick, tidyverse dev advocate)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

@@ -309,66 +309,118 @@ divorce_margarine_scaled
 
 ## First taste of `ggplot2`
 
-```{r, fig.height=4}
+.pull-left[
+```{r p1, fig.show="hide"}
 divorce_margarine_scaled %>% 
   ggplot() #<<
 ```
+]
 
----
-
-## First taste of `ggplot2`
-
-```{r, fig.height=4}
-divorce_margarine_scaled %>% 
-  ggplot(aes(
-    x = divorce, #<<
-    y = margarine #<<
-  ))
+.pull-right[
+```{r, ref.label="p1", echo = FALSE, fig.height=6, fig.retina=4}
 ```
 
+]
+
 ---
 
 ## First taste of `ggplot2`
 
-```{r, fig.height=4}
+.pull-left[
+```{r p2, fig.show="hide"}
 divorce_margarine_scaled %>% 
-  ggplot(aes(
+  ggplot() + 
+  aes( #<<
+    x = divorce, #<<
+    y = margarine #<<
+  ) #<<
+```
+
+]
+
+.pull-right[
+```{r, ref.label="p2", echo = FALSE, fig.height=6, fig.retina=4}
+```
+
+]
+
+---
+
+## First taste of `ggplot2`
+
+.pull-left[
+```{r p3, fig.show="hide"}
+divorce_margarine_scaled %>% 
+  ggplot() +
+  aes(
     x = divorce,
     y = margarine
-  )) +
+  ) + 
   geom_point() #<<
 ```
 
+]
+
+.pull-right[
+```{r, ref.label="p3", echo = FALSE, fig.height=6, fig.retina=4}
+```
+
+]
+
 ---
 
 ## First taste of `ggplot2`
 
-```{r, fig.height=4}
+.pull-left[
+```{r p4, fig.show="hide"}
 divorce_margarine_scaled %>% 
-  ggplot(aes(
+  ggplot() +
+  aes(
     x = divorce,
     y = margarine,
     label = year #<<
-  )) +
+  ) + 
   geom_point() +
   geom_text() #<<
 ```
 
+]
+
+.pull-right[
+```{r, ref.label="p4", echo = FALSE, fig.height=6, fig.retina=4}
+```
+
+]
+
 ---
 
 ## First taste of `ggplot2`
 
-```{r, fig.height=4}
+.pull-left[
+```{r p5, fig.show="hide"}
 divorce_margarine_scaled %>% 
-  ggplot(aes(
+  ggplot() +
+  aes(
     x = divorce,
     y = margarine,
     label = year
-  )) +
+  ) + 
   geom_point() +
   geom_text() +
-  labs(title = "Divorce rate and margarine consumption") #<<
+  labs(title = "Divorce rate and margarine consumption",
+       x = "Divorce rate",
+       y = "Margarine consumption") + #<<
+  theme_bw(base_size = 20) #<<
 ```
+
+
+]
+
+.pull-right[
+```{r, ref.label="p5", echo = FALSE, fig.height=6, fig.retina=4}
+```
+
+]
 
 ---
 
@@ -394,11 +446,12 @@ long_data %>%
              colour = type)) +
   geom_point() +
   geom_path() +
-  labs(title = "Can you make this plot using the data above")
+  theme_bw(base_size = 20) 
 ```
 ]
 
 ---
+
 ## Pivot operation
 
 <center>
@@ -432,7 +485,7 @@ long_data
 ---
 
 
-```{r, fig.width=12, fig.height=5}
+```{r, fig.width=12, fig.height=5, fig.retina=4}
 long_data %>% 
   ggplot(aes(x = year,
              y = values,
@@ -473,3 +526,15 @@ class: segue
 # Final remarks
 
 + If you can't get through the entire workshop, don't worry! The website will be up indefinitely. 
+
++ If you're looking to learn more:
+
+  - [R for Data Science](https://r4ds.had.co.nz/)
+  - [Resources for a 5 day workshop](https://tidy-ds.wjakethompson.com/) built aroung the R for Data Science book
+  - [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday)
+  - [Data Wrangling & Exploration with the Tidyverse in R](https://github.com/jobreu/tidyverse-workshop-gesis-2019) workshop
+  
++ Follow some people on twitter:
+
+  - [hadleywickham](https://twitter.com/hadleywickham) (Hadley Wickham, chief scientist at RStudio)
+- [dataandme](https://twitter.com/dataandme) (Mara Averick, tidyverse dev advocate)
