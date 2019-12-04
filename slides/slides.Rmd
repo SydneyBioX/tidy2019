@@ -19,7 +19,9 @@ output:
       navigation:
         scroll: false # disable slide transitions by scrolling
 ---
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.retina = 2)
+```
 
 class: segue
 
